@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shelter_ai/presentation/global_settings_screen/global_settings_widget.dart';
+
+import 'core/app_shared_preference/app_shared_preference.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  AppSharedPreference().init();
   runApp(const MyApp());
 }
 
@@ -9,15 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ShelterAI',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const Center(),
+    return const MaterialApp(
+      home: GlobalSettingsWidget(),
     );
   }
 }
-
-
