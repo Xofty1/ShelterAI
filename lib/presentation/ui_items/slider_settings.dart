@@ -36,28 +36,18 @@ class _SliderSettingsState extends State<SliderSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return SliderTheme(
-      data: const SliderThemeData(
-        trackHeight: 25,
-        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10),
-        overlayShape: RoundSliderOverlayShape(overlayRadius: 16),
-        activeTrackColor: Color(0xFFEAA25A),
-        inactiveTrackColor: Colors.white,
-        thumbColor: Color.fromRGBO(107, 86, 66, 80),
-      ),
-      child: Slider(
-        value: _sliderValue,
-        min: widget.min,
-        max: widget.max,
-        divisions: (widget.max - widget.min).toInt(),
-        label: _sliderValue.toStringAsFixed(1),
-        onChanged: (double value) {
-          setState(() {
-            _sliderValue = value;
-          });
-          widget.saveSetting(_sliderValue);
-        },
-      ),
+    return Slider(
+      value: _sliderValue,
+      min: widget.min,
+      max: widget.max,
+      divisions: (widget.max - widget.min).toInt(),
+      label: _sliderValue.toStringAsFixed(0),
+      onChanged: (double value) {
+        setState(() {
+          _sliderValue = value;
+        });
+        widget.saveSetting(_sliderValue);
+      },
     );
   }
 }

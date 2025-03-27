@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/presentation/global_settings_screen/global_settings_widget.dart';
+import 'package:shelter_ai/presentation/theme/theme.dart';
 
 import 'core/app_shared_preference/app_shared_preference.dart';
 
@@ -14,8 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: GlobalSettingsWidget(),
+    final Brightness platformBrightness = MediaQuery.platformBrightnessOf(context);
+    final bool isSystemDark = platformBrightness == Brightness.dark;
+    return MaterialApp(
+      theme: isSystemDark ? lightTheme /* <= тут заменить на darkTheme */ : lightTheme,
+      home: const GlobalSettingsWidget(),
     );
   }
 }

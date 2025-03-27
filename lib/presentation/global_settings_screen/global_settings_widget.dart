@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shelter_ai/presentation/global_settings_screen/utils/slider_settings.dart';
-import 'package:shelter_ai/presentation/global_settings_screen/utils/switch_settings.dart';
+import 'package:shelter_ai/presentation/ui_items/button.dart';
+import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
+import 'package:shelter_ai/presentation/ui_items/switch_settings.dart';
 
 import '../../core/app_shared_preference/app_shared_preference.dart';
+import '../ui_items/label.dart';
 
 class GlobalSettingsWidget extends StatelessWidget {
   const GlobalSettingsWidget({super.key});
@@ -13,8 +15,11 @@ class GlobalSettingsWidget extends StatelessWidget {
       backgroundColor: const Color(0xFF8B6F55),
       appBar: AppBar(
         backgroundColor: const Color(0xFFD3C0AA),
-        title: const Center(
-          child: Text("Настройки"),
+        title: Center(
+          child: Text(
+            "Настройки",
+            style: TextStyle(color: Theme.of(context).appBarTheme.foregroundColor),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -57,10 +62,7 @@ class GlobalSettingsWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(
-                      width: 80,
-                      child: Text("Озвучка"),
-                    ),
+                    const LabelWidget(text: "Озвучка"),
                     Expanded(
                       child: SliderSettings(
                         loadSetting: () =>
@@ -76,10 +78,7 @@ class GlobalSettingsWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(
-                      width: 80,
-                      child: Text("Эффекты"),
-                    ),
+                    const LabelWidget(text: "Эффекты"),
                     Expanded(
                       child: SliderSettings(
                         loadSetting: () =>
@@ -87,6 +86,41 @@ class GlobalSettingsWidget extends StatelessWidget {
                         saveSetting: (value) async =>
                             await AppSharedPreference()
                                 .saveDouble("effects", value),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(
+                      width: 80,
+                      child: Text("ДА?"),
+                    ),
+                    Expanded(
+                      child: SwitchSettings(
+                        loadSetting: () =>
+                        AppSharedPreference().getBool("yes") ?? false,
+                        saveSetting: (value) async =>
+                        await AppSharedPreference()
+                            .saveBool("yes", value),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(
+                      width: 80,
+                      child: Text("ДА?"),
+                    ),
+                    Expanded(
+                      child: CustomButton(
+                        text: "fff",
+                        onPressed: () {}
                       ),
                     ),
                   ],
