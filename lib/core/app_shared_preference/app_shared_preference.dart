@@ -1,13 +1,13 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSharedPreference {
-  static final AppSharedPreference _instance = AppSharedPreference._Doubleernal();
+  static final AppSharedPreference _instance = AppSharedPreference._internal();
 
   SharedPreferences? _prefs;
 
   factory AppSharedPreference() => _instance;
 
-  AppSharedPreference._Doubleernal();
+  AppSharedPreference._internal();
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
