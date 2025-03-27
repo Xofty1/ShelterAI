@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 ThemeData get lightTheme => ThemeData(
   brightness: Brightness.light, // Устанавливает яркость на светлую (по умолчанию для светлой темы)
   primaryColor: Colors.brown, // Основной цвет приложения (цвет на панелях, кнопках и т. д.)
-  scaffoldBackgroundColor: const Color(0xFFD3C0AA), // Цвет фона для основного экрана (scaffold)
+  // scaffoldBackgroundColor: const Color(0xFFD3C0AA), // Цвет фона для основного экрана (scaffold)
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.brown, // Цвет фона для AppBar (верхней панели)
     foregroundColor: Colors.black, // Цвет текста и иконок на AppBar

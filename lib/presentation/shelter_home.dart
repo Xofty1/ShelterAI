@@ -56,7 +56,9 @@ class MainMenuScreen extends StatelessWidget {
                     width: 260,
                     child: Column(
                       children: [
-                        CustomButton(text: "Новая игра", onPressed: () {}),
+                        CustomButton(text: "Новая игра", onPressed: () {
+                          Navigator.pushNamed(context, '/game_settings');
+                        }),
                         const SizedBox(height: 16),
                         CustomButton(text: "История", onPressed: () {}),
                         const SizedBox(height: 16),
@@ -82,42 +84,6 @@ class MainMenuScreen extends StatelessWidget {
               ),
             )
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _MenuButton extends StatelessWidget {
-  final String text;
-
-  const _MenuButton({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {},
-        child: Container(
-          width: 260,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          decoration: BoxDecoration(
-            color: const Color.fromRGBO(163, 140, 104, 1.0),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Center(
-            child: Text(
-              text,
-              style: const TextStyle(
-                color: Color.fromRGBO(90, 80, 63, 1.0),
-                fontSize: 32,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 2.0,
-                height: 1.2,
-              ),
-            ),
-          ),
         ),
       ),
     );
