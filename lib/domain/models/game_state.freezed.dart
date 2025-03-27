@@ -15,12 +15,15 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$GameState {
-  GameSettings get settings;
-  Disaster get disaster;
-  GameStage get stage;
-  int get iteration;
-  List<Player> get players;
-  List<List<String>> get notes;
+// Настройки игры
+  GameSettings get settings; // Свойства катастрофы
+  Disaster get disaster; // Список игроков
+  List<Player> get players; // Текущая стадия игры
+  GameStage get stage; // Вся информация по текущему раунду
+  RoundInfo
+      get roundInfo; // Количество действий, сделынных игроком на данном ходу (кол-во открытых карточек)
+  int get actionsTaken; // Индекс текущего игрока (чей ход)
+  int get currentPlayerIndex;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,11 +41,14 @@ mixin _$GameState {
                 other.settings == settings) &&
             (identical(other.disaster, disaster) ||
                 other.disaster == disaster) &&
-            (identical(other.stage, stage) || other.stage == stage) &&
-            (identical(other.iteration, iteration) ||
-                other.iteration == iteration) &&
             const DeepCollectionEquality().equals(other.players, players) &&
-            const DeepCollectionEquality().equals(other.notes, notes));
+            (identical(other.stage, stage) || other.stage == stage) &&
+            (identical(other.roundInfo, roundInfo) ||
+                other.roundInfo == roundInfo) &&
+            (identical(other.actionsTaken, actionsTaken) ||
+                other.actionsTaken == actionsTaken) &&
+            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
+                other.currentPlayerIndex == currentPlayerIndex));
   }
 
   @override
@@ -50,14 +56,15 @@ mixin _$GameState {
       runtimeType,
       settings,
       disaster,
-      stage,
-      iteration,
       const DeepCollectionEquality().hash(players),
-      const DeepCollectionEquality().hash(notes));
+      stage,
+      roundInfo,
+      actionsTaken,
+      currentPlayerIndex);
 
   @override
   String toString() {
-    return 'GameState(settings: $settings, disaster: $disaster, stage: $stage, iteration: $iteration, players: $players, notes: $notes)';
+    return 'GameState(settings: $settings, disaster: $disaster, players: $players, stage: $stage, roundInfo: $roundInfo, actionsTaken: $actionsTaken, currentPlayerIndex: $currentPlayerIndex)';
   }
 }
 
@@ -69,13 +76,15 @@ abstract mixin class $GameStateCopyWith<$Res> {
   $Res call(
       {GameSettings settings,
       Disaster disaster,
-      GameStage stage,
-      int iteration,
       List<Player> players,
-      List<List<String>> notes});
+      GameStage stage,
+      RoundInfo roundInfo,
+      int actionsTaken,
+      int currentPlayerIndex});
 
   $GameSettingsCopyWith<$Res> get settings;
   $DisasterCopyWith<$Res> get disaster;
+  $RoundInfoCopyWith<$Res> get roundInfo;
 }
 
 /// @nodoc
@@ -92,10 +101,11 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
   $Res call({
     Object? settings = null,
     Object? disaster = null,
-    Object? stage = null,
-    Object? iteration = null,
     Object? players = null,
-    Object? notes = null,
+    Object? stage = null,
+    Object? roundInfo = null,
+    Object? actionsTaken = null,
+    Object? currentPlayerIndex = null,
   }) {
     return _then(_self.copyWith(
       settings: null == settings
@@ -106,22 +116,26 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
           ? _self.disaster
           : disaster // ignore: cast_nullable_to_non_nullable
               as Disaster,
-      stage: null == stage
-          ? _self.stage
-          : stage // ignore: cast_nullable_to_non_nullable
-              as GameStage,
-      iteration: null == iteration
-          ? _self.iteration
-          : iteration // ignore: cast_nullable_to_non_nullable
-              as int,
       players: null == players
           ? _self.players
           : players // ignore: cast_nullable_to_non_nullable
               as List<Player>,
-      notes: null == notes
-          ? _self.notes
-          : notes // ignore: cast_nullable_to_non_nullable
-              as List<List<String>>,
+      stage: null == stage
+          ? _self.stage
+          : stage // ignore: cast_nullable_to_non_nullable
+              as GameStage,
+      roundInfo: null == roundInfo
+          ? _self.roundInfo
+          : roundInfo // ignore: cast_nullable_to_non_nullable
+              as RoundInfo,
+      actionsTaken: null == actionsTaken
+          ? _self.actionsTaken
+          : actionsTaken // ignore: cast_nullable_to_non_nullable
+              as int,
+      currentPlayerIndex: null == currentPlayerIndex
+          ? _self.currentPlayerIndex
+          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 
@@ -144,6 +158,16 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
       return _then(_self.copyWith(disaster: value));
     });
   }
+
+  /// Create a copy of GameState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RoundInfoCopyWith<$Res> get roundInfo {
+    return $RoundInfoCopyWith<$Res>(_self.roundInfo, (value) {
+      return _then(_self.copyWith(roundInfo: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -152,22 +176,22 @@ class _GameState implements GameState {
   const _GameState(
       {required this.settings,
       required this.disaster,
-      required this.stage,
-      required this.iteration,
       required final List<Player> players,
-      required final List<List<String>> notes})
-      : _players = players,
-        _notes = notes;
+      required this.stage,
+      required this.roundInfo,
+      required this.actionsTaken,
+      required this.currentPlayerIndex})
+      : _players = players;
 
+// Настройки игры
   @override
   final GameSettings settings;
+// Свойства катастрофы
   @override
   final Disaster disaster;
-  @override
-  final GameStage stage;
-  @override
-  final int iteration;
+// Список игроков
   final List<Player> _players;
+// Список игроков
   @override
   List<Player> get players {
     if (_players is EqualUnmodifiableListView) return _players;
@@ -175,13 +199,18 @@ class _GameState implements GameState {
     return EqualUnmodifiableListView(_players);
   }
 
-  final List<List<String>> _notes;
+// Текущая стадия игры
   @override
-  List<List<String>> get notes {
-    if (_notes is EqualUnmodifiableListView) return _notes;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_notes);
-  }
+  final GameStage stage;
+// Вся информация по текущему раунду
+  @override
+  final RoundInfo roundInfo;
+// Количество действий, сделынных игроком на данном ходу (кол-во открытых карточек)
+  @override
+  final int actionsTaken;
+// Индекс текущего игрока (чей ход)
+  @override
+  final int currentPlayerIndex;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -200,11 +229,14 @@ class _GameState implements GameState {
                 other.settings == settings) &&
             (identical(other.disaster, disaster) ||
                 other.disaster == disaster) &&
-            (identical(other.stage, stage) || other.stage == stage) &&
-            (identical(other.iteration, iteration) ||
-                other.iteration == iteration) &&
             const DeepCollectionEquality().equals(other._players, _players) &&
-            const DeepCollectionEquality().equals(other._notes, _notes));
+            (identical(other.stage, stage) || other.stage == stage) &&
+            (identical(other.roundInfo, roundInfo) ||
+                other.roundInfo == roundInfo) &&
+            (identical(other.actionsTaken, actionsTaken) ||
+                other.actionsTaken == actionsTaken) &&
+            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
+                other.currentPlayerIndex == currentPlayerIndex));
   }
 
   @override
@@ -212,14 +244,15 @@ class _GameState implements GameState {
       runtimeType,
       settings,
       disaster,
-      stage,
-      iteration,
       const DeepCollectionEquality().hash(_players),
-      const DeepCollectionEquality().hash(_notes));
+      stage,
+      roundInfo,
+      actionsTaken,
+      currentPlayerIndex);
 
   @override
   String toString() {
-    return 'GameState(settings: $settings, disaster: $disaster, stage: $stage, iteration: $iteration, players: $players, notes: $notes)';
+    return 'GameState(settings: $settings, disaster: $disaster, players: $players, stage: $stage, roundInfo: $roundInfo, actionsTaken: $actionsTaken, currentPlayerIndex: $currentPlayerIndex)';
   }
 }
 
@@ -234,15 +267,18 @@ abstract mixin class _$GameStateCopyWith<$Res>
   $Res call(
       {GameSettings settings,
       Disaster disaster,
-      GameStage stage,
-      int iteration,
       List<Player> players,
-      List<List<String>> notes});
+      GameStage stage,
+      RoundInfo roundInfo,
+      int actionsTaken,
+      int currentPlayerIndex});
 
   @override
   $GameSettingsCopyWith<$Res> get settings;
   @override
   $DisasterCopyWith<$Res> get disaster;
+  @override
+  $RoundInfoCopyWith<$Res> get roundInfo;
 }
 
 /// @nodoc
@@ -259,10 +295,11 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
   $Res call({
     Object? settings = null,
     Object? disaster = null,
-    Object? stage = null,
-    Object? iteration = null,
     Object? players = null,
-    Object? notes = null,
+    Object? stage = null,
+    Object? roundInfo = null,
+    Object? actionsTaken = null,
+    Object? currentPlayerIndex = null,
   }) {
     return _then(_GameState(
       settings: null == settings
@@ -273,22 +310,26 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
           ? _self.disaster
           : disaster // ignore: cast_nullable_to_non_nullable
               as Disaster,
-      stage: null == stage
-          ? _self.stage
-          : stage // ignore: cast_nullable_to_non_nullable
-              as GameStage,
-      iteration: null == iteration
-          ? _self.iteration
-          : iteration // ignore: cast_nullable_to_non_nullable
-              as int,
       players: null == players
           ? _self._players
           : players // ignore: cast_nullable_to_non_nullable
               as List<Player>,
-      notes: null == notes
-          ? _self._notes
-          : notes // ignore: cast_nullable_to_non_nullable
-              as List<List<String>>,
+      stage: null == stage
+          ? _self.stage
+          : stage // ignore: cast_nullable_to_non_nullable
+              as GameStage,
+      roundInfo: null == roundInfo
+          ? _self.roundInfo
+          : roundInfo // ignore: cast_nullable_to_non_nullable
+              as RoundInfo,
+      actionsTaken: null == actionsTaken
+          ? _self.actionsTaken
+          : actionsTaken // ignore: cast_nullable_to_non_nullable
+              as int,
+      currentPlayerIndex: null == currentPlayerIndex
+          ? _self.currentPlayerIndex
+          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 
@@ -309,6 +350,16 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
   $DisasterCopyWith<$Res> get disaster {
     return $DisasterCopyWith<$Res>(_self.disaster, (value) {
       return _then(_self.copyWith(disaster: value));
+    });
+  }
+
+  /// Create a copy of GameState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RoundInfoCopyWith<$Res> get roundInfo {
+    return $RoundInfoCopyWith<$Res>(_self.roundInfo, (value) {
+      return _then(_self.copyWith(roundInfo: value));
     });
   }
 }
