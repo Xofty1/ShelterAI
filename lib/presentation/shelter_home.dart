@@ -26,6 +26,9 @@ class MainMenuScreen extends StatelessWidget {
         ),
         child: Stack(
           children: [
+            const Image(
+              image: AssetImage('assets/images/door.png'),
+            ),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
