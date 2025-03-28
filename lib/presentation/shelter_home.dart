@@ -29,14 +29,20 @@ class MainMenuScreen extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Image.asset("assets/images/door.png"),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Image.asset(
+                    "assets/images/door.png",
+                    width: 250,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   Container(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(217, 217, 217, 1.0),
                       borderRadius: BorderRadius.circular(8),
@@ -57,9 +63,11 @@ class MainMenuScreen extends StatelessWidget {
                     width: 260,
                     child: Column(
                       children: [
-                        CustomButton(text: loc.newGame, onPressed: () {
-                          Navigator.pushNamed(context, '/game_settings');
-                        }),
+                        CustomButton(
+                            text: loc.newGame,
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/game_settings');
+                            }),
                         const SizedBox(height: 16),
                         CustomButton(text: loc.history, onPressed: () {}),
                         const SizedBox(height: 16),
