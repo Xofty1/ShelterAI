@@ -22,9 +22,8 @@ class ScaffoldTemplate extends StatelessWidget {
           children: [
             AppBar(
               backgroundColor: const Color(0xFFD3C0AA),
-              title: Center(
-                child: Text(name),
-              ),
+              centerTitle: true,
+              title: Text(name),
             ),
             Expanded(
               child: SingleChildScrollView(

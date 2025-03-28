@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 
+import '../l10n/l10n.dart';
+
 class ShelterHome extends StatelessWidget {
   const ShelterHome({super.key});
 
@@ -15,6 +17,7 @@ class MainMenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -26,9 +29,7 @@ class MainMenuScreen extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            const Image(
-              image: AssetImage('assets/images/door.png'),
-            ),
+            Image.asset("assets/images/door.png"),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -40,9 +41,9 @@ class MainMenuScreen extends StatelessWidget {
                       color: const Color.fromRGBO(217, 217, 217, 1.0),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Text(
-                      'БУНКЕР',
-                      style: TextStyle(
+                    child: Text(
+                      loc.appTitle,
+                      style: const TextStyle(
                         color: Color.fromRGBO(90, 80, 63, 1.0),
                         fontSize: 64,
                         fontWeight: FontWeight.w300,
@@ -56,13 +57,13 @@ class MainMenuScreen extends StatelessWidget {
                     width: 260,
                     child: Column(
                       children: [
-                        CustomButton(text: "Новая игра", onPressed: () {
+                        CustomButton(text: loc.newGame, onPressed: () {
                           Navigator.pushNamed(context, '/game_settings');
                         }),
                         const SizedBox(height: 16),
-                        CustomButton(text: "История", onPressed: () {}),
+                        CustomButton(text: loc.history, onPressed: () {}),
                         const SizedBox(height: 16),
-                        CustomButton(text: "Правила", onPressed: () {}),
+                        CustomButton(text: loc.rules, onPressed: () {}),
                       ],
                     ),
                   ),

@@ -17,6 +17,10 @@ class AppSharedPreference {
     _prefs?.setBool(settingKey, value);
   }
 
+  Future<void> saveString(String settingKey, String value) async {
+    _prefs?.setString(settingKey, value);
+  }
+
   Future<void> saveDouble(String settingKey, double value) async {
     _prefs?.setDouble(settingKey, value);
   }
@@ -27,5 +31,9 @@ class AppSharedPreference {
 
   double? getDouble(String settingKey) {
     return _prefs?.getDouble(settingKey);
+  }
+
+  String? getString(String settingKey) {
+    return _prefs?.getString(settingKey);
   }
 }
