@@ -5,6 +5,7 @@ import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 
 import '../../core/app_shared_preference/app_shared_preference.dart';
 import '../../domain/bloc/app_settings_cubit.dart';
+import '../../l10n/l10n.dart';
 import '../ui_items/dropdown_spinner.dart';
 import '../ui_items/label.dart';
 
@@ -25,45 +26,52 @@ class GlobalSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     const Map<String, String> languageMap = {
       'ru': 'Русский',
-      'en': 'Английский',
+      'en': 'English',
     };
-    String loc = AppSharedPreference().getString("language") ?? "en";
     return BlocBuilder<AppSettingsCubit, AppSettingsState>(
       builder: (context, state) => ScaffoldTemplate(
-        name: "Настройки",
+        name: loc.settings,
         child: Column(
           children: [
-            const Center(
+            Center(
               child: Text(
-                "Громкость",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF6B4F35)),
+                loc.language,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF6B4F35)),
               ),
             ),
             const SizedBox(height: 16),
             DropdownSpinner(
               items: languageMap.values.toList(),
-              initialValue: languageMap[loc],
+              initialValue: languageMap[state.settings.loc],
               itemLabel: (item) => item,
               onChanged: (value) {
-                String languageName = value == 'Английский' ? 'en' : 'ru';
-                AppSharedPreference().saveString("language", languageName);
+                String languageName = value == 'English' ? 'en' : 'ru';
+                AppSharedPreference().saveLanguage(languageName);
                 BlocProvider.of<AppSettingsCubit>(context)
                     .updateLocale(languageName);
               },
             ),
             const SizedBox(height: 16),
+            Center(
+              child: Text(
+                loc.volume,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF6B4F35)),
+              ),
+            ),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const LabelWidget(text: "Музыка"),
+                LabelWidget(text: loc.music),
                 Expanded(
                   child: SliderSettings(
                     loadSetting: () =>
-                        AppSharedPreference().getDouble("music") ?? 50.0,
+                        AppSharedPreference().getMusic()?.toDouble() ?? 50.0,
                     saveSetting: (value) async =>
-                        await AppSharedPreference().saveDouble("music", value),
+                        await AppSharedPreference().saveMusic(value.toInt()),
                   ),
                 ),
               ],
@@ -72,13 +80,13 @@ class GlobalSettingsWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const LabelWidget(text: "Озвучка"),
+                LabelWidget(text: loc.dubbing),
                 Expanded(
                   child: SliderSettings(
                     loadSetting: () =>
-                        AppSharedPreference().getDouble("dubbing") ?? 50.0,
+                        AppSharedPreference().getDubbing()?.toDouble() ?? 50.0,
                     saveSetting: (value) async => await AppSharedPreference()
-                        .saveDouble("dubbing", value),
+                        .saveDubbing(value.toInt()),
                   ),
                 ),
               ],
@@ -87,13 +95,13 @@ class GlobalSettingsWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const LabelWidget(text: "Эффекты"),
+                LabelWidget(text: loc.effects),
                 Expanded(
                   child: SliderSettings(
                     loadSetting: () =>
-                        AppSharedPreference().getDouble("effects") ?? 50.0,
+                        AppSharedPreference().getEffects()?.toDouble() ?? 50.0,
                     saveSetting: (value) async => await AppSharedPreference()
-                        .saveDouble("effects", value),
+                        .saveEffects(value.toInt()),
                   ),
                 ),
               ],

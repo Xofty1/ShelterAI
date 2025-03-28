@@ -13,27 +13,35 @@ class AppSharedPreference {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  Future<void> saveBool(String settingKey, bool value) async {
-    _prefs?.setBool(settingKey, value);
+  Future<void> saveMusic(int value) async {
+    await _prefs?.setInt("music", value);
   }
 
-  Future<void> saveString(String settingKey, String value) async {
-    _prefs?.setString(settingKey, value);
+  Future<void> saveDubbing(int value) async {
+    await _prefs?.setInt("dubbing", value);
   }
 
-  Future<void> saveDouble(String settingKey, double value) async {
-    _prefs?.setDouble(settingKey, value);
+  Future<void> saveEffects(int value) async {
+    await _prefs?.setInt("effects", value);
   }
 
-  bool? getBool(String settingKey) {
-    return _prefs?.getBool(settingKey);
+  Future<void> saveLanguage(String value) async {
+    await _prefs?.setString("language", value);
   }
 
-  double? getDouble(String settingKey) {
-    return _prefs?.getDouble(settingKey);
+  int? getMusic() {
+    return _prefs?.getInt("music");
   }
 
-  String? getString(String settingKey) {
-    return _prefs?.getString(settingKey);
+  int? getDubbing() {
+    return _prefs?.getInt("dubbing");
+  }
+
+  int? getEffects() {
+    return _prefs?.getInt("effects");
+  }
+
+  String? getLanguage() {
+    return _prefs?.getString("language");
   }
 }

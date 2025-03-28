@@ -6,8 +6,8 @@ import '../models/app_settings.dart';
 class AppSettingsCubit extends Cubit<AppSettingsState> {
   AppSettingsCubit() : super(AppSettingsState.initial());
 
-  void updateVolume(int volume) {
-    emit(AppSettingsState(settings: state.settings.copyWith(volume: volume)));
+  void updateVolume(int dubbing) {
+    emit(AppSettingsState(settings: state.settings.copyWith(dubbing: dubbing)));
   }
 
   void updateMusic(int music) {
@@ -28,12 +28,12 @@ class AppSettingsState {
   final AppSettings settings;
 
   factory AppSettingsState.initial() {
-    String language = AppSharedPreference().getString('language') ?? "ru";
+    String language = AppSharedPreference().getLanguage() ?? "ru";
     return AppSettingsState(
       settings: AppSettings(
-        volume: (AppSharedPreference().getDouble('volume') ?? 50).toInt(),
-        music: (AppSharedPreference().getDouble('music') ?? 50).toInt(),
-        effects: (AppSharedPreference().getDouble('effects') ?? 50).toInt(),
+        dubbing: AppSharedPreference().getDubbing() ?? 50,
+        music: AppSharedPreference().getMusic() ?? 50,
+        effects: AppSharedPreference().getEffects() ?? 50,
         loc: language,
       ),
     );

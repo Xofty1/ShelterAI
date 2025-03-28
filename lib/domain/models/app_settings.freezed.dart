@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$AppSettings {
-  int get volume;
+  int get dubbing;
   int get music;
   int get effects;
   String get loc;
@@ -32,18 +32,18 @@ mixin _$AppSettings {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is AppSettings &&
-            (identical(other.volume, volume) || other.volume == volume) &&
+            (identical(other.dubbing, dubbing) || other.dubbing == dubbing) &&
             (identical(other.music, music) || other.music == music) &&
             (identical(other.effects, effects) || other.effects == effects) &&
             (identical(other.loc, loc) || other.loc == loc));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, volume, music, effects, loc);
+  int get hashCode => Object.hash(runtimeType, dubbing, music, effects, loc);
 
   @override
   String toString() {
-    return 'AppSettings(volume: $volume, music: $music, effects: $effects, loc: $loc)';
+    return 'AppSettings(dubbing: $dubbing, music: $music, effects: $effects, loc: $loc)';
   }
 }
 
@@ -53,7 +53,7 @@ abstract mixin class $AppSettingsCopyWith<$Res> {
           AppSettings value, $Res Function(AppSettings) _then) =
       _$AppSettingsCopyWithImpl;
   @useResult
-  $Res call({int volume, int music, int effects, String loc});
+  $Res call({int dubbing, int music, int effects, String loc});
 }
 
 /// @nodoc
@@ -68,15 +68,15 @@ class _$AppSettingsCopyWithImpl<$Res> implements $AppSettingsCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? volume = null,
+    Object? dubbing = null,
     Object? music = null,
     Object? effects = null,
     Object? loc = null,
   }) {
     return _then(_self.copyWith(
-      volume: null == volume
-          ? _self.volume
-          : volume // ignore: cast_nullable_to_non_nullable
+      dubbing: null == dubbing
+          ? _self.dubbing
+          : dubbing // ignore: cast_nullable_to_non_nullable
               as int,
       music: null == music
           ? _self.music
@@ -98,13 +98,13 @@ class _$AppSettingsCopyWithImpl<$Res> implements $AppSettingsCopyWith<$Res> {
 
 class _AppSettings implements AppSettings {
   _AppSettings(
-      {required this.volume,
+      {required this.dubbing,
       required this.music,
       required this.effects,
       required this.loc});
 
   @override
-  final int volume;
+  final int dubbing;
   @override
   final int music;
   @override
@@ -125,18 +125,18 @@ class _AppSettings implements AppSettings {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _AppSettings &&
-            (identical(other.volume, volume) || other.volume == volume) &&
+            (identical(other.dubbing, dubbing) || other.dubbing == dubbing) &&
             (identical(other.music, music) || other.music == music) &&
             (identical(other.effects, effects) || other.effects == effects) &&
             (identical(other.loc, loc) || other.loc == loc));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, volume, music, effects, loc);
+  int get hashCode => Object.hash(runtimeType, dubbing, music, effects, loc);
 
   @override
   String toString() {
-    return 'AppSettings(volume: $volume, music: $music, effects: $effects, loc: $loc)';
+    return 'AppSettings(dubbing: $dubbing, music: $music, effects: $effects, loc: $loc)';
   }
 }
 
@@ -148,7 +148,7 @@ abstract mixin class _$AppSettingsCopyWith<$Res>
       __$AppSettingsCopyWithImpl;
   @override
   @useResult
-  $Res call({int volume, int music, int effects, String loc});
+  $Res call({int dubbing, int music, int effects, String loc});
 }
 
 /// @nodoc
@@ -163,15 +163,15 @@ class __$AppSettingsCopyWithImpl<$Res> implements _$AppSettingsCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? volume = null,
+    Object? dubbing = null,
     Object? music = null,
     Object? effects = null,
     Object? loc = null,
   }) {
     return _then(_AppSettings(
-      volume: null == volume
-          ? _self.volume
-          : volume // ignore: cast_nullable_to_non_nullable
+      dubbing: null == dubbing
+          ? _self.dubbing
+          : dubbing // ignore: cast_nullable_to_non_nullable
               as int,
       music: null == music
           ? _self.music

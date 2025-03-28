@@ -118,6 +118,48 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Правила'**
   String get rules;
+
+  /// No description provided for @volume.
+  ///
+  /// In ru, this message translates to:
+  /// **'Громкость'**
+  String get volume;
+
+  /// No description provided for @music.
+  ///
+  /// In ru, this message translates to:
+  /// **'Музыка'**
+  String get music;
+
+  /// No description provided for @dubbing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Озвучка'**
+  String get dubbing;
+
+  /// No description provided for @effects.
+  ///
+  /// In ru, this message translates to:
+  /// **'Эффекты'**
+  String get effects;
+
+  /// No description provided for @language.
+  ///
+  /// In ru, this message translates to:
+  /// **'Язык'**
+  String get language;
+
+  /// No description provided for @settings.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки'**
+  String get settings;
+
+  /// No description provided for @game_settings.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки игры'**
+  String get game_settings;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

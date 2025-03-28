@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
+import 'package:shelter_ai/l10n/l10n.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/scaffold_template.dart';
@@ -24,9 +25,10 @@ class GameSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return BlocBuilder<GameSettingsCubit, GameSettingsState>(
       builder: (context, state) => ScaffoldTemplate(
-        name: "Настройки игры",
+        name: loc.game_settings,
         child: Column(
           children: [
             Container(

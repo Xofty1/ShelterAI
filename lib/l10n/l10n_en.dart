@@ -17,4 +17,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rules => 'Rules';
+
+  @override
+  String get volume => 'Volume';
+
+  @override
+  String get music => 'Music';
+
+  @override
+  String get dubbing => 'Dubbing';
+
+  @override
+  String get effects => 'Effects';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get game_settings => 'Game Settings';
 }

@@ -17,4 +17,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get rules => 'Правила';
+
+  @override
+  String get volume => 'Громкость';
+
+  @override
+  String get music => 'Музыка';
+
+  @override
+  String get dubbing => 'Озвучка';
+
+  @override
+  String get effects => 'Эффекты';
+
+  @override
+  String get language => 'Язык';
+
+  @override
+  String get settings => 'Настройки';
+
+  @override
+  String get game_settings => 'Настройки игры';
 }

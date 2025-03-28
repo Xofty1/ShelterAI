@@ -1,93 +1,110 @@
 import 'package:flutter/material.dart';
 
-// Легкая тема приложения (для светлого режима)
+
+const Color lightPrimaryColor = Color(0xFF8B5E3C);
+const Color lightSecondaryColor = Color(0xFFA98274);
+const Color lightBackgroundColor = Color(0xFFD3C0AA);
+const Color lightSurfaceColor = Colors.white;
+const Color lightOnPrimaryColor = Colors.black;
+const Color lightOnSecondaryColor = Colors.white;
+const Color lightOnBackgroundColor = Colors.black;
+const Color lightOnSurfaceColor = Colors.black;
+const Color lightActiveSwitch = Color(0xA38C6800);
+
+const Color darkPrimaryColor = Colors.black;
+const Color darkSecondaryColor = Color(0xFF424242);
+const Color darkBackgroundColor = Color(0xFF212121);
+const Color darkSurfaceColor = Color(0xFF303030);
+const Color darkOnPrimaryColor = Colors.white;
+const Color darkOnSecondaryColor = Colors.black;
+const Color darkOnBackgroundColor = Colors.white;
+const Color darkOnSurfaceColor = Colors.white;
+// Легкая тема приложения
 ThemeData get lightTheme => ThemeData(
-      brightness: Brightness.light,
-      // Устанавливает яркость на светлую (по умолчанию для светлой темы)
-      primaryColor: Colors.brown,
-      // Основной цвет приложения (цвет на панелях, кнопках и т. д.)
-      // scaffoldBackgroundColor: const Color(0xFFD3C0AA), // Цвет фона для основного экрана (scaffold)
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.brown, // Цвет фона для AppBar (верхней панели)
-        foregroundColor: Colors.black, // Цвет текста и иконок на AppBar
-      ),
-      switchTheme: _switchThemeData(),
-      // Настройки внешнего вида переключателя (Switch)
-      sliderTheme: _sliderThemeData(),
-      // Настройки внешнего вида ползунка (Slider)
-      inputDecorationTheme: _inputDecorationTheme(),
-    );
+  brightness: Brightness.light,
+  colorScheme: const ColorScheme.light(
+    primary: lightPrimaryColor,
+    secondary: lightSecondaryColor,
+    background: lightBackgroundColor,
+    surface: lightSurfaceColor,
+    onPrimary: lightOnPrimaryColor,
+    onSecondary: lightOnSecondaryColor,
+    onBackground: lightOnBackgroundColor,
+    onSurface: lightOnSurfaceColor,
+  ),
+  appBarTheme: const AppBarTheme(
+    backgroundColor: lightPrimaryColor,
+    foregroundColor: lightOnPrimaryColor,
+  ),
+  switchTheme: _switchThemeData(light: true),
+  sliderTheme: _sliderThemeData(light: true),
+  inputDecorationTheme: _inputDecorationTheme(light: true),
+);
 
-// Тема для темного режима
+// Темная тема приложения
 ThemeData get darkTheme => ThemeData(
-      brightness: Brightness.dark,
-      // Устанавливает яркость на темную (по умолчанию для темной темы)
-      primaryColor: Colors.black,
-      // Основной цвет приложения (черный для темной темы)
-      scaffoldBackgroundColor: Colors.grey[900],
-      // Темный фон для основного экрана
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.black, // Цвет фона для AppBar в темной теме
-        foregroundColor:
-            Colors.white, // Цвет текста и иконок на AppBar в темной теме
-      ),
-    );
+  brightness: Brightness.dark,
+  colorScheme: const ColorScheme.dark(
+    primary: darkPrimaryColor,
+    secondary: darkSecondaryColor,
+    background: darkBackgroundColor,
+    surface: darkSurfaceColor,
+    onPrimary: darkOnPrimaryColor,
+    onSecondary: darkOnSecondaryColor,
+    onBackground: darkOnBackgroundColor,
+    onSurface: darkOnSurfaceColor,
+  ),
+  appBarTheme: const AppBarTheme(
+    backgroundColor: darkPrimaryColor,
+    foregroundColor: darkOnPrimaryColor,
+  ),
+  switchTheme: _switchThemeData(light: false),
+  sliderTheme: _sliderThemeData(light: false),
+  inputDecorationTheme: _inputDecorationTheme(light: false),
+);
 
-// Настройка внешнего вида переключателя (Switch)
-SwitchThemeData _switchThemeData() {
-  return SwitchThemeData(
-    trackOutlineColor: WidgetStateProperty.all(const Color(0xA38C6800)),
-    thumbColor: WidgetStateProperty.resolveWith<Color>(
-      // Цвет "ползунка" переключателя
-      (states) =>
-          const Color(0xFF564200), // Когда переключатель включен, его цвет
-    ),
-    trackColor: WidgetStateProperty.resolveWith<Color>(
-      // Цвет полоски, по которой двигается ползунок
-      (states) => states.contains(WidgetState.selected)
-          ? const Color(0xA38C6800) // Когда переключатель включен
-          : Colors.white, // Когда переключатель выключен
-    ),
-    materialTapTargetSize:
-        MaterialTapTargetSize.shrinkWrap, // Размер области нажатия для Switch
-  );
-}
+// Настройки внешнего вида переключателя (Switch)
+SwitchThemeData _switchThemeData({required bool light}) => SwitchThemeData(
+  trackOutlineColor: WidgetStateProperty.all(
+      light ? lightSecondaryColor : darkSecondaryColor),
+  thumbColor: WidgetStateProperty.resolveWith<Color>(
+        (states) => light ? lightPrimaryColor : darkOnPrimaryColor,
+  ),
+  trackColor: WidgetStateProperty.resolveWith<Color>(
+        (states) => states.contains(WidgetState.selected)
+        ? (light ? lightPrimaryColor : darkSecondaryColor)
+        : (light ? Colors.white : darkSurfaceColor),
+  ),
+  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+);
 
-// Настройка внешнего вида ползунка (Slider)
-SliderThemeData _sliderThemeData() {
-  return const SliderThemeData(
-    trackHeight: 30,
-    // Высота дорожки ползунка
-    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 13),
-    // Форма и размер ползунка
-    overlayShape: RoundSliderOverlayShape(overlayRadius: 13),
-    // Форма и размер оверлея при нажатии
-    activeTrackColor: Color(0xA38C6800),
-    // Цвет активной дорожки ползунка
-    inactiveTrackColor: Colors.white,
-    // Цвет неактивной дорожки ползунка
-    thumbColor: Color(0x6B564200),
-    // Цвет самого ползунка
-    overlayColor: Color(0x6B564200),
-    // Цвет оверлея ползунка
-    valueIndicatorColor: Colors.white,
-    // Цвет индикатора значения
-    valueIndicatorTextStyle: TextStyle(
-      color: Colors.black, // Цвет текста в индикаторе
-      fontWeight: FontWeight.bold, // Жирный шрифт для текста в индикаторе
-    ),
-  );
-}
+// Настройки внешнего вида ползунка (Slider)
+SliderThemeData _sliderThemeData({required bool light}) => SliderThemeData(
+  trackHeight: 30,
+  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 13),
+  overlayShape: const RoundSliderOverlayShape(overlayRadius: 13),
+  activeTrackColor: light ? lightActiveSwitch : darkSecondaryColor,
+  inactiveTrackColor: light ? Colors.white : darkSurfaceColor,
+  thumbColor: light ? lightPrimaryColor : darkOnPrimaryColor,
+  overlayColor: light ? lightPrimaryColor.withOpacity(0.5) : darkSurfaceColor.withOpacity(0.5),
+  valueIndicatorColor: light ? lightSurfaceColor : darkSurfaceColor,
+  valueIndicatorTextStyle: TextStyle(
+    color: light ? lightOnBackgroundColor : darkOnBackgroundColor,
+    fontWeight: FontWeight.bold,
+  ),
+);
 
-InputDecorationTheme _inputDecorationTheme() {
-  return InputDecorationTheme(
-    filled: true,
-    fillColor: Colors.brown.shade50,
-    hintStyle: const TextStyle(color: Colors.grey),
-    contentPadding: const EdgeInsets.all(16.0),
-    border: OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.brown, width: 2.0),
-      borderRadius: BorderRadius.circular(8.0),
+// Настройки внешнего вида полей ввода
+InputDecorationTheme _inputDecorationTheme({required bool light}) => InputDecorationTheme(
+  filled: true,
+  fillColor: light ? lightSurfaceColor : darkSurfaceColor,
+  hintStyle: TextStyle(color: light ? lightOnBackgroundColor.withOpacity(0.5) : darkOnBackgroundColor.withOpacity(0.5)),
+  contentPadding: const EdgeInsets.all(16.0),
+  border: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: light ? lightPrimaryColor : darkSecondaryColor,
+      width: 2.0,
     ),
-  );
-}
+    borderRadius: BorderRadius.circular(8.0),
+  ),
+);

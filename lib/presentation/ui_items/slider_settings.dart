@@ -31,7 +31,6 @@ class _SliderSettingsState extends State<SliderSettings> {
 
   void _loadSetting() {
     _sliderValue = widget.loadSetting();
-    setState(() {});
   }
 
   @override
