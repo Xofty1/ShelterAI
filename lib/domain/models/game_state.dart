@@ -1,27 +1,44 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/round_info.dart';
+import 'package:shelter_ai/domain/models/vote_info.dart';
 
 import 'disaster.dart';
 import 'game_settings.dart';
 
 part 'game_state.freezed.dart';
 
+abstract class GameState{
+  const GameState();
+}
+
+class LoadingGameState extends GameState{
+  const LoadingGameState();
+}
+
 @freezed
-abstract class GameState with _$GameState{
-  const factory GameState({
+abstract class RunningGameState extends GameState with _$RunningGameState{
+  const RunningGameState._();
+
+  const factory RunningGameState({
     // Настройки игры
     required GameSettings settings,
     // Свойства катастрофы
     required Disaster disaster,
     // Список игроков
     required List<Player> players,
+    // Переменная означает, что сейчас промежуточное состояние
+    // К примеру перевернутая карточка игрока, перед его ходом.
+    // В основном эту переменную меняет ReadyGameEvent.
+    required bool isPreview,
     // Текущая стадия игры
     required GameStage stage,
     // Вся информация по текущему раунду
     required RoundInfo roundInfo,
     // Количество действий, сделынных игроком на данном ходу (кол-во открытых карточек)
     required int actionsTaken,
+    // Информация о голосовании
+    required VoteInfo voteInfo,
     // Индекс текущего игрока (чей ход)
     required int currentPlayerIndex,
   }) = _GameState;
@@ -35,14 +52,10 @@ enum GameStage{
   roundStarted,
   /// Этап вскрытия данных
   openCards,
-  /// Этаб обсуждения
+  /// Этап обсуждения
   speaking,
   /// Этап голосования
   voting,
-  /// Этап дообсуждения
-  reSpeaking,
-  /// Этап переголосования
-  reVoting,
   /// Этап объявления результатов голосования
   voteResult,
   /// Финальный этап
