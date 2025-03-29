@@ -12,7 +12,8 @@ class GameBloc extends Bloc<GameEvent, GameState>{
 
   final GPTRepository repository;
 
-  GameBloc(this.repository, GameSettings settings) : super(const LoadingGameState()) {
+  GameBloc(this.repository
+      ) : super(const LoadingGameState()) {
     on<StartedGameEvent>(_onStarted);
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
@@ -85,7 +86,12 @@ class GameBloc extends Bloc<GameEvent, GameState>{
               ? GameStage.roundStarted
               : GameStage.finals;
           isPreview = true;
-          // TODO: Очистить VoteStatus
+          voteInfo = const VoteInfo(
+            votes: [],
+            canBeSelected: [],
+            selectedIndexes: [],
+            voteStatus: VoteStatus.none
+          );
         } else{
           stage = GameStage.speaking;
           isPreview = true;
@@ -181,12 +187,60 @@ class GameBloc extends Bloc<GameEvent, GameState>{
 
       final sortedVotes = _getSortedVotes(votes);
       final lastKicking = prevState.roundInfo.kickedCount - 1;
+
       // В отсортированном массиве последний кикаемый игрок должен
       // иметь большее количество голосов, чем следующий после него.
       if(sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value){
-        // TODO: Голосование
+
+        // Получаем кикнутых игроков
+        final selectedIndexes = sortedVotes
+            .getRange(0, lastKicking)
+            .map((element) => element.key)
+            .toList();
+
+        final players = List.of(prevState.players);
+
+        // Меняем статус жизни персонажей: last -> killed,
+        // У выбранных персонажей alive -> last
+        for(int i = 0; i < players.length; i++){
+          if(players[i].lifeStatus == LifeStatus.killed){
+            players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
+          } else if(selectedIndexes.contains(i)){
+            players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
+          }
+        }
+
+
+        emit(prevState.copyWith(
+          players: players,
+          isPreview: true,
+          stage: GameStage.voteResult,
+          roundInfo: getRoundInfo(prevState.roundInfo.roundNumber, prevState.settings.playersCount),
+          actionsTaken: 0,
+          voteInfo: prevState.voteInfo.copyWith(
+            selectedIndexes: selectedIndexes,
+            voteStatus: VoteStatus.successful,
+          ),
+          currentPlayerIndex: players
+              .indexWhere((player) => player.lifeStatus == LifeStatus.alive),
+        ));
       } else{
         // TODO: Переголосование
+        int votesBorder = sortedVotes[lastKicking].value;
+        final canBeSelected = votes.map((vote) => vote >= votesBorder).toList();
+
+        emit(prevState.copyWith(
+          isPreview: true,
+          stage: GameStage.voteResult,
+          voteInfo: prevState.voteInfo.copyWith(
+            voteStatus: VoteStatus.reRunning,
+            votes: List.filled(prevState.settings.playersCount, 0),
+            canBeSelected: canBeSelected,
+            selectedIndexes: [],
+          ),
+          currentPlayerIndex: prevState.players
+              .indexWhere((player) => player.lifeStatus != LifeStatus.killed),
+        ));
       }
     }
   }

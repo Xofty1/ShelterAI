@@ -8,7 +8,8 @@ abstract class VoteInfo with _$VoteInfo{
     // Голоса (по индексам)
     required List<int> votes,
     // Могут ли быть выбраны в голосовании
-    // Необходимо для переголосования
+    // Необходимо для переголосования, список с информацией:
+    // можно выбрать игрока или нельзя
     required List<bool> canBeSelected,
     // Победители голосования (их индексы)
     required List<int> selectedIndexes,
