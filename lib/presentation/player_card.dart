@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
 import 'package:shelter_ai/presentation/ui_items/label.dart';
-import 'package:shelter_ai/presentation/ui_items/scaffold_template.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
+import 'package:shelter_ai/presentation/ui_items/asset_image_item.dart';
 import 'dart:math';
 
 class PlayerCardScreen extends StatefulWidget {
@@ -17,6 +17,20 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   late AnimationController _controller;
   late Animation<double> _animation;
   bool _showFrontSide = false;
+
+  // Define consistent card dimensions
+  double cardWidth = 10;
+  double cardHeight = 10;
+
+  // Store the active state for each row
+  final Map<String, bool> _rowActiveStates = {
+    "Возраст": false,
+    "Здоровье": false,
+    "Хобби/Навыки": false,
+    "Фобии": false,
+    "Багаж": false,
+    "Дополнительная информация": false,
+  };
 
   @override
   void initState() {
@@ -50,48 +64,87 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
     });
   }
 
+  // Update the active state for a specific row
+  void _updateRowActiveState(String label, bool isActive) {
+    setState(() {
+      _rowActiveStates[label] = isActive;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ScaffoldTemplate(
-      name: "Раунд 1",
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 20),
-          GestureDetector(
-            onTap: _flipCard,
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                final angle = _animation.value * pi;
-                final transform = Matrix4.identity()
-                  ..setEntry(3, 2, 0.001)
-                  ..rotateY(angle);
-
-                return Transform(
-                  transform: transform,
-                  alignment: Alignment.center,
-                  child: angle >= pi / 2
-                      ? Transform(
-                          transform: Matrix4.identity()..rotateY(pi),
-                          alignment: Alignment.center,
-                          child: _buildFrontCard(),
-                        )
-                      : _buildBackCard(),
-                );
-              },
-            ),
+    cardWidth = MediaQuery.of(context).size.width * 0.9;
+    cardHeight = MediaQuery.of(context).size.height * 0.9;
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF6B5642), Color(0xFFD1A881)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          if (_showFrontSide) ...[],
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: !_showFrontSide ? _flipCard : null,
+              child: AnimatedBuilder(
+                animation: _animation,
+                builder: (context, child) {
+                  final angle = _animation.value * pi;
+
+                  // When the card is past the halfway point of animation,
+                  // show the front face instead of the back face
+                  if (angle >= pi / 2) {
+                    // We need to apply a second transformation to fix the reversed text
+                    // that would otherwise be displayed
+                    return Transform(
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.001) // perspective
+                        ..rotateY(angle),
+                      alignment: Alignment.center,
+                      child: Transform(
+                        transform: Matrix4.identity()..rotateY(pi),
+                        alignment: Alignment.center,
+                        child: _buildCardContainer(
+                          isBackSide: false,
+                          child: _buildFrontCardContent(),
+                        ),
+                      ),
+                    );
+                  } else {
+                    // First half of animation - show the back face
+                    return Transform(
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.001) // perspective
+                        ..rotateY(angle),
+                      alignment: Alignment.center,
+                      child: _buildCardContainer(
+                        isBackSide: true,
+                        child: _buildBackCardContent(),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildFrontCard() {
+  // A shared container with consistent styling for both card sides
+  Widget _buildCardContainer(
+      {required bool isBackSide, required Widget child}) {
     return Container(
+      width: cardWidth,
+      height: cardHeight,
       decoration: BoxDecoration(
-        color: const Color(0xFFD9D9D9),
+        color: isBackSide ? const Color(0xFF8B7355) : const Color(0xFFD9D9D9),
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -101,7 +154,14 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(12),
+      child: child,
+    );
+  }
+
+  // Front card content only
+  Widget _buildFrontCardContent() {
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -119,7 +179,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           const Center(
             child: Text(
               "Игрок 1",
@@ -130,20 +190,25 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
               ),
             ),
           ),
-          const SizedBox(height: 30),
-          _buildStatRow("Здоровье", "100%"),
-          const SizedBox(height: 15),
-          _buildStatRow("Сытость", "80%"),
-          const SizedBox(height: 15),
-          _buildStatRow("Рассудок", "90%"),
-          const SizedBox(height: 15),
-          _buildStatRow("Усталость", "70%"),
-          const SizedBox(height: 40),
+          const SizedBox(height: 12),
+          _buildStatRow("assets/images/hobby.png", "Возраст", "100%"),
+          const SizedBox(height: 12),
+          _buildStatRow("assets/images/hobby.png", "Здоровье", "80%"),
+          const SizedBox(height: 12),
+          _buildStatRow("assets/images/hobby.png", "Хобби/Навыки", "90%"),
+          const SizedBox(height: 12),
+          _buildStatRow("assets/images/hobby.png", "Фобии", "70%"),
+          const SizedBox(height: 12),
+          _buildStatRow("assets/images/hobby.png", "Багаж", "70%"),
+          const SizedBox(height: 12),
+          _buildStatRow(
+              "assets/images/hobby.png", "Дополнительная информация", "70%"),
+          const SizedBox(height: 20),
           Center(
             child: CustomButton(
-              text: "Подтверить выбор",
+              text: "Подтверить",
               onPressed: () {
-                // Handle next turn
+                _flipCard();
               },
             ),
           ),
@@ -152,53 +217,48 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
     );
   }
 
-  Widget _buildBackCard() {
-    return Container(
-      width: 300,
-      height: 400,
-      decoration: BoxDecoration(
-        color: const Color(0xFF8B7355),
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-        image: const DecorationImage(
-          image: AssetImage("assets/images/door.png"),
-          fit: BoxFit.scaleDown,
+  // Back card content only
+  Widget _buildBackCardContent() {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AssetImageItem(
+          imagePath: "assets/images/door.png",
+          width: 200,
+          height: 200,
         ),
-      ),
-      padding: const EdgeInsets.all(20),
-      child: Center(
-        child: Text(
+        SizedBox(height: 20),
+        Text(
           "Нажмите, чтобы увидеть карту игрока",
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             color: Color(0xFFD9D9D9),
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+      ],
     );
   }
 
-  Widget _buildStatRow(String label, String value) {
+  Widget _buildStatRow(String assetsPath, String label, String value) {
+    bool isActive = _rowActiveStates[label] ?? false;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: const TextStyle(
             fontSize: 18,
-            color: Color(0xFF5A503F),
+            color: Color(0xFF6B5642),
           ),
         ),
         Container(
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.brown,
+            // Change color based on active state
+            color: isActive ? const Color(0xFFA38C68) : const Color(0x666B5642),
             borderRadius: BorderRadius.circular(12),
             boxShadow: const [
               BoxShadow(
@@ -209,17 +269,24 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
             ],
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
-                width: 30,
-                child: Image.asset("assets/images/door.png"),
+              AssetImageItem(
+                backgroundColor: const Color(0x80D9D9D9),
+                imagePath: assetsPath,
+                width: 60,
+                height: 60,
+                borderRadius: 4.0,
               ),
               const LabelWidget(
-                  text: "ddddddddddddddddddddddddddddd"
-                      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
+                  color: Color(0xFFD9D9D9),
+                  text: "ddddddddddddddddddddddddddddd"),
               CustomSwitcher(
-                initialValue: false,
-                onToggle: (value) {},
+                initialValue: isActive,
+                onToggle: (value) {
+                  // Update the state in the parent widget
+                  _updateRowActiveState(label, value);
+                },
               )
             ],
           ),
