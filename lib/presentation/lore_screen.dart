@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../domain/bloc/game_bloc.dart';
 
 class LoreScreen extends StatelessWidget {
   const LoreScreen({super.key});
@@ -95,7 +98,8 @@ class LoreScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/player_card');
+                BlocProvider.of<GameBloc>(context).add(ReadyGameEvent());
+                // Navigator.pushNamed(context, '/player_card');
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),

@@ -132,7 +132,7 @@ class GameSettingsScreen extends StatelessWidget {
             CustomButton(
               text: 'Продолжить',
               onPressed: () {
-                Navigator.pushNamed(context, '/lore');
+                Navigator.pushNamed(context, '/game');
               },
             ),
           ],
