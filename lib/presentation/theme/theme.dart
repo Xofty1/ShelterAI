@@ -9,7 +9,7 @@ const Color lightOnPrimaryColor = Colors.black;
 const Color lightOnSecondaryColor = Colors.white;
 const Color lightOnBackgroundColor = Colors.black;
 const Color lightOnSurfaceColor = Colors.black;
-const Color lightActiveSwitch = Color(0xA38C6800);
+const Color lightActiveSwitch = Color(0xFFA38C68);
 
 const Color darkPrimaryColor = Colors.black;
 const Color darkSecondaryColor = Color(0xFF424242);

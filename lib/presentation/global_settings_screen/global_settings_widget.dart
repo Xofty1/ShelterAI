@@ -39,7 +39,10 @@ class GlobalSettingsWidget extends StatelessWidget {
             Center(
               child: Text(
                 loc.language,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF6B4F35)),
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF6B4F35)),
               ),
             ),
             const SizedBox(height: 16),
@@ -58,20 +61,26 @@ class GlobalSettingsWidget extends StatelessWidget {
             Center(
               child: Text(
                 loc.volume,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF6B4F35)),
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF6B4F35)),
               ),
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                LabelWidget(text: loc.music),
+                IntrinsicWidth(
+                  child: LabelWidget(text: loc.music),
+                ),
                 Expanded(
                   child: SliderSettings(
-                    loadSetting: () =>
-                        AppSharedPreference().getMusic()?.toDouble() ?? 50.0,
-                    saveSetting: (value) async =>
-                        await AppSharedPreference().saveMusic(value.toInt()),
+                    defaultValue: state.settings.music.toDouble(),
+                    onChange: (value) {
+                      BlocProvider.of<AppSettingsCubit>(context)
+                          .updateMusic(value.toInt());
+                    },
                   ),
                 ),
               ],
@@ -80,13 +89,17 @@ class GlobalSettingsWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                LabelWidget(text: loc.dubbing),
+                IntrinsicWidth(
+                  child: LabelWidget(text: loc.dubbing),
+                ),
                 Expanded(
                   child: SliderSettings(
-                    loadSetting: () =>
-                        AppSharedPreference().getDubbing()?.toDouble() ?? 50.0,
-                    saveSetting: (value) async => await AppSharedPreference()
-                        .saveDubbing(value.toInt()),
+                    defaultValue: AppSharedPreference().getDubbing()?.toDouble() ?? 50,
+                    onChange: (value) {
+                      AppSharedPreference().saveDubbing(value.toInt());
+                      BlocProvider.of<AppSettingsCubit>(context)
+                          .updateDubbing(value.toInt());
+                    },
                   ),
                 ),
               ],
@@ -95,13 +108,18 @@ class GlobalSettingsWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                LabelWidget(text: loc.effects),
+                IntrinsicWidth(
+                  child: LabelWidget(text: loc.effects),
+                ),
+
                 Expanded(
                   child: SliderSettings(
-                    loadSetting: () =>
-                        AppSharedPreference().getEffects()?.toDouble() ?? 50.0,
-                    saveSetting: (value) async => await AppSharedPreference()
-                        .saveEffects(value.toInt()),
+                    defaultValue: AppSharedPreference().getEffects()?.toDouble() ?? 50,
+                    onChange: (value) {
+                      AppSharedPreference().saveEffects(value.toInt());
+                      BlocProvider.of<AppSettingsCubit>(context)
+                          .updateEffects(value.toInt());
+                    },
                   ),
                 ),
               ],

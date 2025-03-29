@@ -62,8 +62,7 @@ class GameSettingsScreen extends StatelessWidget {
                           defaultValue: 10,
                           min: 4,
                           max: 22,
-                          loadSetting: () => 6,
-                          saveSetting: (value) async =>
+                          onChange: (value) =>
                               BlocProvider.of<GameSettingsCubit>(context)
                                   .updatePlayersCount(value.toInt()),
                         ),
@@ -120,8 +119,7 @@ class GameSettingsScreen extends StatelessWidget {
                             defaultValue: 33,
                             min: 30,
                             max: 120,
-                            loadSetting: () => 33,
-                            saveSetting: (value) async =>
+                            onChange: (value) =>
                                 BlocProvider.of<GameSettingsCubit>(context)
                                     .updateTime(value.toInt())),
                       ),
@@ -134,7 +132,7 @@ class GameSettingsScreen extends StatelessWidget {
             CustomButton(
               text: 'Продолжить',
               onPressed: () {
-                Navigator.pushNamed(context, '/settings');
+                Navigator.pushNamed(context, '/player_card');
               },
             ),
           ],
