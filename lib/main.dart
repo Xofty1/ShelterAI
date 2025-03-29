@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shelter_ai/presentation/game_settings_screen.dart';
+import 'package:shelter_ai/presentation/global_settings_screen/global_settings_widget.dart';
+import 'package:shelter_ai/presentation/player_card.dart';
+import 'package:shelter_ai/presentation/shelter_home.dart';
+import 'package:shelter_ai/presentation/theme/theme.dart';
+import 'domain/bloc/app_settings_cubit.dart';
+import 'l10n/l10n.dart';
+
+import 'core/app_shared_preference/app_shared_preference.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  AppSharedPreference().init();
   runApp(const MyApp());
 }
 
@@ -9,15 +22,42 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ShelterAI',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return BlocProvider(
+      create: (context) => AppSettingsCubit(), // Добавляем провайдер
+      child: Builder(
+        builder: (context) {
+          final Brightness platformBrightness =
+              MediaQuery.platformBrightnessOf(context);
+          final bool isSystemDark = platformBrightness == Brightness.dark;
+
+          return BlocSelector<AppSettingsCubit, AppSettingsState, String>(
+            selector: (state) => state.settings.loc,
+            builder: (context, languageCode) {
+              return MaterialApp(
+                locale: Locale(languageCode),
+                supportedLocales: AppLocalizations.supportedLocales,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                theme: isSystemDark
+                    ? lightTheme /* <= тут заменить на darkTheme */
+                    : lightTheme,
+                // Исправленная логика тем
+                routes: {
+                  '/': (context) => const ShelterHome(),
+                  '/settings': (context) => const GlobalSettingsWidget(),
+                  '/game_settings': (context) => const GameSettingsWidget(),
+                  '/player_card': (context) => const PlayerCardScreen(),
+                },
+                initialRoute: '/',
+              );
+            },
+          );
+        },
       ),
-      home: const Center(),
     );
   }
 }
-
-
