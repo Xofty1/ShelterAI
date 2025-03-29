@@ -1,0 +1,14 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Бункер",
+  "newGame": "Новая игра",
+    "history": "История",
+    "rules": "Правила",
+    "volume": "Громкость",
+    "music": "Музыка",
+    "dubbing": "Озвучка",
+    "effects": "Эффекты",
+    "language": "Язык",
+    "settings": "Настройки",
+    "game_settings": "Настройки игры"
+}
