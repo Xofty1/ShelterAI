@@ -14,35 +14,47 @@ part of 'game_state.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$GameState {
-  GameSettings get settings;
-  Disaster get disaster;
-  GameStage get stage;
-  int get iteration;
-  List<Player> get players;
-  List<List<String>> get notes;
+mixin _$RunningGameState {
+// Настройки игры
+  GameSettings get settings; // Свойства катастрофы
+  Disaster get disaster; // Список игроков
+  List<Player>
+      get players; // Переменная означает, что сейчас промежуточное состояние
+// К примеру перевернутая карточка игрока, перед его ходом.
+// В основном эту переменную меняет ReadyGameEvent.
+  bool get isPreview; // Текущая стадия игры
+  GameStage get stage; // Вся информация по текущему раунду
+  RoundInfo get roundInfo; // Информация о голосовании
+  VoteInfo get voteInfo; // Индекс текущего игрока (чей ход)
+  int get currentPlayerIndex;
 
-  /// Create a copy of GameState
+  /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $GameStateCopyWith<GameState> get copyWith =>
-      _$GameStateCopyWithImpl<GameState>(this as GameState, _$identity);
+  $RunningGameStateCopyWith<RunningGameState> get copyWith =>
+      _$RunningGameStateCopyWithImpl<RunningGameState>(
+          this as RunningGameState, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is GameState &&
+            other is RunningGameState &&
             (identical(other.settings, settings) ||
                 other.settings == settings) &&
             (identical(other.disaster, disaster) ||
                 other.disaster == disaster) &&
-            (identical(other.stage, stage) || other.stage == stage) &&
-            (identical(other.iteration, iteration) ||
-                other.iteration == iteration) &&
             const DeepCollectionEquality().equals(other.players, players) &&
-            const DeepCollectionEquality().equals(other.notes, notes));
+            (identical(other.isPreview, isPreview) ||
+                other.isPreview == isPreview) &&
+            (identical(other.stage, stage) || other.stage == stage) &&
+            (identical(other.roundInfo, roundInfo) ||
+                other.roundInfo == roundInfo) &&
+            (identical(other.voteInfo, voteInfo) ||
+                other.voteInfo == voteInfo) &&
+            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
+                other.currentPlayerIndex == currentPlayerIndex));
   }
 
   @override
@@ -50,52 +62,62 @@ mixin _$GameState {
       runtimeType,
       settings,
       disaster,
-      stage,
-      iteration,
       const DeepCollectionEquality().hash(players),
-      const DeepCollectionEquality().hash(notes));
+      isPreview,
+      stage,
+      roundInfo,
+      voteInfo,
+      currentPlayerIndex);
 
   @override
   String toString() {
-    return 'GameState(settings: $settings, disaster: $disaster, stage: $stage, iteration: $iteration, players: $players, notes: $notes)';
+    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, isPreview: $isPreview, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
   }
 }
 
 /// @nodoc
-abstract mixin class $GameStateCopyWith<$Res> {
-  factory $GameStateCopyWith(GameState value, $Res Function(GameState) _then) =
-      _$GameStateCopyWithImpl;
+abstract mixin class $RunningGameStateCopyWith<$Res> {
+  factory $RunningGameStateCopyWith(
+          RunningGameState value, $Res Function(RunningGameState) _then) =
+      _$RunningGameStateCopyWithImpl;
   @useResult
   $Res call(
       {GameSettings settings,
       Disaster disaster,
-      GameStage stage,
-      int iteration,
       List<Player> players,
-      List<List<String>> notes});
+      bool isPreview,
+      GameStage stage,
+      RoundInfo roundInfo,
+      VoteInfo voteInfo,
+      int currentPlayerIndex});
 
   $GameSettingsCopyWith<$Res> get settings;
   $DisasterCopyWith<$Res> get disaster;
+  $RoundInfoCopyWith<$Res> get roundInfo;
+  $VoteInfoCopyWith<$Res> get voteInfo;
 }
 
 /// @nodoc
-class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
-  _$GameStateCopyWithImpl(this._self, this._then);
+class _$RunningGameStateCopyWithImpl<$Res>
+    implements $RunningGameStateCopyWith<$Res> {
+  _$RunningGameStateCopyWithImpl(this._self, this._then);
 
-  final GameState _self;
-  final $Res Function(GameState) _then;
+  final RunningGameState _self;
+  final $Res Function(RunningGameState) _then;
 
-  /// Create a copy of GameState
+  /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? settings = null,
     Object? disaster = null,
-    Object? stage = null,
-    Object? iteration = null,
     Object? players = null,
-    Object? notes = null,
+    Object? isPreview = null,
+    Object? stage = null,
+    Object? roundInfo = null,
+    Object? voteInfo = null,
+    Object? currentPlayerIndex = null,
   }) {
     return _then(_self.copyWith(
       settings: null == settings
@@ -106,26 +128,34 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
           ? _self.disaster
           : disaster // ignore: cast_nullable_to_non_nullable
               as Disaster,
-      stage: null == stage
-          ? _self.stage
-          : stage // ignore: cast_nullable_to_non_nullable
-              as GameStage,
-      iteration: null == iteration
-          ? _self.iteration
-          : iteration // ignore: cast_nullable_to_non_nullable
-              as int,
       players: null == players
           ? _self.players
           : players // ignore: cast_nullable_to_non_nullable
               as List<Player>,
-      notes: null == notes
-          ? _self.notes
-          : notes // ignore: cast_nullable_to_non_nullable
-              as List<List<String>>,
+      isPreview: null == isPreview
+          ? _self.isPreview
+          : isPreview // ignore: cast_nullable_to_non_nullable
+              as bool,
+      stage: null == stage
+          ? _self.stage
+          : stage // ignore: cast_nullable_to_non_nullable
+              as GameStage,
+      roundInfo: null == roundInfo
+          ? _self.roundInfo
+          : roundInfo // ignore: cast_nullable_to_non_nullable
+              as RoundInfo,
+      voteInfo: null == voteInfo
+          ? _self.voteInfo
+          : voteInfo // ignore: cast_nullable_to_non_nullable
+              as VoteInfo,
+      currentPlayerIndex: null == currentPlayerIndex
+          ? _self.currentPlayerIndex
+          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 
-  /// Create a copy of GameState
+  /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -135,7 +165,7 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
     });
   }
 
-  /// Create a copy of GameState
+  /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -144,30 +174,52 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
       return _then(_self.copyWith(disaster: value));
     });
   }
+
+  /// Create a copy of RunningGameState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RoundInfoCopyWith<$Res> get roundInfo {
+    return $RoundInfoCopyWith<$Res>(_self.roundInfo, (value) {
+      return _then(_self.copyWith(roundInfo: value));
+    });
+  }
+
+  /// Create a copy of RunningGameState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $VoteInfoCopyWith<$Res> get voteInfo {
+    return $VoteInfoCopyWith<$Res>(_self.voteInfo, (value) {
+      return _then(_self.copyWith(voteInfo: value));
+    });
+  }
 }
 
 /// @nodoc
 
-class _GameState implements GameState {
+class _GameState extends RunningGameState {
   const _GameState(
       {required this.settings,
       required this.disaster,
-      required this.stage,
-      required this.iteration,
       required final List<Player> players,
-      required final List<List<String>> notes})
+      required this.isPreview,
+      required this.stage,
+      required this.roundInfo,
+      required this.voteInfo,
+      required this.currentPlayerIndex})
       : _players = players,
-        _notes = notes;
+        super._();
 
+// Настройки игры
   @override
   final GameSettings settings;
+// Свойства катастрофы
   @override
   final Disaster disaster;
-  @override
-  final GameStage stage;
-  @override
-  final int iteration;
+// Список игроков
   final List<Player> _players;
+// Список игроков
   @override
   List<Player> get players {
     if (_players is EqualUnmodifiableListView) return _players;
@@ -175,15 +227,25 @@ class _GameState implements GameState {
     return EqualUnmodifiableListView(_players);
   }
 
-  final List<List<String>> _notes;
+// Переменная означает, что сейчас промежуточное состояние
+// К примеру перевернутая карточка игрока, перед его ходом.
+// В основном эту переменную меняет ReadyGameEvent.
   @override
-  List<List<String>> get notes {
-    if (_notes is EqualUnmodifiableListView) return _notes;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_notes);
-  }
+  final bool isPreview;
+// Текущая стадия игры
+  @override
+  final GameStage stage;
+// Вся информация по текущему раунду
+  @override
+  final RoundInfo roundInfo;
+// Информация о голосовании
+  @override
+  final VoteInfo voteInfo;
+// Индекс текущего игрока (чей ход)
+  @override
+  final int currentPlayerIndex;
 
-  /// Create a copy of GameState
+  /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -200,11 +262,16 @@ class _GameState implements GameState {
                 other.settings == settings) &&
             (identical(other.disaster, disaster) ||
                 other.disaster == disaster) &&
-            (identical(other.stage, stage) || other.stage == stage) &&
-            (identical(other.iteration, iteration) ||
-                other.iteration == iteration) &&
             const DeepCollectionEquality().equals(other._players, _players) &&
-            const DeepCollectionEquality().equals(other._notes, _notes));
+            (identical(other.isPreview, isPreview) ||
+                other.isPreview == isPreview) &&
+            (identical(other.stage, stage) || other.stage == stage) &&
+            (identical(other.roundInfo, roundInfo) ||
+                other.roundInfo == roundInfo) &&
+            (identical(other.voteInfo, voteInfo) ||
+                other.voteInfo == voteInfo) &&
+            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
+                other.currentPlayerIndex == currentPlayerIndex));
   }
 
   @override
@@ -212,20 +279,22 @@ class _GameState implements GameState {
       runtimeType,
       settings,
       disaster,
-      stage,
-      iteration,
       const DeepCollectionEquality().hash(_players),
-      const DeepCollectionEquality().hash(_notes));
+      isPreview,
+      stage,
+      roundInfo,
+      voteInfo,
+      currentPlayerIndex);
 
   @override
   String toString() {
-    return 'GameState(settings: $settings, disaster: $disaster, stage: $stage, iteration: $iteration, players: $players, notes: $notes)';
+    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, isPreview: $isPreview, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
   }
 }
 
 /// @nodoc
 abstract mixin class _$GameStateCopyWith<$Res>
-    implements $GameStateCopyWith<$Res> {
+    implements $RunningGameStateCopyWith<$Res> {
   factory _$GameStateCopyWith(
           _GameState value, $Res Function(_GameState) _then) =
       __$GameStateCopyWithImpl;
@@ -234,15 +303,21 @@ abstract mixin class _$GameStateCopyWith<$Res>
   $Res call(
       {GameSettings settings,
       Disaster disaster,
-      GameStage stage,
-      int iteration,
       List<Player> players,
-      List<List<String>> notes});
+      bool isPreview,
+      GameStage stage,
+      RoundInfo roundInfo,
+      VoteInfo voteInfo,
+      int currentPlayerIndex});
 
   @override
   $GameSettingsCopyWith<$Res> get settings;
   @override
   $DisasterCopyWith<$Res> get disaster;
+  @override
+  $RoundInfoCopyWith<$Res> get roundInfo;
+  @override
+  $VoteInfoCopyWith<$Res> get voteInfo;
 }
 
 /// @nodoc
@@ -252,17 +327,19 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
   final _GameState _self;
   final $Res Function(_GameState) _then;
 
-  /// Create a copy of GameState
+  /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
     Object? settings = null,
     Object? disaster = null,
-    Object? stage = null,
-    Object? iteration = null,
     Object? players = null,
-    Object? notes = null,
+    Object? isPreview = null,
+    Object? stage = null,
+    Object? roundInfo = null,
+    Object? voteInfo = null,
+    Object? currentPlayerIndex = null,
   }) {
     return _then(_GameState(
       settings: null == settings
@@ -273,26 +350,34 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
           ? _self.disaster
           : disaster // ignore: cast_nullable_to_non_nullable
               as Disaster,
-      stage: null == stage
-          ? _self.stage
-          : stage // ignore: cast_nullable_to_non_nullable
-              as GameStage,
-      iteration: null == iteration
-          ? _self.iteration
-          : iteration // ignore: cast_nullable_to_non_nullable
-              as int,
       players: null == players
           ? _self._players
           : players // ignore: cast_nullable_to_non_nullable
               as List<Player>,
-      notes: null == notes
-          ? _self._notes
-          : notes // ignore: cast_nullable_to_non_nullable
-              as List<List<String>>,
+      isPreview: null == isPreview
+          ? _self.isPreview
+          : isPreview // ignore: cast_nullable_to_non_nullable
+              as bool,
+      stage: null == stage
+          ? _self.stage
+          : stage // ignore: cast_nullable_to_non_nullable
+              as GameStage,
+      roundInfo: null == roundInfo
+          ? _self.roundInfo
+          : roundInfo // ignore: cast_nullable_to_non_nullable
+              as RoundInfo,
+      voteInfo: null == voteInfo
+          ? _self.voteInfo
+          : voteInfo // ignore: cast_nullable_to_non_nullable
+              as VoteInfo,
+      currentPlayerIndex: null == currentPlayerIndex
+          ? _self.currentPlayerIndex
+          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 
-  /// Create a copy of GameState
+  /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -302,13 +387,33 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
     });
   }
 
-  /// Create a copy of GameState
+  /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DisasterCopyWith<$Res> get disaster {
     return $DisasterCopyWith<$Res>(_self.disaster, (value) {
       return _then(_self.copyWith(disaster: value));
+    });
+  }
+
+  /// Create a copy of RunningGameState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $RoundInfoCopyWith<$Res> get roundInfo {
+    return $RoundInfoCopyWith<$Res>(_self.roundInfo, (value) {
+      return _then(_self.copyWith(roundInfo: value));
+    });
+  }
+
+  /// Create a copy of RunningGameState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $VoteInfoCopyWith<$Res> get voteInfo {
+    return $VoteInfoCopyWith<$Res>(_self.voteInfo, (value) {
+      return _then(_self.copyWith(voteInfo: value));
     });
   }
 }
