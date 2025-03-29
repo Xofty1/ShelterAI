@@ -35,8 +35,6 @@ abstract class RunningGameState extends GameState with _$RunningGameState{
     required GameStage stage,
     // Вся информация по текущему раунду
     required RoundInfo roundInfo,
-    // Количество действий, сделынных игроком на данном ходу (кол-во открытых карточек)
-    required int actionsTaken,
     // Информация о голосовании
     required VoteInfo voteInfo,
     // Индекс текущего игрока (чей ход)

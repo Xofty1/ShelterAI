@@ -17,7 +17,8 @@ T _$identity<T>(T value) => value;
 mixin _$VoteInfo {
 // Голоса (по индексам)
   List<int> get votes; // Могут ли быть выбраны в голосовании
-// Необходимо для переголосования
+// Необходимо для переголосования, список с информацией:
+// можно выбрать игрока или нельзя
   List<bool> get canBeSelected; // Победители голосования (их индексы)
   List<int> get selectedIndexes; // Статус голосования
   VoteStatus get voteStatus;
@@ -130,10 +131,12 @@ class _VoteInfo implements VoteInfo {
   }
 
 // Могут ли быть выбраны в голосовании
-// Необходимо для переголосования
+// Необходимо для переголосования, список с информацией:
+// можно выбрать игрока или нельзя
   final List<bool> _canBeSelected;
 // Могут ли быть выбраны в голосовании
-// Необходимо для переголосования
+// Необходимо для переголосования, список с информацией:
+// можно выбрать игрока или нельзя
   @override
   List<bool> get canBeSelected {
     if (_canBeSelected is EqualUnmodifiableListView) return _canBeSelected;

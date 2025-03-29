@@ -24,9 +24,7 @@ mixin _$RunningGameState {
 // В основном эту переменную меняет ReadyGameEvent.
   bool get isPreview; // Текущая стадия игры
   GameStage get stage; // Вся информация по текущему раунду
-  RoundInfo
-      get roundInfo; // Количество действий, сделынных игроком на данном ходу (кол-во открытых карточек)
-  int get actionsTaken; // Информация о голосовании
+  RoundInfo get roundInfo; // Информация о голосовании
   VoteInfo get voteInfo; // Индекс текущего игрока (чей ход)
   int get currentPlayerIndex;
 
@@ -53,8 +51,6 @@ mixin _$RunningGameState {
             (identical(other.stage, stage) || other.stage == stage) &&
             (identical(other.roundInfo, roundInfo) ||
                 other.roundInfo == roundInfo) &&
-            (identical(other.actionsTaken, actionsTaken) ||
-                other.actionsTaken == actionsTaken) &&
             (identical(other.voteInfo, voteInfo) ||
                 other.voteInfo == voteInfo) &&
             (identical(other.currentPlayerIndex, currentPlayerIndex) ||
@@ -70,13 +66,12 @@ mixin _$RunningGameState {
       isPreview,
       stage,
       roundInfo,
-      actionsTaken,
       voteInfo,
       currentPlayerIndex);
 
   @override
   String toString() {
-    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, isPreview: $isPreview, stage: $stage, roundInfo: $roundInfo, actionsTaken: $actionsTaken, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
+    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, isPreview: $isPreview, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
   }
 }
 
@@ -93,7 +88,6 @@ abstract mixin class $RunningGameStateCopyWith<$Res> {
       bool isPreview,
       GameStage stage,
       RoundInfo roundInfo,
-      int actionsTaken,
       VoteInfo voteInfo,
       int currentPlayerIndex});
 
@@ -122,7 +116,6 @@ class _$RunningGameStateCopyWithImpl<$Res>
     Object? isPreview = null,
     Object? stage = null,
     Object? roundInfo = null,
-    Object? actionsTaken = null,
     Object? voteInfo = null,
     Object? currentPlayerIndex = null,
   }) {
@@ -151,10 +144,6 @@ class _$RunningGameStateCopyWithImpl<$Res>
           ? _self.roundInfo
           : roundInfo // ignore: cast_nullable_to_non_nullable
               as RoundInfo,
-      actionsTaken: null == actionsTaken
-          ? _self.actionsTaken
-          : actionsTaken // ignore: cast_nullable_to_non_nullable
-              as int,
       voteInfo: null == voteInfo
           ? _self.voteInfo
           : voteInfo // ignore: cast_nullable_to_non_nullable
@@ -217,7 +206,6 @@ class _GameState extends RunningGameState {
       required this.isPreview,
       required this.stage,
       required this.roundInfo,
-      required this.actionsTaken,
       required this.voteInfo,
       required this.currentPlayerIndex})
       : _players = players,
@@ -250,9 +238,6 @@ class _GameState extends RunningGameState {
 // Вся информация по текущему раунду
   @override
   final RoundInfo roundInfo;
-// Количество действий, сделынных игроком на данном ходу (кол-во открытых карточек)
-  @override
-  final int actionsTaken;
 // Информация о голосовании
   @override
   final VoteInfo voteInfo;
@@ -283,8 +268,6 @@ class _GameState extends RunningGameState {
             (identical(other.stage, stage) || other.stage == stage) &&
             (identical(other.roundInfo, roundInfo) ||
                 other.roundInfo == roundInfo) &&
-            (identical(other.actionsTaken, actionsTaken) ||
-                other.actionsTaken == actionsTaken) &&
             (identical(other.voteInfo, voteInfo) ||
                 other.voteInfo == voteInfo) &&
             (identical(other.currentPlayerIndex, currentPlayerIndex) ||
@@ -300,13 +283,12 @@ class _GameState extends RunningGameState {
       isPreview,
       stage,
       roundInfo,
-      actionsTaken,
       voteInfo,
       currentPlayerIndex);
 
   @override
   String toString() {
-    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, isPreview: $isPreview, stage: $stage, roundInfo: $roundInfo, actionsTaken: $actionsTaken, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
+    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, isPreview: $isPreview, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
   }
 }
 
@@ -325,7 +307,6 @@ abstract mixin class _$GameStateCopyWith<$Res>
       bool isPreview,
       GameStage stage,
       RoundInfo roundInfo,
-      int actionsTaken,
       VoteInfo voteInfo,
       int currentPlayerIndex});
 
@@ -357,7 +338,6 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
     Object? isPreview = null,
     Object? stage = null,
     Object? roundInfo = null,
-    Object? actionsTaken = null,
     Object? voteInfo = null,
     Object? currentPlayerIndex = null,
   }) {
@@ -386,10 +366,6 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
           ? _self.roundInfo
           : roundInfo // ignore: cast_nullable_to_non_nullable
               as RoundInfo,
-      actionsTaken: null == actionsTaken
-          ? _self.actionsTaken
-          : actionsTaken // ignore: cast_nullable_to_non_nullable
-              as int,
       voteInfo: null == voteInfo
           ? _self.voteInfo
           : voteInfo // ignore: cast_nullable_to_non_nullable
