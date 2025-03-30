@@ -18,11 +18,7 @@ mixin _$RunningGameState {
 // Настройки игры
   GameSettings get settings; // Свойства катастрофы
   Disaster get disaster; // Список игроков
-  List<Player>
-      get players; // Переменная означает, что сейчас промежуточное состояние
-// К примеру перевернутая карточка игрока, перед его ходом.
-// В основном эту переменную меняет ReadyGameEvent.
-  bool get isPreview; // Текущая стадия игры
+  List<Player> get players; // Текущая стадия игры
   GameStage get stage; // Вся информация по текущему раунду
   RoundInfo get roundInfo; // Информация о голосовании
   VoteInfo get voteInfo; // Индекс текущего игрока (чей ход)
@@ -46,8 +42,6 @@ mixin _$RunningGameState {
             (identical(other.disaster, disaster) ||
                 other.disaster == disaster) &&
             const DeepCollectionEquality().equals(other.players, players) &&
-            (identical(other.isPreview, isPreview) ||
-                other.isPreview == isPreview) &&
             (identical(other.stage, stage) || other.stage == stage) &&
             (identical(other.roundInfo, roundInfo) ||
                 other.roundInfo == roundInfo) &&
@@ -63,7 +57,6 @@ mixin _$RunningGameState {
       settings,
       disaster,
       const DeepCollectionEquality().hash(players),
-      isPreview,
       stage,
       roundInfo,
       voteInfo,
@@ -71,7 +64,7 @@ mixin _$RunningGameState {
 
   @override
   String toString() {
-    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, isPreview: $isPreview, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
+    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
   }
 }
 
@@ -85,7 +78,6 @@ abstract mixin class $RunningGameStateCopyWith<$Res> {
       {GameSettings settings,
       Disaster disaster,
       List<Player> players,
-      bool isPreview,
       GameStage stage,
       RoundInfo roundInfo,
       VoteInfo voteInfo,
@@ -113,7 +105,6 @@ class _$RunningGameStateCopyWithImpl<$Res>
     Object? settings = null,
     Object? disaster = null,
     Object? players = null,
-    Object? isPreview = null,
     Object? stage = null,
     Object? roundInfo = null,
     Object? voteInfo = null,
@@ -132,10 +123,6 @@ class _$RunningGameStateCopyWithImpl<$Res>
           ? _self.players
           : players // ignore: cast_nullable_to_non_nullable
               as List<Player>,
-      isPreview: null == isPreview
-          ? _self.isPreview
-          : isPreview // ignore: cast_nullable_to_non_nullable
-              as bool,
       stage: null == stage
           ? _self.stage
           : stage // ignore: cast_nullable_to_non_nullable
@@ -203,7 +190,6 @@ class _GameState extends RunningGameState {
       {required this.settings,
       required this.disaster,
       required final List<Player> players,
-      required this.isPreview,
       required this.stage,
       required this.roundInfo,
       required this.voteInfo,
@@ -227,11 +213,6 @@ class _GameState extends RunningGameState {
     return EqualUnmodifiableListView(_players);
   }
 
-// Переменная означает, что сейчас промежуточное состояние
-// К примеру перевернутая карточка игрока, перед его ходом.
-// В основном эту переменную меняет ReadyGameEvent.
-  @override
-  final bool isPreview;
 // Текущая стадия игры
   @override
   final GameStage stage;
@@ -263,8 +244,6 @@ class _GameState extends RunningGameState {
             (identical(other.disaster, disaster) ||
                 other.disaster == disaster) &&
             const DeepCollectionEquality().equals(other._players, _players) &&
-            (identical(other.isPreview, isPreview) ||
-                other.isPreview == isPreview) &&
             (identical(other.stage, stage) || other.stage == stage) &&
             (identical(other.roundInfo, roundInfo) ||
                 other.roundInfo == roundInfo) &&
@@ -280,7 +259,6 @@ class _GameState extends RunningGameState {
       settings,
       disaster,
       const DeepCollectionEquality().hash(_players),
-      isPreview,
       stage,
       roundInfo,
       voteInfo,
@@ -288,7 +266,7 @@ class _GameState extends RunningGameState {
 
   @override
   String toString() {
-    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, isPreview: $isPreview, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
+    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
   }
 }
 
@@ -304,7 +282,6 @@ abstract mixin class _$GameStateCopyWith<$Res>
       {GameSettings settings,
       Disaster disaster,
       List<Player> players,
-      bool isPreview,
       GameStage stage,
       RoundInfo roundInfo,
       VoteInfo voteInfo,
@@ -335,7 +312,6 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
     Object? settings = null,
     Object? disaster = null,
     Object? players = null,
-    Object? isPreview = null,
     Object? stage = null,
     Object? roundInfo = null,
     Object? voteInfo = null,
@@ -354,10 +330,6 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
           ? _self._players
           : players // ignore: cast_nullable_to_non_nullable
               as List<Player>,
-      isPreview: null == isPreview
-          ? _self.isPreview
-          : isPreview // ignore: cast_nullable_to_non_nullable
-              as bool,
       stage: null == stage
           ? _self.stage
           : stage // ignore: cast_nullable_to_non_nullable
