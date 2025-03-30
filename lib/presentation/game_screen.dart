@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 import 'package:shelter_ai/domain/services/random_gpt_repository.dart';
+import 'package:shelter_ai/presentation/dialogs/lore_dialog.dart';
+import 'package:shelter_ai/presentation/dialogs/settings_dialog.dart';
 import 'package:shelter_ai/presentation/lore_screen.dart';
 import 'package:shelter_ai/presentation/player_card.dart';
 
@@ -18,15 +19,12 @@ class GameScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Create a RandomGPTRepository instance
     GPTRepository repository = RandomGPTRepository();
-
+    final gameSettings = ModalRoute.of(context)!.settings.arguments as GameSettings;
     return BlocProvider(
       create: (context) => GameBloc(repository)
-        ..add(StartedGameEvent(const GameSettings(
-            playersCount: 1,
-            difficulty: 1,
-            plot: "1",
-            safeMode: true,
-            time: 1))),
+        ..add(
+          StartedGameEvent(gameSettings),
+        ),
       child: const GameScreen(),
     );
   }
@@ -35,25 +33,111 @@ class GameScreenWidget extends StatelessWidget {
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key});
 
+  void _showLoreDialog(BuildContext context, RunningGameState state) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => LoreDialog(
+        disaster: state.disaster,
+      ),
+    );
+  }
+
+  void _showSettingsDialog(BuildContext context, RunningGameState state) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => SettingsDialog(
+        settings: state.settings,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
-        if (state is LoadingGameState)
-          return const CircularProgressIndicator();
-        else {
-          return switch ((state as RunningGameState).stage) {
-            GameStage.intro => const LoreScreen(),
-            GameStage.roundStarted => const PlayerCardScreen(),
-            GameStage.openCards => const PlayerCardScreen(),
-            GameStage.speaking => throw UnimplementedError(),
-            GameStage.voting => throw UnimplementedError(),
-            GameStage.voteResult => throw UnimplementedError(),
-            GameStage.finals => throw UnimplementedError(),
-          };
+        if (state is LoadingGameState) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else {
+          final runningState = state as RunningGameState;
+          return Scaffold(
+            body: Stack(
+              children: [
+                // Main game content based on stage
+                _buildGameContent(context, runningState),
+
+                // Floating buttons for lore and settings
+                Positioned(
+                  top: 40,
+                  right: 16,
+                  child: Column(
+                    children: [
+                      _buildFloatingButton(
+                        context: context,
+                        icon: Icons.info_outline,
+                        tooltip: "Информация о катастрофе",
+                        onPressed: () => _showLoreDialog(context, runningState),
+                      ),
+                      const SizedBox(height: 12),
+                      _buildFloatingButton(
+                        context: context,
+                        icon: Icons.settings,
+                        tooltip: "Настройки игры",
+                        onPressed: () =>
+                            _showSettingsDialog(context, runningState),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
         }
       },
+    );
+  }
+
+  Widget _buildGameContent(BuildContext context, RunningGameState state) {
+    return switch (state.stage) {
+      GameStage.intro => const LoreScreen(),
+      GameStage.roundStarted => const PlayerCardScreen(),
+      GameStage.openCards => const PlayerCardScreen(),
+      GameStage.speaking => const Center(child: Text("Говорим")),
+      GameStage.voting => const Center(child: Text("Голосуем")),
+      GameStage.voteResult =>
+        const Center(child: Text("Результаты голосования")),
+      GameStage.finals => const Center(child: Text("Финал")),
+    };
+  }
+
+  Widget _buildFloatingButton({
+    required BuildContext context,
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: FloatingActionButton(
+        onPressed: onPressed,
+        tooltip: tooltip,
+        mini: true,
+        backgroundColor: const Color(0xFF8B7355),
+        foregroundColor: Colors.white,
+        elevation: 0,
+        child: Icon(icon),
+      ),
     );
   }
 }
