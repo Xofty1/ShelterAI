@@ -31,7 +31,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       settings: event.settings,
       disaster: disaster,
       players: players,
-      isPreview: true,
       stage: GameStage.intro,
       voteInfo: VoteInfo(
         votes: List.filled(players.length, 0),
@@ -47,35 +46,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onReady(ReadyGameEvent event, Emitter emit) {
     final prevState = (state as RunningGameState);
     GameStage stage = prevState.stage;
-    bool isPreview = false;
     VoteInfo voteInfo = prevState.voteInfo;
 
     switch (stage) {
       // Переходим на следующую стадию, на следующей стадии предпросмотр
       case GameStage.intro:
         stage = GameStage.roundStarted;
-        isPreview = true;
-
       // Переходим на следующую стадию, на следующей стадии предпросмотр
       case GameStage.roundStarted:
         stage = GameStage.openCards;
-        isPreview = true;
-
-      // Остаемся на той же стадии, но отключаем предпросмотр
-      case GameStage.openCards:
-        stage = GameStage.openCards;
-        isPreview = false;
-
       // Переходим на следующую стадию, предпросмотр
       case GameStage.speaking:
         stage = GameStage.voting;
-        isPreview = true;
-
-      // Выключаем предпросмотр
-      case GameStage.voting:
-        stage = GameStage.voting;
-        isPreview = false;
-
       // Тут разветвление в зависимости от результатов голосования
       case GameStage.voteResult:
         if (voteInfo.voteStatus == VoteStatus.successful) {
@@ -84,7 +66,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           stage = prevState.roundInfo.roundNumber < 6
               ? GameStage.roundStarted
               : GameStage.finals;
-          isPreview = true;
           voteInfo = const VoteInfo(
               votes: [],
               canBeSelected: [],
@@ -92,15 +73,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
               voteStatus: VoteStatus.none);
         } else {
           stage = GameStage.speaking;
-          isPreview = true;
         }
-      case GameStage.finals:
+      default:
         break;
     }
 
     emit(prevState.copyWith(
       stage: stage,
-      isPreview: isPreview,
       voteInfo: voteInfo,
     ));
   }
@@ -128,7 +107,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(prevState.copyWith(
         players: players,
         currentPlayerIndex: playerIndex,
-        isPreview: true,
       ));
     } else {
       // Ищем первого голосующего игрока
@@ -150,7 +128,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(prevState.copyWith(
         players: players,
         currentPlayerIndex: playerIndex,
-        isPreview: true,
         stage: GameStage.speaking,
         voteInfo: voteInfo,
       ));
@@ -172,7 +149,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(prevState.copyWith(
         voteInfo: prevState.voteInfo.copyWith(votes: votes),
         currentPlayerIndex: playerIndex,
-        isPreview: true,
       ));
     } else {
       final sortedVotes = _getSortedVotes(votes);
@@ -201,7 +177,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
         emit(prevState.copyWith(
           players: players,
-          isPreview: true,
           stage: GameStage.voteResult,
           roundInfo: getRoundInfo(
               prevState.roundInfo.roundNumber, prevState.settings.playersCount),
@@ -217,7 +192,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         final canBeSelected = votes.map((vote) => vote >= votesBorder).toList();
 
         emit(prevState.copyWith(
-          isPreview: true,
           stage: GameStage.voteResult,
           voteInfo: prevState.voteInfo.copyWith(
             voteStatus: VoteStatus.reRunning,
