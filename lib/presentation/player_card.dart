@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/domain/bloc/game_bloc.dart';
+import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
+import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
 import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
@@ -6,7 +10,12 @@ import 'package:shelter_ai/presentation/ui_items/asset_image_item.dart';
 import 'dart:math';
 
 class PlayerCardScreen extends StatefulWidget {
-  const PlayerCardScreen({super.key});
+  final List<Player> players;
+  Player get player => players[currentPlayerIndex];
+  final int currentPlayerIndex;
+
+  const PlayerCardScreen(
+      {super.key, required this.players, required this.currentPlayerIndex});
 
   @override
   State<PlayerCardScreen> createState() => _PlayerCardScreenState();
@@ -53,11 +62,30 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
     super.dispose();
   }
 
-  void _flipCard() {
+  // void _flipCard() {
+  //   if (_showFrontSide) {
+  //     _controller.reverse();
+  //   } else {
+  //     _controller.forward();
+  //   }
+  //   setState(() {
+  //     _showFrontSide = !_showFrontSide;
+  //   });
+  // }
+
+  void _flipCard({VoidCallback? onComplete}) {
     if (_showFrontSide) {
-      _controller.reverse();
+      _controller.reverse().then((_) {
+        if (onComplete != null) {
+          onComplete();
+        }
+      });
     } else {
-      _controller.forward();
+      _controller.forward().then((_) {
+        if (onComplete != null) {
+          onComplete();
+        }
+      });
     }
     setState(() {
       _showFrontSide = !_showFrontSide;
@@ -180,10 +208,10 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
             ),
           ),
           const SizedBox(height: 12),
-          const Center(
+          Center(
             child: Text(
-              "Игрок 1",
-              style: TextStyle(
+              widget.currentPlayerIndex.toString(),
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF5A503F),
@@ -191,24 +219,32 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
             ),
           ),
           const SizedBox(height: 12),
-          _buildStatRow("assets/images/hobby.png", "Возраст", "100%"),
-          const SizedBox(height: 12),
-          _buildStatRow("assets/images/hobby.png", "Здоровье", "80%"),
-          const SizedBox(height: 12),
-          _buildStatRow("assets/images/hobby.png", "Хобби/Навыки", "90%"),
-          const SizedBox(height: 12),
-          _buildStatRow("assets/images/hobby.png", "Фобии", "70%"),
-          const SizedBox(height: 12),
-          _buildStatRow("assets/images/hobby.png", "Багаж", "70%"),
+          _buildStatRow(
+              "assets/images/hobby.png", "Возраст", widget.player.bio),
           const SizedBox(height: 12),
           _buildStatRow(
-              "assets/images/hobby.png", "Дополнительная информация", "70%"),
+              "assets/images/hobby.png", "Здоровье", widget.player.health),
+          const SizedBox(height: 12),
+          _buildStatRow(
+              "assets/images/hobby.png", "Хобби/Навыки", widget.player.hobby),
+          const SizedBox(height: 12),
+          _buildStatRow(
+              "assets/images/hobby.png", "Фобии", widget.player.phobia),
+          const SizedBox(height: 12),
+          _buildStatRow(
+              "assets/images/hobby.png", "Багаж", widget.player.luggage),
+          const SizedBox(height: 12),
+          _buildStatRow("assets/images/hobby.png", "Дополнительная информация",
+              widget.player.extra),
           const SizedBox(height: 20),
           Center(
             child: CustomButton(
               text: "Подтверить",
               onPressed: () {
-                _flipCard();
+                _flipCard(onComplete: () {
+                  BlocProvider.of<GameBloc>(context)
+                      .add(OpenedPropertyGameEvent([1, 2]));
+                });
               },
             ),
           ),
@@ -278,9 +314,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
                 height: 60,
                 borderRadius: 4.0,
               ),
-              const LabelWidget(
-                  color: Color(0xFFD9D9D9),
-                  text: "ddddddddddddddddddddddddddddd"),
+              LabelWidget(color: const Color(0xFFD9D9D9), text: value),
               CustomSwitcher(
                 initialValue: isActive,
                 onToggle: (value) {

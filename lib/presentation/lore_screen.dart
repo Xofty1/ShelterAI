@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../domain/bloc/game_bloc.dart';
+import '../domain/models/disaster.dart';
 
 class LoreScreen extends StatelessWidget {
-  const LoreScreen({super.key});
+  final Disaster disaster;
+
+  const LoreScreen({super.key, required this.disaster});
 
   @override
   Widget build(BuildContext context) {
@@ -17,47 +20,31 @@ class LoreScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.85,
               height: MediaQuery.of(context).size.height * 0.73,
               decoration: BoxDecoration(
-                color: Color(0xFFD6D1CC),
+                color: const Color(0xFFD6D1CC),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Color(0xFFCCC6C1),
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        child: const SingleChildScrollView(
-                          padding: EdgeInsets.all(10),
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.all(10),
                           child: Text(
-                            'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n'
-                                'Здесь будет текст...\n',
-                            style: TextStyle(fontSize: 32, color: Colors.black),
+                            disaster.name,
+                            style: const TextStyle(fontSize: 32, color: Colors.black),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

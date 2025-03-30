@@ -8,6 +8,7 @@ import 'package:shelter_ai/presentation/dialogs/lore_dialog.dart';
 import 'package:shelter_ai/presentation/dialogs/settings_dialog.dart';
 import 'package:shelter_ai/presentation/lore_screen.dart';
 import 'package:shelter_ai/presentation/player_card.dart';
+import 'package:shelter_ai/presentation/ui_items/button.dart';
 
 import '../domain/bloc/game_bloc.dart';
 import '../l10n/l10n.dart';
@@ -19,7 +20,8 @@ class GameScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Create a RandomGPTRepository instance
     GPTRepository repository = RandomGPTRepository();
-    final gameSettings = ModalRoute.of(context)!.settings.arguments as GameSettings;
+    final gameSettings =
+        ModalRoute.of(context)!.settings.arguments as GameSettings;
     return BlocProvider(
       create: (context) => GameBloc(repository)
         ..add(
@@ -101,10 +103,34 @@ class GameScreen extends StatelessWidget {
 
   Widget _buildGameContent(BuildContext context, RunningGameState state) {
     return switch (state.stage) {
-      GameStage.intro => const LoreScreen(),
-      GameStage.roundStarted => const PlayerCardScreen(),
-      GameStage.openCards => const PlayerCardScreen(),
-      GameStage.speaking => const Center(child: Text("Говорим")),
+      GameStage.intro => LoreScreen(disaster: state.disaster),
+      GameStage.roundStarted => Center(
+          child: Column(
+            children: [
+              Text(state.roundInfo.roundNumber.toString()),
+              CustomButton(
+                  text: "Дальше",
+                  onPressed: () =>
+                      BlocProvider.of<GameBloc>(context).add(ReadyGameEvent()))
+            ],
+          ),
+        ),
+      GameStage.openCards => PlayerCardScreen(
+          key: UniqueKey(),
+
+          /// Убрать
+          players: state.players,
+          currentPlayerIndex: state.currentPlayerIndex,
+        ),
+      GameStage.speaking => Column(
+          children: [
+            Text(state.roundInfo.roundNumber.toString()),
+            CustomButton(
+                text: "Дальше",
+                onPressed: () =>
+                    BlocProvider.of<GameBloc>(context).add(ReadyGameEvent()))
+          ],
+        ),
       GameStage.voting => const Center(child: Text("Голосуем")),
       GameStage.voteResult =>
         const Center(child: Text("Результаты голосования")),

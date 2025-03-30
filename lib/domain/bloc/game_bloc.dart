@@ -100,7 +100,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         players[playerIndex].copyWith(knownProperties: knownProperties);
 
     playerIndex = players.indexWhere(
-        (player) => player.lifeStatus == LifeStatus.alive, playerIndex);
+        (player) => player.lifeStatus == LifeStatus.alive, playerIndex + 1);
 
     // Есть живые игроки, не сделавшие ход
     if (playerIndex != -1) {
