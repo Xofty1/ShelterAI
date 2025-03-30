@@ -27,10 +27,6 @@ abstract class RunningGameState extends GameState with _$RunningGameState{
     required Disaster disaster,
     // Список игроков
     required List<Player> players,
-    // Переменная означает, что сейчас промежуточное состояние
-    // К примеру перевернутая карточка игрока, перед его ходом.
-    // В основном эту переменную меняет ReadyGameEvent.
-    required bool isPreview,
     // Текущая стадия игры
     required GameStage stage,
     // Вся информация по текущему раунду
