@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class SliderSettings extends StatefulWidget {
-  final void Function(double) onChange;
+  final double Function() loadSetting;
+  final Future<void> Function(double value) saveSetting;
   final double min;
   final double max;
   final double defaultValue;
 
   const SliderSettings({
     super.key,
+    required this.loadSetting,
+    required this.saveSetting,
     this.min = 0.0,
     this.max = 100.0,
     this.defaultValue = 50.0,
-    required this.onChange,
   });
 
   @override
@@ -24,7 +26,12 @@ class _SliderSettingsState extends State<SliderSettings> {
   @override
   void initState() {
     super.initState();
-    _sliderValue = widget.defaultValue;
+    _loadSetting();
+  }
+
+  void _loadSetting() {
+    _sliderValue = widget.loadSetting();
+    setState(() {});
   }
 
   @override
@@ -39,7 +46,7 @@ class _SliderSettingsState extends State<SliderSettings> {
         setState(() {
           _sliderValue = value;
         });
-        widget.onChange(value);
+        widget.saveSetting(_sliderValue);
       },
     );
   }

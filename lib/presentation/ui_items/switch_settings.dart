@@ -22,7 +22,9 @@ class _SwitchSettingsState extends State<SwitchSettings> {
 
   void _loadSetting() {
     bool value = widget.loadSetting();
-    curSettingValue = value;
+    setState(() {
+      curSettingValue = value;
+    });
   }
 
   @override
