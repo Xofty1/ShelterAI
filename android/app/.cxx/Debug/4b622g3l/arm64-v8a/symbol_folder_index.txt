@@ -1,0 +1,1 @@
+C:\AndroidApps\shelter_ai\build\app\intermediates\cxx\Debug\4b622g3l\obj\arm64-v8a

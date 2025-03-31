@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 
 import '../l10n/l10n.dart';
@@ -66,7 +67,7 @@ class MainMenuScreen extends StatelessWidget {
                         CustomButton(
                             text: loc.newGame,
                             onPressed: () {
-                              Navigator.pushNamed(context, '/game_settings');
+                              NavigationManager.instance.openGameSettings();
                             }),
                         const SizedBox(height: 16),
                         CustomButton(text: loc.history, onPressed: () {}),
@@ -83,7 +84,7 @@ class MainMenuScreen extends StatelessWidget {
               bottom: 30,
               child: IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/settings');
+                  NavigationManager.instance.openSettings();
                 },
                 icon: const Icon(
                   Icons.settings,
