@@ -71,7 +71,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 child: SliderSettings(
                                   defaultValue:
                                       state.settings.playersCount.toDouble(),
-                                  min: 4,
+                                  min: 2,
                                   max: 22,
                                   onChange: (value) =>
                                       BlocProvider.of<GameSettingsCubit>(

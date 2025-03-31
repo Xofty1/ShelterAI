@@ -16,7 +16,7 @@ RoundInfo getRoundInfo(int roundNumber, int playersCount){
   switch(roundNumber){
     case 1:
       switch(playersCount){
-        default: return RoundInfo(roundNumber: roundNumber, kickedCount: 0, openCount: 2);
+        default: return RoundInfo(roundNumber: roundNumber, kickedCount: 1, openCount: 2);
       }
     case 2:
       switch(playersCount){

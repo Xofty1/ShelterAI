@@ -6,14 +6,14 @@ import '../domain/bloc/game_bloc.dart';
 
 class GameRoundScreen extends StatelessWidget {
 
-  final String roundCount;
+  final String roundNumber;
   final String alivePlayerCount;
   final String deadPlayerCount;
   final String showCharacteristicCount;
   final String needToKickCount;
 
   const GameRoundScreen({
-    required this.roundCount,
+    required this.roundNumber,
     required this.alivePlayerCount,
     required this.deadPlayerCount,
     required this.showCharacteristicCount,
@@ -66,7 +66,7 @@ class GameRoundScreen extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        roundCount,
+                        roundNumber,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 28,

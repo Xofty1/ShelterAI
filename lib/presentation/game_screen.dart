@@ -13,6 +13,7 @@ import 'package:shelter_ai/presentation/ui_items/button.dart';
 import '../domain/bloc/game_bloc.dart';
 import '../l10n/l10n.dart';
 import 'game_round_screen.dart';
+import 'game_votting_screen.dart';
 
 class GameScreenWidget extends StatelessWidget {
   const GameScreenWidget({super.key});
@@ -109,7 +110,7 @@ class GameScreen extends StatelessWidget {
           alivePlayerCount: "0",
           deadPlayerCount: "2",
           needToKickCount: state.roundInfo.kickedCount.toString(),
-          roundCount: state.roundInfo.roundNumber.toString(),
+          roundNumber: state.roundInfo.roundNumber.toString(),
           showCharacteristicCount: state.roundInfo.openCount.toString()),
       GameStage.openCards => PlayerCardScreen(
           players: state.players,
@@ -127,9 +128,14 @@ class GameScreen extends StatelessWidget {
             ),
           ],
         ),
-      GameStage.voting => const Center(child: Text("Голосуем")),
+      GameStage.voting => GameVotingScreen(
+        players: state.players,
+        currentPlayerIndex: state.currentPlayerIndex,
+          roundNumber: state.roundInfo.roundNumber.toString(),
+          totalPlayers: state.settings.playersCount,
+        ),
       GameStage.voteResult =>
-        const Center(child: Text("Результаты голосования")),
+        Center(child: Text(state.voteInfo.selectedIndexes.first.toString())),
       GameStage.finals => const Center(child: Text("Финал")),
     };
   }

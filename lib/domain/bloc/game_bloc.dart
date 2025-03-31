@@ -142,7 +142,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     var playerIndex = prevState.players.indexWhere(
         (player) => player.lifeStatus != LifeStatus.killed,
-        prevState.currentPlayerIndex);
+        prevState.currentPlayerIndex + 1);
 
     // Голосует следующий игрок
     if (playerIndex != -1) {
@@ -159,14 +159,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value) {
         // Получаем кикнутых игроков
         final selectedIndexes = sortedVotes
-            .getRange(0, lastKicking)
+            .getRange(0, lastKicking + 1)
             .map((element) => element.key)
             .toList();
 
         final players = List.of(prevState.players);
-
         // Меняем статус жизни персонажей: last -> killed,
         // У выбранных персонажей alive -> last
+
         for (int i = 0; i < players.length; i++) {
           if (players[i].lifeStatus == LifeStatus.killed) {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
@@ -174,7 +174,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
           }
         }
-
         emit(prevState.copyWith(
           players: players,
           stage: GameStage.voteResult,
