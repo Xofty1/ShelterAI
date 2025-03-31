@@ -52,14 +52,6 @@ class MyApp extends StatelessWidget {
                 initialRoute: RouteNames.home,
                 onGenerateRoute: RoutesBuilder.onGenerateRoute,
                 navigatorKey: NavigationManager.instance.key,
-
-                // routes: {
-                //   '/': (context) => const ShelterHome(),
-                //   '/settings': (context) => const GlobalSettingsWidget(),
-                //   '/game_settings': (context) => const GameSettingsWidget(),
-                //   '/player_card': (context) => const PlayerCardScreen(),
-                // },
-
               );
             },
           );
