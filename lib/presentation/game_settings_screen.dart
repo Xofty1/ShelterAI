@@ -8,6 +8,8 @@ import 'package:shelter_ai/presentation/ui_items/scaffold_template.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 
+import '../core/navigation/navigation_manager.dart';
+
 class GameSettingsWidget extends StatelessWidget {
   const GameSettingsWidget({super.key});
 
@@ -132,7 +134,7 @@ class GameSettingsScreen extends StatelessWidget {
             CustomButton(
               text: 'Продолжить',
               onPressed: () {
-                Navigator.pushNamed(context, '/player_card');
+                NavigationManager.instance.openGame(state.settings);
               },
             ),
           ],
