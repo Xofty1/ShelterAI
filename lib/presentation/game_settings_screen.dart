@@ -10,6 +10,12 @@ import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 
 import '../core/navigation/navigation_manager.dart';
 
+final Map<int, String> difficulty = {
+  1: "Классика",
+  2: "Хардкор",
+  3: "Безумие",
+};
+
 class GameSettingsWidget extends StatelessWidget {
   const GameSettingsWidget({super.key});
 
@@ -90,19 +96,19 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               _buildDifficultyButton(
-                                  "Классика",
+                                  difficulty[1]!,
                                   state.settings.difficulty == 1,
                                   () => BlocProvider.of<GameSettingsCubit>(
                                           context)
                                       .updateDifficulty(1)),
                               _buildDifficultyButton(
-                                  "Хардкор",
+                                  difficulty[2]!,
                                   state.settings.difficulty == 2,
                                   () => BlocProvider.of<GameSettingsCubit>(
                                           context)
                                       .updateDifficulty(2)),
                               _buildDifficultyButton(
-                                  "Безумие",
+                                  difficulty[3]!,
                                   state.settings.difficulty == 3,
                                   () => BlocProvider.of<GameSettingsCubit>(
                                           context)
@@ -161,6 +167,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 onToggle: (value) {
                                   setState(() {
                                     isTimerEnabled = value;
+                                    BlocProvider.of<GameSettingsCubit>(context)
+                                        .updateEnableTime(value);
                                   });
                                 },
                               ),

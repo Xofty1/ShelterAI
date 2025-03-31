@@ -66,6 +66,14 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   }
 
   @override
+  void didUpdateWidget(PlayerCardScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      selectedIndexes.clear();
+    });
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -180,6 +188,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   // Front card content only
   Widget _buildFrontCardContent() {
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -281,7 +290,6 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
                 _flipCard(onComplete: () {
                   BlocProvider.of<GameBloc>(context)
                       .add(OpenedPropertyGameEvent(selectedIndexes));
-                  selectedIndexes.clear();
                 });
               },
             ),

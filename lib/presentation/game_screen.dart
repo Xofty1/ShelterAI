@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
+import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 import 'package:shelter_ai/domain/services/random_gpt_repository.dart';
 import 'package:shelter_ai/presentation/dialogs/lore_dialog.dart';
@@ -107,8 +108,16 @@ class GameScreen extends StatelessWidget {
     return switch (state.stage) {
       GameStage.intro => LoreScreen(disaster: state.disaster),
       GameStage.roundStarted => GameRoundScreen(
-          alivePlayerCount: "0",
-          deadPlayerCount: "2",
+          alivePlayerCount: state.players
+              .where((element) => (element.lifeStatus == LifeStatus.alive))
+              .toList()
+              .length
+              .toString(),
+          deadPlayerCount: state.players
+              .where((element) => (element.lifeStatus != LifeStatus.alive))
+              .toList()
+              .length
+              .toString(),
           needToKickCount: state.roundInfo.kickedCount.toString(),
           roundNumber: state.roundInfo.roundNumber.toString(),
           showCharacteristicCount: state.roundInfo.openCount.toString()),
@@ -129,13 +138,23 @@ class GameScreen extends StatelessWidget {
           ],
         ),
       GameStage.voting => GameVotingScreen(
-        players: state.players,
-        currentPlayerIndex: state.currentPlayerIndex,
+          players: state.players,
+          currentPlayerIndex: state.currentPlayerIndex,
           roundNumber: state.roundInfo.roundNumber.toString(),
           totalPlayers: state.settings.playersCount,
         ),
       GameStage.voteResult =>
-        Center(child: Text(state.voteInfo.selectedIndexes.first.toString())),
+          Column(
+            children: [
+              Text("state.roundInfo.roundNumber.toString()"),
+              CustomButton(
+                text: "Дальше",
+                onPressed: () => BlocProvider.of<GameBloc>(context).add(
+                  ReadyGameEvent(),
+                ),
+              ),
+            ],
+          ),
       GameStage.finals => const Center(child: Text("Финал")),
     };
   }

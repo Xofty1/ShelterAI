@@ -12,29 +12,39 @@ abstract class RoundInfo with _$RoundInfo{
   }) = _RoundInfo;
 }
 
-RoundInfo getRoundInfo(int roundNumber, int playersCount){
-  switch(roundNumber){
+RoundInfo getRoundInfo(int roundNumber, int playersCount) {
+  switch (roundNumber) {
     case 1:
-      switch(playersCount){
-        default: return RoundInfo(roundNumber: roundNumber, kickedCount: 1, openCount: 2);
-      }
+      return RoundInfo(roundNumber: roundNumber, kickedCount: 0, openCount: 1);
     case 2:
-      switch(playersCount){
-        default: return RoundInfo(roundNumber: roundNumber, kickedCount: 1, openCount: 1);
+      int kickedCount = 0;
+      if (playersCount > 6 && playersCount < 15) {
+        kickedCount = 1;
+      } else if (playersCount >= 15) {
+        kickedCount = 2;
       }
+      return RoundInfo(roundNumber: roundNumber, kickedCount: kickedCount, openCount: 1);
     case 3:
-      switch(playersCount){
-        default: return RoundInfo(roundNumber: roundNumber, kickedCount: 1, openCount: 1);
+      int kickedCount = 0;
+      if (playersCount > 4 && playersCount < 13) {
+        kickedCount = 1;
+      } else if (playersCount >= 13) {
+        kickedCount = 2;
       }
+      return RoundInfo(roundNumber: roundNumber, kickedCount: kickedCount, openCount: 1);
     case 4:
-      switch(playersCount){
-        default: return RoundInfo(roundNumber: roundNumber, kickedCount: 2, openCount: 1);
+      int kickedCount = 1;
+      if (playersCount > 10) {
+        kickedCount = 2;
       }
+      return RoundInfo(roundNumber: roundNumber, kickedCount: kickedCount, openCount: 1);
     case 5:
-      switch(playersCount){
-        default: return RoundInfo(roundNumber: roundNumber, kickedCount: 1, openCount: 1);
+      int kickedCount = 1;
+      if (playersCount > 8) {
+        kickedCount = 2;
       }
+      return RoundInfo(roundNumber: roundNumber, kickedCount: kickedCount, openCount: 1);
+    default:
+      throw Exception("Invalid round number");
   }
-
-  throw Exception('Unexpected round number');
 }

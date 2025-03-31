@@ -30,6 +30,14 @@ class _VotingScreenState extends State<GameVotingScreen> {
   int? selectedPlayer;
 
   @override
+  void didUpdateWidget(GameVotingScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      selectedPlayer = null;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     const headerColor = Color(0xFFB8A876);
     const headerTextColor = Color(0xFF482020);
@@ -175,9 +183,8 @@ class _VotingScreenState extends State<GameVotingScreen> {
                   child: ElevatedButton(
                     onPressed: selectedPlayer != null
                         ? () {
-                            BlocProvider.of<GameBloc>(context).add(VotedGameEvent(1));
-                            selectedPlayer = null;
-                          }
+                            BlocProvider.of<GameBloc>(context).add(VotedGameEvent(selectedPlayer ?? 0)); /// Exception
+                    }
                         : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: buttonColor,
