@@ -83,32 +83,29 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
 
                           // Difficulty
                           _buildSettingHeader("Сложность"),
-                          SingleChildScrollView(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildDifficultyButton(
-                                    "Классический",
-                                    state.settings.difficulty == 1,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
-                                        .updateDifficulty(1)),
-                                _buildDifficultyButton(
-                                    "Необычный",
-                                    state.settings.difficulty == 2,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
-                                        .updateDifficulty(2)),
-                                _buildDifficultyButton(
-                                    "Безумный",
-                                    state.settings.difficulty == 3,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
-                                        .updateDifficulty(3)),
-                              ],
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _buildDifficultyButton(
+                                  "Классика",
+                                  state.settings.difficulty == 1,
+                                  () => BlocProvider.of<GameSettingsCubit>(
+                                          context)
+                                      .updateDifficulty(1)),
+                              _buildDifficultyButton(
+                                  "Хардкор",
+                                  state.settings.difficulty == 2,
+                                  () => BlocProvider.of<GameSettingsCubit>(
+                                          context)
+                                      .updateDifficulty(2)),
+                              _buildDifficultyButton(
+                                  "Безумие",
+                                  state.settings.difficulty == 3,
+                                  () => BlocProvider.of<GameSettingsCubit>(
+                                          context)
+                                      .updateDifficulty(3)),
+                            ],
                           ),
-
                           const SizedBox(height: 10),
 
                           // Game tone
@@ -166,6 +163,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 8),
                           Opacity(
                             opacity: isTimerEnabled ? 1.0 : 0.5,
                             child: AbsorbPointer(
@@ -175,6 +173,12 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 children: [
                                   Row(
                                     children: [
+                                      SizedBox(
+                                        width: 70,
+                                        child: LabelWidget(
+                                          text: state.settings.time.toString(),
+                                        ),
+                                      ),
                                       Expanded(
                                         child: SliderSettings(
                                           defaultValue:
@@ -190,23 +194,6 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                         ),
                                       ),
                                     ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 32),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        isTimerEnabled
-                                            ? state.settings.time.toString()
-                                            : "Таймер отключен",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: isTimerEnabled
-                                              ? Colors.black87
-                                              : Colors.black54,
-                                        ),
-                                      ),
-                                    ),
                                   ),
                                 ],
                               ),
@@ -240,7 +227,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                     CustomButton(
                       text: 'Продолжить',
                       onPressed: () {
-                        Navigator.pushNamed(context, '/game', arguments: state.settings);
+                        Navigator.pushNamed(context, '/game',
+                            arguments: state.settings);
                       },
                     ),
                   ],

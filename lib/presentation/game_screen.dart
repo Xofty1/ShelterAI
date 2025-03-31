@@ -12,6 +12,7 @@ import 'package:shelter_ai/presentation/ui_items/button.dart';
 
 import '../domain/bloc/game_bloc.dart';
 import '../l10n/l10n.dart';
+import 'game_round_screen.dart';
 
 class GameScreenWidget extends StatelessWidget {
   const GameScreenWidget({super.key});
@@ -104,17 +105,12 @@ class GameScreen extends StatelessWidget {
   Widget _buildGameContent(BuildContext context, RunningGameState state) {
     return switch (state.stage) {
       GameStage.intro => LoreScreen(disaster: state.disaster),
-      GameStage.roundStarted => Center(
-          child: Column(
-            children: [
-              Text(state.roundInfo.roundNumber.toString()),
-              CustomButton(
-                  text: "Дальше",
-                  onPressed: () =>
-                      BlocProvider.of<GameBloc>(context).add(ReadyGameEvent()))
-            ],
-          ),
-        ),
+      GameStage.roundStarted => GameRoundScreen(
+          alivePlayerCount: "0",
+          deadPlayerCount: "2",
+          needToKickCount: state.roundInfo.kickedCount.toString(),
+          roundCount: state.roundInfo.roundNumber.toString(),
+          showCharacteristicCount: state.roundInfo.openCount.toString()),
       GameStage.openCards => PlayerCardScreen(
           key: UniqueKey(),
 
@@ -126,9 +122,11 @@ class GameScreen extends StatelessWidget {
           children: [
             Text(state.roundInfo.roundNumber.toString()),
             CustomButton(
-                text: "Дальше",
-                onPressed: () =>
-                    BlocProvider.of<GameBloc>(context).add(ReadyGameEvent()))
+              text: "Дальше",
+              onPressed: () => BlocProvider.of<GameBloc>(context).add(
+                ReadyGameEvent(),
+              ),
+            ),
           ],
         ),
       GameStage.voting => const Center(child: Text("Голосуем")),
