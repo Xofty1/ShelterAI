@@ -112,11 +112,9 @@ class GameScreen extends StatelessWidget {
           roundCount: state.roundInfo.roundNumber.toString(),
           showCharacteristicCount: state.roundInfo.openCount.toString()),
       GameStage.openCards => PlayerCardScreen(
-          key: UniqueKey(),
-
-          /// Убрать
           players: state.players,
           currentPlayerIndex: state.currentPlayerIndex,
+          openCount: state.roundInfo.openCount,
         ),
       GameStage.speaking => Column(
           children: [

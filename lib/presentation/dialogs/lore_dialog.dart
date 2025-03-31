@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/domain/models/disaster.dart';
 
+import '../ui_items/state_section.dart';
+
 class LoreDialog extends StatelessWidget {
   final Disaster disaster;
 
@@ -47,43 +49,32 @@ class LoreDialog extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
+              StateSection(
+                  title: "Описание катастрофы",
+                  content: disaster.disasterDescription),
 
-              // Disaster description
-              _buildSection(
-                "Описание катастрофы",
-                disaster.disasterDescription,
-              ),
               const SizedBox(height: 16),
+              StateSection(
+                  title: "Убежище",
+                  content: "${disaster.shelterName} (${disaster.location})"),
 
-              // Shelter info
-              _buildSection(
-                "Убежище",
-                "${disaster.shelterName} (${disaster.location})",
-              ),
               const SizedBox(height: 8),
-              _buildSection(
-                "Описание убежища",
-                disaster.description,
-              ),
+              StateSection(
+                  title: "Описание убежища", content: disaster.description),
+
               const SizedBox(height: 8),
-              _buildSection(
-                "Вместимость",
-                "${disaster.capacity} человек",
-              ),
+              StateSection(
+                  title: "Вместимость",
+                  content: "${disaster.capacity} человек"),
+
               const SizedBox(height: 16),
 
-              // Rooms
-              _buildSection(
-                "Помещения",
-                disaster.rooms.join(", "),
-              ),
-              const SizedBox(height: 16),
+              StateSection(
+                  title: "Помещения", content: disaster.rooms.join(", ")),
 
-              // Resources
-              _buildSection(
-                "Ресурсы",
-                disaster.resources.join(", "),
-              ),
+              const SizedBox(height: 16),
+              StateSection(
+                  title: "Ресурсы", content: disaster.resources.join(", ")),
               const SizedBox(height: 20),
 
               // Close button

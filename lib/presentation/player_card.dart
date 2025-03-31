@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_bloc.dart';
-import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
 import 'package:shelter_ai/domain/models/player.dart';
-import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
-import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/asset_image_item.dart';
 import 'dart:math';
 
+import 'package:shelter_ai/presentation/ui_items/state_card_row.dart';
+
 class PlayerCardScreen extends StatefulWidget {
+  final int openCount;
   final List<Player> players;
+
   Player get player => players[currentPlayerIndex];
+
   final int currentPlayerIndex;
 
   const PlayerCardScreen(
-      {super.key, required this.players, required this.currentPlayerIndex});
+      {super.key,
+      required this.players,
+      required this.currentPlayerIndex,
+      required this.openCount});
 
   @override
   State<PlayerCardScreen> createState() => _PlayerCardScreenState();
@@ -26,20 +31,22 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   late AnimationController _controller;
   late Animation<double> _animation;
   bool _showFrontSide = false;
-
-  // Define consistent card dimensions
   double cardWidth = 10;
   double cardHeight = 10;
 
-  // Store the active state for each row
-  final Map<String, bool> _rowActiveStates = {
-    "Возраст": false,
-    "Здоровье": false,
-    "Хобби/Навыки": false,
-    "Фобии": false,
-    "Багаж": false,
-    "Дополнительная информация": false,
-  };
+  List<int> selectedIndexes = [];
+
+  void _handleToggle(int index, bool value) {
+    setState(() {
+      if (value) {
+        if (selectedIndexes.length < widget.openCount) {
+          selectedIndexes.add(index);
+        }
+      } else {
+        selectedIndexes.remove(index);
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -62,17 +69,6 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
     super.dispose();
   }
 
-  // void _flipCard() {
-  //   if (_showFrontSide) {
-  //     _controller.reverse();
-  //   } else {
-  //     _controller.forward();
-  //   }
-  //   setState(() {
-  //     _showFrontSide = !_showFrontSide;
-  //   });
-  // }
-
   void _flipCard({VoidCallback? onComplete}) {
     if (_showFrontSide) {
       _controller.reverse().then((_) {
@@ -89,13 +85,6 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
     }
     setState(() {
       _showFrontSide = !_showFrontSide;
-    });
-  }
-
-  // Update the active state for a specific row
-  void _updateRowActiveState(String label, bool isActive) {
-    setState(() {
-      _rowActiveStates[label] = isActive;
     });
   }
 
@@ -219,23 +208,72 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
             ),
           ),
           const SizedBox(height: 12),
-          _buildStatRow(
-              "assets/images/hobby.png", "Возраст", widget.player.bio),
+          StateCardRow(
+              label: "Возраст",
+              assetsPath: "assets/images/hobby.png",
+              initialActive: widget.player.knownProperties[0],
+              isWorked: selectedIndexes.length < widget.openCount,
+              content: widget.player.bio,
+              onToggle: (value) {
+                _handleToggle(0, value);
+              }),
+
           const SizedBox(height: 12),
-          _buildStatRow(
-              "assets/images/hobby.png", "Здоровье", widget.player.health),
+          StateCardRow(
+            label: "Здоровье",
+            assetsPath: "assets/images/hobby.png",
+            initialActive: widget.player.knownProperties[1],
+            isWorked: selectedIndexes.length < widget.openCount,
+            content: widget.player.health,
+            onToggle: (value) {
+              _handleToggle(1, value);
+            },
+          ),
           const SizedBox(height: 12),
-          _buildStatRow(
-              "assets/images/hobby.png", "Хобби/Навыки", widget.player.hobby),
+          StateCardRow(
+            label: "Хобби/Навыки",
+            assetsPath: "assets/images/hobby.png",
+            initialActive: widget.player.knownProperties[2],
+            isWorked: selectedIndexes.length < widget.openCount,
+            content: widget.player.hobby,
+            onToggle: (value) {
+              _handleToggle(2, value);
+            },
+          ),
           const SizedBox(height: 12),
-          _buildStatRow(
-              "assets/images/hobby.png", "Фобии", widget.player.phobia),
+          StateCardRow(
+            label: "Фобии",
+            assetsPath: "assets/images/hobby.png",
+            initialActive: widget.player.knownProperties[3],
+            isWorked: selectedIndexes.length < widget.openCount,
+            content: widget.player.phobia,
+            onToggle: (value) {
+              _handleToggle(3, value);
+            },
+          ),
+
           const SizedBox(height: 12),
-          _buildStatRow(
-              "assets/images/hobby.png", "Багаж", widget.player.luggage),
+          StateCardRow(
+            label: "Багаж",
+            assetsPath: "assets/images/hobby.png",
+            initialActive: widget.player.knownProperties[4],
+            isWorked: selectedIndexes.length < widget.openCount,
+            content: widget.player.luggage,
+            onToggle: (value) {
+              _handleToggle(4, value);
+            },
+          ),
           const SizedBox(height: 12),
-          _buildStatRow("assets/images/hobby.png", "Дополнительная информация",
-              widget.player.extra),
+          StateCardRow(
+            label: "Дополнительная информация",
+            assetsPath: "assets/images/hobby.png",
+            initialActive: widget.player.knownProperties[5],
+            isWorked: selectedIndexes.length < widget.openCount,
+            content: widget.player.extra,
+            onToggle: (value) {
+              _handleToggle(5, value);
+            },
+          ),
           const SizedBox(height: 20),
           Center(
             child: CustomButton(
@@ -243,7 +281,8 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
               onPressed: () {
                 _flipCard(onComplete: () {
                   BlocProvider.of<GameBloc>(context)
-                      .add(OpenedPropertyGameEvent([1, 2]));
+                      .add(OpenedPropertyGameEvent(selectedIndexes));
+                  selectedIndexes.clear();
                 });
               },
             ),
@@ -271,58 +310,6 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
             color: Color(0xFFD9D9D9),
             fontSize: 18,
             fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatRow(String assetsPath, String label, String value) {
-    bool isActive = _rowActiveStates[label] ?? false;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Color(0xFF6B5642),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            // Change color based on active state
-            color: isActive ? const Color(0xFFA38C68) : const Color(0x666B5642),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              AssetImageItem(
-                backgroundColor: const Color(0x80D9D9D9),
-                imagePath: assetsPath,
-                width: 60,
-                height: 60,
-                borderRadius: 4.0,
-              ),
-              LabelWidget(color: const Color(0xFFD9D9D9), text: value),
-              CustomSwitcher(
-                initialValue: isActive,
-                onToggle: (value) {
-                  // Update the state in the parent widget
-                  _updateRowActiveState(label, value);
-                },
-              )
-            ],
           ),
         ),
       ],
