@@ -37,10 +37,23 @@ class LoreScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SingleChildScrollView(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                              disaster.name,
-                            style: TextStyle(fontSize: 32, color: Colors.black),
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              Text(
+                                  disaster.name,
+                                style: const TextStyle(fontSize: 32, color: Colors.black),
+                              ),
+                              Text(
+                                disaster.description,
+                                style: const TextStyle(fontSize: 24, color: Colors.black),
+                              ),
+                              const SizedBox(height: 8,),
+                              Text(
+                                disaster.disasterDescription,
+                                style: const TextStyle(fontSize: 24, color: Colors.black),
+                              ),
+                            ],
                           ),
                         ),
                       ),

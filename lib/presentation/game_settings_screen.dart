@@ -46,6 +46,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
             ),
             child: SafeArea(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 child: Column(
