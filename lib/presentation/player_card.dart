@@ -36,6 +36,8 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
 
   List<int> selectedIndexes = [];
 
+  bool _isAnimating = false;
+
   void _handleToggle(int index, bool value) {
     setState(() {
       if (value) {
@@ -70,22 +72,24 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   }
 
   void _flipCard({VoidCallback? onComplete}) {
-    if (_showFrontSide) {
-      _controller.reverse().then((_) {
-        if (onComplete != null) {
-          onComplete();
-        }
-      });
-    } else {
-      _controller.forward().then((_) {
-        if (onComplete != null) {
-          onComplete();
-        }
-      });
-    }
+    if (_isAnimating) return; // Если анимация уже идет, ничего не делаем
+
     setState(() {
+      _isAnimating = true;
       _showFrontSide = !_showFrontSide;
     });
+
+    if (_showFrontSide) {
+      _controller.forward().then((_) {
+        setState(() => _isAnimating = false);
+        onComplete?.call();
+      });
+    } else {
+      _controller.reverse().then((_) {
+        setState(() => _isAnimating = false);
+        onComplete?.call();
+      });
+    }
   }
 
   @override
@@ -107,45 +111,42 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           children: [
             const SizedBox(height: 8),
             GestureDetector(
-              onTap: !_showFrontSide ? _flipCard : null,
-              child: AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  final angle = _animation.value * pi;
-
-                  // When the card is past the halfway point of animation,
-                  // show the front face instead of the back face
-                  if (angle >= pi / 2) {
-                    // We need to apply a second transformation to fix the reversed text
-                    // that would otherwise be displayed
-                    return Transform(
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001) // perspective
-                        ..rotateY(angle),
-                      alignment: Alignment.center,
-                      child: Transform(
-                        transform: Matrix4.identity()..rotateY(pi),
+              onTap: !_showFrontSide && !_isAnimating ? _flipCard : null,
+              child: IgnorePointer(
+                ignoring: _isAnimating,
+                child: AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, child) {
+                    final angle = _animation.value * pi;
+                    if (angle >= pi / 2) {
+                      return Transform(
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(angle),
+                        alignment: Alignment.center,
+                        child: Transform(
+                          transform: Matrix4.identity()..rotateY(pi),
+                          alignment: Alignment.center,
+                          child: _buildCardContainer(
+                            isBackSide: false,
+                            child: _buildFrontCardContent(),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Transform(
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(angle),
                         alignment: Alignment.center,
                         child: _buildCardContainer(
-                          isBackSide: false,
-                          child: _buildFrontCardContent(),
+                          isBackSide: true,
+                          child: _buildBackCardContent(),
                         ),
-                      ),
-                    );
-                  } else {
-                    // First half of animation - show the back face
-                    return Transform(
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001) // perspective
-                        ..rotateY(angle),
-                      alignment: Alignment.center,
-                      child: _buildCardContainer(
-                        isBackSide: true,
-                        child: _buildBackCardContent(),
-                      ),
-                    );
-                  }
-                },
+                      );
+                    }
+                  },
+                ),
               ),
             ),
           ],
@@ -217,7 +218,6 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
               onToggle: (value) {
                 _handleToggle(0, value);
               }),
-
           const SizedBox(height: 12),
           StateCardRow(
             label: "Здоровье",
@@ -251,7 +251,6 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
               _handleToggle(3, value);
             },
           ),
-
           const SizedBox(height: 12),
           StateCardRow(
             label: "Багаж",
