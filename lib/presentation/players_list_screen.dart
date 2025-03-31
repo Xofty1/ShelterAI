@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'ui_items/player_card.dart';
+import 'package:shelter_ai/presentation/ui_items/app_button.dart';
+import 'ui_items/player_card_tap.dart';
 
 class PlayersListScreen extends StatelessWidget {
   const PlayersListScreen({super.key});
@@ -18,6 +19,9 @@ class PlayersListScreen extends StatelessWidget {
                 child: _buildPlayerCards(),
               ),
             ),
+            AppButton(text: 'ГОЛОСОВАНИЕ', onPressed: () {
+              Navigator.pushNamed(context, '/game_voting');
+            })
           ],
         ),
       ),

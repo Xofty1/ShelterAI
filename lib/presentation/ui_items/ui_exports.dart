@@ -1,1 +1,1 @@
-export 'player_card.dart'; 
+export 'player_card_tap.dart';
