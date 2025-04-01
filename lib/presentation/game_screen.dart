@@ -16,6 +16,7 @@ import 'package:shelter_ai/presentation/vote_result_screen.dart';
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/disaster.dart';
 import '../l10n/l10n.dart';
+import 'game_finish_screen.dart';
 import 'game_round_screen.dart';
 import 'game_votting_screen.dart';
 
@@ -188,7 +189,7 @@ class GameScreen extends StatelessWidget {
                             ),
                           GameStage.speaking => DiscussionScreen(
                               roundNumber: state.roundInfo.roundNumber,
-                            seconds: state.settings.time,
+                              seconds: state.settings.time,
                             ),
                           GameStage.voting => GameVotingScreen(
                               players: state.players,
@@ -198,15 +199,26 @@ class GameScreen extends StatelessWidget {
                                   state.roundInfo.roundNumber.toString(),
                             ),
                           GameStage.voteResult => VoteResultScreen(
-                            kickedPlayers: state.players
-                                .where((player) => state.voteInfo.selectedIndexes
-                                .contains(state.players.indexOf(player)))
-                                .toList(),
-                          ),
-                          GameStage.preFinalLoading => const CircularProgressIndicator(),
-                          GameStage.finals =>
-                            Center(child: CustomButton(onPressed: () => BlocProvider.of<GameBloc>(context).add(ReadyGameEvent()), text: '123',),),
-
+                              kickedPlayers: state.players
+                                  .where((player) => state
+                                      .voteInfo.selectedIndexes
+                                      .contains(state.players.indexOf(player)))
+                                  .toList(),
+                            ),
+                          GameStage.preFinalLoading =>
+                            const CircularProgressIndicator(),
+                          GameStage.finals => FinishScreen(
+                              alivePlayers: state.players
+                                  .where((element) =>
+                                      element.lifeStatus == LifeStatus.alive)
+                                  .toList()
+                                  .length,
+                              deadPlayers: state.players
+                                  .where((element) =>
+                                      element.lifeStatus != LifeStatus.alive)
+                                  .toList()
+                                  .length,
+                            ),
                         },
                       )
                     ],

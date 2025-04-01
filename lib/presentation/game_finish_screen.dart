@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shelter_ai/presentation/ui_items/player_card_voting.dart';
+import 'package:shelter_ai/presentation/ui_items/player_votting_card.dart';
 
 class FinishScreen extends StatelessWidget {
 
