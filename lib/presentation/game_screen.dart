@@ -203,8 +203,10 @@ class GameScreen extends StatelessWidget {
                                 .contains(state.players.indexOf(player)))
                                 .toList(),
                           ),
+                          GameStage.preFinalLoading => const CircularProgressIndicator(),
                           GameStage.finals =>
                             Center(child: CustomButton(onPressed: () => BlocProvider.of<GameBloc>(context).add(ReadyGameEvent()), text: '123',),),
+
                         },
                       )
                     ],

@@ -22,7 +22,8 @@ mixin _$RunningGameState {
   GameStage get stage; // Вся информация по текущему раунду
   RoundInfo get roundInfo; // Информация о голосовании
   VoteInfo get voteInfo; // Индекс текущего игрока (чей ход)
-  int get currentPlayerIndex;
+  int get currentPlayerIndex; // Финальная строка
+  String get finals;
 
   /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
@@ -48,7 +49,8 @@ mixin _$RunningGameState {
             (identical(other.voteInfo, voteInfo) ||
                 other.voteInfo == voteInfo) &&
             (identical(other.currentPlayerIndex, currentPlayerIndex) ||
-                other.currentPlayerIndex == currentPlayerIndex));
+                other.currentPlayerIndex == currentPlayerIndex) &&
+            (identical(other.finals, finals) || other.finals == finals));
   }
 
   @override
@@ -60,11 +62,12 @@ mixin _$RunningGameState {
       stage,
       roundInfo,
       voteInfo,
-      currentPlayerIndex);
+      currentPlayerIndex,
+      finals);
 
   @override
   String toString() {
-    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
+    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex, finals: $finals)';
   }
 }
 
@@ -81,7 +84,8 @@ abstract mixin class $RunningGameStateCopyWith<$Res> {
       GameStage stage,
       RoundInfo roundInfo,
       VoteInfo voteInfo,
-      int currentPlayerIndex});
+      int currentPlayerIndex,
+      String finals});
 
   $GameSettingsCopyWith<$Res> get settings;
   $DisasterCopyWith<$Res> get disaster;
@@ -109,6 +113,7 @@ class _$RunningGameStateCopyWithImpl<$Res>
     Object? roundInfo = null,
     Object? voteInfo = null,
     Object? currentPlayerIndex = null,
+    Object? finals = null,
   }) {
     return _then(_self.copyWith(
       settings: null == settings
@@ -139,6 +144,10 @@ class _$RunningGameStateCopyWithImpl<$Res>
           ? _self.currentPlayerIndex
           : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      finals: null == finals
+          ? _self.finals
+          : finals // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 
@@ -193,7 +202,8 @@ class _GameState extends RunningGameState {
       required this.stage,
       required this.roundInfo,
       required this.voteInfo,
-      required this.currentPlayerIndex})
+      required this.currentPlayerIndex,
+      required this.finals})
       : _players = players,
         super._();
 
@@ -225,6 +235,9 @@ class _GameState extends RunningGameState {
 // Индекс текущего игрока (чей ход)
   @override
   final int currentPlayerIndex;
+// Финальная строка
+  @override
+  final String finals;
 
   /// Create a copy of RunningGameState
   /// with the given fields replaced by the non-null parameter values.
@@ -250,7 +263,8 @@ class _GameState extends RunningGameState {
             (identical(other.voteInfo, voteInfo) ||
                 other.voteInfo == voteInfo) &&
             (identical(other.currentPlayerIndex, currentPlayerIndex) ||
-                other.currentPlayerIndex == currentPlayerIndex));
+                other.currentPlayerIndex == currentPlayerIndex) &&
+            (identical(other.finals, finals) || other.finals == finals));
   }
 
   @override
@@ -262,11 +276,12 @@ class _GameState extends RunningGameState {
       stage,
       roundInfo,
       voteInfo,
-      currentPlayerIndex);
+      currentPlayerIndex,
+      finals);
 
   @override
   String toString() {
-    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex)';
+    return 'RunningGameState(settings: $settings, disaster: $disaster, players: $players, stage: $stage, roundInfo: $roundInfo, voteInfo: $voteInfo, currentPlayerIndex: $currentPlayerIndex, finals: $finals)';
   }
 }
 
@@ -285,7 +300,8 @@ abstract mixin class _$GameStateCopyWith<$Res>
       GameStage stage,
       RoundInfo roundInfo,
       VoteInfo voteInfo,
-      int currentPlayerIndex});
+      int currentPlayerIndex,
+      String finals});
 
   @override
   $GameSettingsCopyWith<$Res> get settings;
@@ -316,6 +332,7 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
     Object? roundInfo = null,
     Object? voteInfo = null,
     Object? currentPlayerIndex = null,
+    Object? finals = null,
   }) {
     return _then(_GameState(
       settings: null == settings
@@ -346,6 +363,10 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
           ? _self.currentPlayerIndex
           : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      finals: null == finals
+          ? _self.finals
+          : finals // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 
