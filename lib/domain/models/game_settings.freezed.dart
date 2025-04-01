@@ -19,6 +19,7 @@ mixin _$GameSettings {
   int get difficulty;
   String get plot;
   bool get safeMode;
+  String get language;
   int get time;
 
   /// Create a copy of GameSettings
@@ -41,16 +42,18 @@ mixin _$GameSettings {
             (identical(other.plot, plot) || other.plot == plot) &&
             (identical(other.safeMode, safeMode) ||
                 other.safeMode == safeMode) &&
+            (identical(other.language, language) ||
+                other.language == language) &&
             (identical(other.time, time) || other.time == time));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, playersCount, difficulty, plot, safeMode, time);
+  int get hashCode => Object.hash(
+      runtimeType, playersCount, difficulty, plot, safeMode, language, time);
 
   @override
   String toString() {
-    return 'GameSettings(playersCount: $playersCount, difficulty: $difficulty, plot: $plot, safeMode: $safeMode, time: $time)';
+    return 'GameSettings(playersCount: $playersCount, difficulty: $difficulty, plot: $plot, safeMode: $safeMode, language: $language, time: $time)';
   }
 }
 
@@ -61,7 +64,12 @@ abstract mixin class $GameSettingsCopyWith<$Res> {
       _$GameSettingsCopyWithImpl;
   @useResult
   $Res call(
-      {int playersCount, int difficulty, String plot, bool safeMode, int time});
+      {int playersCount,
+      int difficulty,
+      String plot,
+      bool safeMode,
+      String language,
+      int time});
 }
 
 /// @nodoc
@@ -80,6 +88,7 @@ class _$GameSettingsCopyWithImpl<$Res> implements $GameSettingsCopyWith<$Res> {
     Object? difficulty = null,
     Object? plot = null,
     Object? safeMode = null,
+    Object? language = null,
     Object? time = null,
   }) {
     return _then(_self.copyWith(
@@ -99,6 +108,10 @@ class _$GameSettingsCopyWithImpl<$Res> implements $GameSettingsCopyWith<$Res> {
           ? _self.safeMode
           : safeMode // ignore: cast_nullable_to_non_nullable
               as bool,
+      language: null == language
+          ? _self.language
+          : language // ignore: cast_nullable_to_non_nullable
+              as String,
       time: null == time
           ? _self.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -115,6 +128,7 @@ class _GameSettings implements GameSettings {
       required this.difficulty,
       required this.plot,
       required this.safeMode,
+      required this.language,
       required this.time});
 
   @override
@@ -125,6 +139,8 @@ class _GameSettings implements GameSettings {
   final String plot;
   @override
   final bool safeMode;
+  @override
+  final String language;
   @override
   final int time;
 
@@ -148,16 +164,18 @@ class _GameSettings implements GameSettings {
             (identical(other.plot, plot) || other.plot == plot) &&
             (identical(other.safeMode, safeMode) ||
                 other.safeMode == safeMode) &&
+            (identical(other.language, language) ||
+                other.language == language) &&
             (identical(other.time, time) || other.time == time));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, playersCount, difficulty, plot, safeMode, time);
+  int get hashCode => Object.hash(
+      runtimeType, playersCount, difficulty, plot, safeMode, language, time);
 
   @override
   String toString() {
-    return 'GameSettings(playersCount: $playersCount, difficulty: $difficulty, plot: $plot, safeMode: $safeMode, time: $time)';
+    return 'GameSettings(playersCount: $playersCount, difficulty: $difficulty, plot: $plot, safeMode: $safeMode, language: $language, time: $time)';
   }
 }
 
@@ -170,7 +188,12 @@ abstract mixin class _$GameSettingsCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int playersCount, int difficulty, String plot, bool safeMode, int time});
+      {int playersCount,
+      int difficulty,
+      String plot,
+      bool safeMode,
+      String language,
+      int time});
 }
 
 /// @nodoc
@@ -190,6 +213,7 @@ class __$GameSettingsCopyWithImpl<$Res>
     Object? difficulty = null,
     Object? plot = null,
     Object? safeMode = null,
+    Object? language = null,
     Object? time = null,
   }) {
     return _then(_GameSettings(
@@ -209,6 +233,10 @@ class __$GameSettingsCopyWithImpl<$Res>
           ? _self.safeMode
           : safeMode // ignore: cast_nullable_to_non_nullable
               as bool,
+      language: null == language
+          ? _self.language
+          : language // ignore: cast_nullable_to_non_nullable
+              as String,
       time: null == time
           ? _self.time
           : time // ignore: cast_nullable_to_non_nullable

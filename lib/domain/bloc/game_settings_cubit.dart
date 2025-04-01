@@ -37,6 +37,14 @@ class GameSettingsCubit extends Cubit<GameSettingsState>{
     ));
   }
 
+  void updateLanguage(String language){
+    emit(GameSettingsState(
+        settings: state.settings.copyWith(
+            language: language
+        )
+    ));
+  }
+
   void updateTime(int newTime){
     emit(GameSettingsState(
         settings: state.settings.copyWith(
@@ -58,6 +66,7 @@ class GameSettingsState{
             difficulty: 2,
             plot: '',
             safeMode: false,
+            language: '',
             time: 30,
         );
 
