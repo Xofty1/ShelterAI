@@ -204,7 +204,7 @@ class GameScreen extends StatelessWidget {
                                 .toList(),
                           ),
                           GameStage.finals =>
-                            const Center(child: Text("Финал")),
+                            Center(child: CustomButton(onPressed: () => BlocProvider.of<GameBloc>(context).add(ReadyGameEvent()), text: '123',),),
                         },
                       )
                     ],
