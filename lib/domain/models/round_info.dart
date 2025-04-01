@@ -15,7 +15,7 @@ abstract class RoundInfo with _$RoundInfo{
 RoundInfo getRoundInfo(int roundNumber, int playersCount) {
   switch (roundNumber) {
     case 1:
-      return RoundInfo(roundNumber: roundNumber, kickedCount: 1, openCount: 1);
+      return RoundInfo(roundNumber: roundNumber, kickedCount: 0, openCount: 1);
     case 2:
       int kickedCount = 0;
       if (playersCount > 6 && playersCount < 15) {

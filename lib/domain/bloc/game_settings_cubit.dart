@@ -1,9 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
+import '../models/disaster.dart';
 import '../models/game_settings.dart';
+import '../models/player.dart';
 
 class GameSettingsCubit extends Cubit<GameSettingsState> {
-  GameSettingsCubit() : super(const GameSettingsState.initial());
+  GPTRepository repository;
+
+  GameSettingsCubit(this.repository) : super(const GameSettingsState.initial());
 
   void updatePlayersCount(int newCount) {
     emit(
@@ -40,6 +45,21 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     );
   }
 
+  Future<void> startGame() async {
+    emit(DisasterLoadingState(
+      settings: state.settings,
+    ));
+
+    final disaster = await repository.getDisaster(state.settings);
+    final players = await repository.getPlayers(state.settings);
+
+    emit(DisasterUploadedState(
+      settings: state.settings,
+      disaster: disaster,
+      players: players,
+    ));
+  }
+
   void updateEnableTime(bool newEnable) {
     emit(
       GameSettingsState(
@@ -64,4 +84,19 @@ class GameSettingsState {
         );
 
   final GameSettings settings;
+}
+
+class DisasterLoadingState extends GameSettingsState {
+  DisasterLoadingState({required super.settings});
+}
+
+class DisasterUploadedState extends GameSettingsState {
+  final Disaster disaster;
+  final List<Player> players;
+
+  DisasterUploadedState({
+    required super.settings,
+    required this.disaster,
+    required this.players,
+  });
 }

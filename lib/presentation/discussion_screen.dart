@@ -6,8 +6,9 @@ import '../domain/bloc/game_bloc.dart';
 
 class DiscussionScreen extends StatelessWidget {
   final int roundNumber;
+  final int seconds;
 
-  const DiscussionScreen({super.key, required this.roundNumber});
+  const DiscussionScreen({super.key, required this.roundNumber, required this.seconds});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class DiscussionScreen extends StatelessWidget {
 
               // Таймер
               CustomTimer(
-                initialSeconds: 30,
+                initialSeconds: seconds,
                 onComplete: () =>
                     BlocProvider.of<GameBloc>(context).add(ReadyGameEvent()),
               ),

@@ -7,8 +7,8 @@ import '../domain/models/player.dart';
 
 class GameVotingScreen extends StatefulWidget {
   final String roundNumber;
-  final int totalPlayers;
   final List<Player> players;
+  final List<bool> canBeSelected;
 
   Player get player => players[currentPlayerIndex];
 
@@ -16,10 +16,9 @@ class GameVotingScreen extends StatefulWidget {
 
   const GameVotingScreen({
     Key? key,
-    required this.totalPlayers,
     required this.roundNumber,
     required this.players,
-    required this.currentPlayerIndex,
+    required this.currentPlayerIndex, required this.canBeSelected,
   }) : super(key: key);
 
   @override
@@ -93,55 +92,59 @@ class _VotingScreenState extends State<GameVotingScreen> {
                   childAspectRatio: 0.7,
                   crossAxisSpacing: 6,
                   mainAxisSpacing: 6,
-                  children: List.generate(widget.totalPlayers, (index) {
-                    final isSelected = index == selectedPlayer;
-                    return GestureDetector(
-                      onTap: () {
-                        if (isSelected) {
+                  children: () {
+                    // Сначала получаем список индексов элементов, которые можно выбрать
+                    final selectableIndices = widget.canBeSelected.asMap().entries
+                        .where((entry) => entry.value == true)
+                        .map((entry) => entry.key)
+                        .toList();
+
+                    return List.generate(selectableIndices.length, (filteredIndex) {
+                      final originalIndex = selectableIndices[filteredIndex];
+                      final isSelected = originalIndex == selectedPlayer;
+
+                      return GestureDetector(
+                        onTap: () {
                           setState(() {
-                            selectedPlayer = null;
+                            selectedPlayer = isSelected ? null : originalIndex;
                           });
-                        } else {
-                          setState(() {
-                            selectedPlayer = index;
-                          });
-                        }
-                      },
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: PlayerCardVoting(
-                              number: (index + 1).toString(),
-                              name: widget.players[index].name,
-                              profession: widget.players[index].profession,
+                        },
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: PlayerCardVoting(
+                                number: (originalIndex + 1).toString(),
+                                name: widget.players[originalIndex].name,
+                                profession: widget.players[originalIndex].profession,
+                              ),
                             ),
-                          ),
-                          if (isSelected)
-                            Positioned(
-                              right: 16,
-                              top: 16,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.brown,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 16,
+                            if (isSelected)
+                              Positioned(
+                                right: 16,
+                                top: 16,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.brown,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                        ],
-                      ),
-                    );
-                  }),
+                          ],
+                        ),
+                      );
+                    });
+                  }(),
                 ),
               ),
               Padding(
