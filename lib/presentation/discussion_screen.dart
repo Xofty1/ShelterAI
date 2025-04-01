@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shelter_ai/presentation/widgets/custom_timer.dart';
+import 'package:shelter_ai/presentation/ui_items/custom_timer.dart';
 
 import '../domain/bloc/game_bloc.dart';
 
@@ -29,9 +29,7 @@ class DiscussionScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-
-
-              // Заголовок "Обсуждение"
+              const SizedBox(height: 16),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 12),

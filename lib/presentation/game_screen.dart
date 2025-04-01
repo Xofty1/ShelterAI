@@ -11,11 +11,9 @@ import 'package:shelter_ai/presentation/discussion_screen.dart';
 import 'package:shelter_ai/presentation/lore_screen.dart';
 import 'package:shelter_ai/presentation/player_card.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
-import 'package:shelter_ai/presentation/widgets/custom_timer.dart';
 
 import '../domain/bloc/game_bloc.dart';
 import '../l10n/l10n.dart';
-import 'discussion_timer.dart';
 import 'game_round_screen.dart';
 import 'game_votting_screen.dart';
 
@@ -104,56 +102,58 @@ class GameScreen extends StatelessWidget {
                   SafeArea(
                     child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: headerColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  "РАУНД 1",
-                                  style: TextStyle(
-                                    color: headerTextColor,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
+                        if (state.stage != GameStage.intro &&
+                            state.stage != GameStage.roundStarted)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: headerColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    "РАУНД 1",
+                                    style: TextStyle(
+                                      color: headerTextColor,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () =>
-                                        _showSettingsDialog(context, state),
-                                    icon: const Icon(Icons.settings),
-                                    color: headerTextColor,
-                                    iconSize: 28,
-                                    tooltip: 'Настройки',
-                                  ),
-                                  const SizedBox(width: 8),
-                                  IconButton(
-                                    onPressed: () =>
-                                        _showLoreDialog(context, state),
-                                    icon: const Icon(Icons.info_outline),
-                                    color: headerTextColor,
-                                    iconSize: 28,
-                                    tooltip: 'Информация',
-                                  ),
-                                ],
-                              ),
-                            ],
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () =>
+                                          _showSettingsDialog(context, state),
+                                      icon: const Icon(Icons.settings),
+                                      color: headerTextColor,
+                                      iconSize: 28,
+                                      tooltip: 'Настройки',
+                                    ),
+                                    const SizedBox(width: 8),
+                                    IconButton(
+                                      onPressed: () =>
+                                          _showLoreDialog(context, state),
+                                      icon: const Icon(Icons.info_outline),
+                                      color: headerTextColor,
+                                      iconSize: 28,
+                                      tooltip: 'Информация',
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
                         Expanded(
                           child: switch (state.stage) {
                             GameStage.intro =>
