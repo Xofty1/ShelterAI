@@ -140,7 +140,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value) {
         // Получаем кикнутых игроков
         final selectedIndexes = sortedVotes
-            .getRange(0, lastKicking)
+            .getRange(0, lastKicking + 1)
             .map((element) => element.key)
             .toList();
 
@@ -148,6 +148,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
         // Меняем статус жизни персонажей: last -> killed,
         // У выбранных персонажей alive -> last
+
         for (int i = 0; i < players.length; i++) {
           if (players[i].lifeStatus == LifeStatus.killed) {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
@@ -160,7 +161,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           players: players,
           stage: GameStage.voteResult,
           roundInfo: getRoundInfo(
-              prevState.roundInfo.roundNumber, prevState.settings.playersCount),
+              prevState.roundInfo.roundNumber + 1, prevState.settings.playersCount),
           voteInfo: prevState.voteInfo.copyWith(
             selectedIndexes: selectedIndexes,
             voteStatus: VoteStatus.successful,
