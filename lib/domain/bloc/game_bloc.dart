@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pair/pair.dart';
+import 'package:shelter_ai/domain/models/disaster.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/round_info.dart';
 import 'package:shelter_ai/domain/models/vote_info.dart';
@@ -11,34 +12,16 @@ import '../models/game_state.dart';
 class GameBloc extends Bloc<GameEvent, GameState> {
   final GPTRepository repository;
 
-  GameBloc(this.repository,) : super(const LoadingGameState()) {
-    on<StartedGameEvent>(_onStarted);
+  GameBloc({
+    required this.repository,
+    required Disaster disaster,
+    required List<Player> players,
+    required GameSettings settings,
+  }) : super(RunningGameState.initial(
+            settings: settings, disaster: disaster, players: players)) {
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
     on<VotedGameEvent>(_onVoted);
-  }
-
-  Future<void> _onStarted(StartedGameEvent event, Emitter emit) async {
-    emit(const LoadingGameState());
-
-    final disaster = await repository.getDisaster(event.settings);
-    final players = await repository.getPlayers(event.settings);
-    final roundInfo = getRoundInfo(1, players.length);
-
-    emit(RunningGameState(
-      settings: event.settings,
-      disaster: disaster,
-      players: players,
-      stage: GameStage.intro,
-      voteInfo: VoteInfo(
-        votes: List.filled(players.length, 0),
-        canBeSelected: List.filled(players.length, true),
-        selectedIndexes: [],
-        voteStatus: VoteStatus.none,
-      ),
-      roundInfo: roundInfo,
-      currentPlayerIndex: 0,
-    ));
   }
 
   void _onReady(ReadyGameEvent event, Emitter emit) {
@@ -47,13 +30,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     VoteInfo voteInfo = prevState.voteInfo;
 
     switch (stage) {
-    // Переходим на следующую стадию, на следующей стадии предпросмотр
+      // Переходим на следующую стадию, на следующей стадии предпросмотр
       case GameStage.intro:
         stage = GameStage.roundStarted;
-    // Переходим на следующую стадию, на следующей стадии предпросмотр
+      // Переходим на следующую стадию, на следующей стадии предпросмотр
       case GameStage.roundStarted:
         stage = GameStage.openCards;
-    // Переходим на следующую стадию, предпросмотр
+      // Переходим на следующую стадию, предпросмотр
       case GameStage.speaking:
         stage = GameStage.voting;
       // Тут разветвление в зависимости от результатов голосования
@@ -87,8 +70,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     var playerIndex = prevState.currentPlayerIndex;
 
     final knownProperties =
-    List.of(prevState.players[playerIndex].knownProperties);
-    print('event length: ${event.propertyIndexes.length}');
+        List.of(prevState.players[playerIndex].knownProperties);
+
     for (var index in event.propertyIndexes) {
       knownProperties[index] = true;
     }
@@ -97,8 +80,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     players[playerIndex] =
         players[playerIndex].copyWith(knownProperties: knownProperties);
 
-    playerIndex = players. indexWhere(
-            (player) => player.lifeStatus == LifeStatus.alive, playerIndex + 1);
+    playerIndex = players.indexWhere(
+        (player) => player.lifeStatus == LifeStatus.alive, playerIndex + 1);
 
     // Есть живые игроки, не сделавшие ход
     if (playerIndex != -1) {
@@ -106,7 +89,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         players: players,
         currentPlayerIndex: playerIndex,
       ));
-      print('Player 0: ${players.first.knownProperties[0]}');
     } else {
       // Ищем первого голосующего игрока
       playerIndex =
@@ -140,7 +122,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     votes[event.voteIndex]++;
 
     var playerIndex = prevState.players.indexWhere(
-            (player) => player.lifeStatus != LifeStatus.killed,
+        (player) => player.lifeStatus != LifeStatus.killed,
         prevState.currentPlayerIndex + 1);
 
     // Голосует следующий игрок
@@ -163,6 +145,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             .toList();
 
         final players = List.of(prevState.players);
+
         // Меняем статус жизни персонажей: last -> killed,
         // У выбранных персонажей alive -> last
 
@@ -173,6 +156,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
           }
         }
+
         emit(prevState.copyWith(
           players: players,
           stage: GameStage.voteResult,

@@ -5,12 +5,14 @@ class SliderSettings extends StatefulWidget {
   final double min;
   final double max;
   final double defaultValue;
+  final bool isMuted;
 
   const SliderSettings({
     super.key,
     this.min = 0.0,
     this.max = 100.0,
     this.defaultValue = 50.0,
+    this.isMuted = false,
     required this.onChange,
   });
 
@@ -35,12 +37,14 @@ class _SliderSettingsState extends State<SliderSettings> {
       max: widget.max,
       divisions: (widget.max - widget.min).toInt(),
       label: _sliderValue.toStringAsFixed(0),
-      onChanged: (double value) {
-        setState(() {
-          _sliderValue = value;
-        });
-        widget.onChange(value);
-      },
+      onChanged: widget.isMuted
+          ? null
+          : (double value) {
+              setState(() {
+                _sliderValue = value;
+              });
+              widget.onChange(value);
+            },
     );
   }
 }

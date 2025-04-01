@@ -5,7 +5,7 @@ import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
-class RandomGPTRepository implements GPTRepository {
+class GPTRepositoryMock implements GPTRepository {
   final Random _random = Random();
 
   @override
@@ -15,7 +15,7 @@ class RandomGPTRepository implements GPTRepository {
 
     // List of random disasters
     final disasters = [
-      Disaster(
+      const Disaster(
         name: "Ядерная война",
         disasterDescription:
             "Мир погрузился в хаос после ядерной войны. Радиация и разрушения повсюду.",
@@ -34,7 +34,7 @@ class RandomGPTRepository implements GPTRepository {
         ],
         resources: ["Еда", "Вода", "Медикаменты", "Инструменты", "Генератор"],
       ),
-      Disaster(
+      const Disaster(
         name: "Пандемия",
         disasterDescription:
             "Смертельный вирус уничтожил большую часть населения Земли.",
@@ -58,7 +58,7 @@ class RandomGPTRepository implements GPTRepository {
           "Вода"
         ],
       ),
-      Disaster(
+      const Disaster(
         name: "Климатическая катастрофа",
         disasterDescription:
             "Глобальное потепление привело к катастрофическим изменениям климата.",
@@ -83,7 +83,7 @@ class RandomGPTRepository implements GPTRepository {
           "Запасы еды"
         ],
       ),
-      Disaster(
+      const Disaster(
         name: "Восстание ИИ",
         disasterDescription:
             "Искусственный интеллект вышел из-под контроля и начал уничтожать человечество.",
@@ -106,7 +106,7 @@ class RandomGPTRepository implements GPTRepository {
           "Консервы"
         ],
       ),
-      Disaster(
+      const Disaster(
         name: "Вторжение пришельцев",
         disasterDescription:
             "Инопланетная цивилизация атаковала Землю и захватила большую часть планеты.",
@@ -214,14 +214,15 @@ class RandomGPTRepository implements GPTRepository {
         name: "Игрок ${i + 1}",
         profession: profession,
         bio: bio,
-        health: "${50 + _random.nextInt(51)}%", // Health between 50% and 100%
+        health: "${50 + _random.nextInt(51)}%",
+        // Health between 50% and 100%
         hobby: hobby,
         phobia: phobia,
         luggage: luggage,
         extra: extra,
         lifeStatus: LifeStatus.alive,
-        knownProperties:
-            List.generate(6, (_) => false), // Initially all properties unknown
+        knownProperties: List.generate(6, (_) => false),
+        // Initially all properties unknown
         notes: [], // No notes initially
       ));
     }
