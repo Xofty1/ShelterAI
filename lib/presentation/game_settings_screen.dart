@@ -25,7 +25,7 @@ class GameSettingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       // TODO: DI вместо GPTRepositoryMock
-      create: (context) => GameSettingsCubit(GptRepositoryImpl()),
+      create: (context) => GameSettingsCubit(GPTRepositoryMock()),
       child: const GameSettingsScreen(),
     );
   }
