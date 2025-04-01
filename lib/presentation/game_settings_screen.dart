@@ -12,12 +12,6 @@ import 'package:shelter_ai/core/navigation/routes.dart';
 
 import '../core/navigation/navigation_manager.dart';
 
-final Map<int, String> difficulty = {
-  1: "Классика",
-  2: "Хардкор",
-  3: "Безумие",
-};
-
 class GameSettingsWidget extends StatelessWidget {
   const GameSettingsWidget({super.key});
 
@@ -39,8 +33,6 @@ class GameSettingsScreen extends StatefulWidget {
 }
 
 class _GameSettingsScreenState extends State<GameSettingsScreen> {
-  bool isTimerEnabled = true;
-
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
@@ -65,7 +57,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
               child: SafeArea(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   child: Column(
                     children: [
                       // Main settings container
@@ -79,16 +72,19 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 SizedBox(
                                   width: 70,
                                   child: LabelWidget(
-                                    text: state.settings.playersCount.toString(),
+                                    text:
+                                        state.settings.playersCount.toString(),
                                   ),
                                 ),
                                 Expanded(
                                   child: SliderSettings(
-                                    defaultValue: state.settings.playersCount.toDouble(),
+                                    defaultValue:
+                                        state.settings.playersCount.toDouble(),
                                     min: 2,
                                     max: 22,
                                     onChange: (value) =>
-                                        BlocProvider.of<GameSettingsCubit>(context)
+                                        BlocProvider.of<GameSettingsCubit>(
+                                                context)
                                             .updatePlayersCount(value.toInt()),
                                   ),
                                 ),
@@ -103,19 +99,22 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _buildDifficultyButton(
-                                    difficulty[1]!,
+                                    loc.difficultyClassic,
                                     state.settings.difficulty == 1,
-                                        () => BlocProvider.of<GameSettingsCubit>(context)
+                                    () => BlocProvider.of<GameSettingsCubit>(
+                                            context)
                                         .updateDifficulty(1)),
                                 _buildDifficultyButton(
-                                    difficulty[2]!,
+                                    loc.difficultyHardcore,
                                     state.settings.difficulty == 2,
-                                        () => BlocProvider.of<GameSettingsCubit>(context)
+                                    () => BlocProvider.of<GameSettingsCubit>(
+                                            context)
                                         .updateDifficulty(2)),
                                 _buildDifficultyButton(
-                                    difficulty[3]!,
+                                    loc.difficultyInsanity,
                                     state.settings.difficulty == 3,
-                                        () => BlocProvider.of<GameSettingsCubit>(context)
+                                    () => BlocProvider.of<GameSettingsCubit>(
+                                            context)
                                         .updateDifficulty(3)),
                               ],
                             ),
@@ -175,13 +174,14 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                     ),
                                     Expanded(
                                       child: SliderSettings(
-                                        defaultValue: state.settings.time.toDouble(),
+                                        defaultValue:
+                                            state.settings.time.toDouble(),
                                         min: 30,
                                         max: 120,
-                                        onChange: isTimerEnabled
-                                            ? (value) => BlocProvider.of<GameSettingsCubit>(context)
-                                            .updateTime(value.toInt())
-                                            : (_) {},
+                                        onChange: (value) =>
+                                            BlocProvider.of<GameSettingsCubit>(
+                                                    context)
+                                                .updateTime(value.toInt()),
                                       ),
                                     ),
                                   ],
@@ -206,22 +206,22 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 ),
                               ],
                             ),
-
-                            const SizedBox(height: 20),
-
-                            // Continue button
-                            CustomButton(
-                              text: 'Продолжить',
-                              onPressed: () {
-                                BlocProvider.of<GameSettingsCubit>(context).startGame();
-                                // Navigator.pushReplacementNamed(
-                                //   context,
-                                //   RouteNames.loader,
-                                // );
-                              },
-                            ),
                           ],
                         ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Continue button
+                      CustomButton(
+                        text: 'Продолжить',
+                        onPressed: () {
+                          BlocProvider.of<GameSettingsCubit>(context)
+                              .startGame();
+                          // Navigator.pushReplacementNamed(
+                          //   context,
+                          //   RouteNames.loader,
+                          // );
+                        },
                       ),
                     ],
                   ),
@@ -288,8 +288,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     );
   }
 
-  Widget _buildDifficultyButton(String text, bool isSelected,
-      VoidCallback onTap) {
+  Widget _buildDifficultyButton(
+      String text, bool isSelected, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

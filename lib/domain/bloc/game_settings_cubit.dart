@@ -59,15 +59,6 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
       players: players,
     ));
   }
-
-  void updateEnableTime(bool newEnable) {
-    emit(
-      GameSettingsState(
-          settings: state.settings.copyWith(
-            isTimerEnable: newEnable,
-          )),
-    );
-  }
 }
 
 class GameSettingsState {
@@ -80,7 +71,6 @@ class GameSettingsState {
           plot: '',
           safeMode: false,
           time: 30,
-          isTimerEnable: true,
         );
 
   final GameSettings settings;
