@@ -231,7 +231,20 @@ class GPTRepositoryMock implements GPTRepository {
   }
 
   @override
-  Future<String> getFinale(GameSettings settings, Disaster disaster, List<Player> alivePlayers, List<Player> kickedPlayer) {
+  Future<String> getFinale(GameSettings settings, Disaster disaster, List<Player> alivePlayers, List<Player> kickedPlayers) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 1000));
 
+    // Generate a random finale based on the disaster and players
+    String disasterImpact = "После катастрофы '${disaster.name}', ";
+    String aliveSummary = alivePlayers.isNotEmpty
+        ? "выжившие (${alivePlayers.map((p) => p.name).join(", ")}) смогли адаптироваться благодаря их навыкам, таким как ${alivePlayers.first.profession}."
+        : "никто не выжил.";
+    String kickedSummary = kickedPlayers.isNotEmpty
+        ? "Однако, ${kickedPlayers.map((p) => p.name).join(", ")} не смогли справиться с трудностями."
+        : "Все участники справились с испытаниями.";
+
+    String finale = "$disasterImpact $aliveSummary $kickedSummary";
+    return finale;
   }
 }

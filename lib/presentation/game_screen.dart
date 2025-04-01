@@ -156,6 +156,7 @@ class GameScreen extends StatelessWidget {
             ),
           ],
         ),
+      GameStage.preFinalLoading => const Center(child: CircularProgressIndicator()),
       GameStage.finals => const Center(child: Text("Финал")),
     };
   }
