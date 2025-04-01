@@ -6,6 +6,8 @@ import '../domain/models/disaster.dart';
 import 'package:shelter_ai/presentation/ui_items/app_button.dart';
 import 'package:shelter_ai/presentation/ui_items/scaffold_app.dart';
 
+import '../l10n/l10n.dart';
+
 class LoreScreen extends StatelessWidget {
   final Disaster disaster;
 
@@ -13,8 +15,9 @@ class LoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return ScaffoldApp(
-      name: 'Lore',
+      name: loc.lore,
       child: Column(
         children: [
           Center(
@@ -63,7 +66,7 @@ class LoreScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      AppButton(text: "Pause", onPressed: (){}),
+                      AppButton(text: loc.pause, onPressed: (){}),
                       IconButton(
                         onPressed: (){},
                         icon: const Icon(Icons.circle_notifications, size: 48),
@@ -76,8 +79,8 @@ class LoreScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 20),
-          AppButton(text: "Start game", onPressed: (){
+          const SizedBox(height: 20),
+          AppButton(text: loc.startGame, onPressed: (){
             // Navigator.pushNamed(context, '/game_round');
             BlocProvider.of<GameBloc>(context).add(ReadyGameEvent());
           })

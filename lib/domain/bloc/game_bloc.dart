@@ -101,7 +101,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         players: players,
         currentPlayerIndex: playerIndex,
         roundInfo: getRoundInfo(
-            prevState.roundInfo.roundNumber, prevState.settings.playersCount),
+            prevState.roundInfo.roundNumber + 1, prevState.settings.playersCount),
         stage: GameStage.roundStarted,
       ));
     }

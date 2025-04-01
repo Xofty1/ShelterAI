@@ -184,6 +184,126 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Выйти'**
   String get exit;
+
+  /// No description provided for @gameTone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тон игры'**
+  String get gameTone;
+
+  /// No description provided for @familyFriendly.
+  ///
+  /// In ru, this message translates to:
+  /// **'Семейный'**
+  String get familyFriendly;
+
+  /// No description provided for @plotWishes.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите пожелания по сюжету'**
+  String get plotWishes;
+
+  /// No description provided for @voting.
+  ///
+  /// In ru, this message translates to:
+  /// **'Голосование'**
+  String get voting;
+
+  /// No description provided for @playerVoting.
+  ///
+  /// In ru, this message translates to:
+  /// **'Голосует игрок {playerName}'**
+  String playerVoting(Object playerName);
+
+  /// No description provided for @round.
+  ///
+  /// In ru, this message translates to:
+  /// **'РАУНД'**
+  String get round;
+
+  /// No description provided for @survivors.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выжившие:'**
+  String get survivors;
+
+  /// No description provided for @eliminated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбывшие:'**
+  String get eliminated;
+
+  /// No description provided for @howManyToKick.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сколько человек кикнуть'**
+  String get howManyToKick;
+
+  /// No description provided for @disasterDescription.
+  ///
+  /// In ru, this message translates to:
+  /// **'Описание катастрофы'**
+  String get disasterDescription;
+
+  /// No description provided for @shelter.
+  ///
+  /// In ru, this message translates to:
+  /// **'Бункер'**
+  String get shelter;
+
+  /// No description provided for @information.
+  ///
+  /// In ru, this message translates to:
+  /// **'Информация'**
+  String get information;
+
+  /// No description provided for @difficultyClassic.
+  ///
+  /// In ru, this message translates to:
+  /// **'Классика'**
+  String get difficultyClassic;
+
+  /// No description provided for @difficultyHardcore.
+  ///
+  /// In ru, this message translates to:
+  /// **'Хардкор'**
+  String get difficultyHardcore;
+
+  /// No description provided for @difficultyInsanity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Безумие'**
+  String get difficultyInsanity;
+
+  /// No description provided for @count.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество: {count}'**
+  String count(Object count);
+
+  /// No description provided for @difficulty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сложность: {level}'**
+  String difficulty(Object level);
+
+  /// No description provided for @startGame.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начать игру'**
+  String get startGame;
+
+  /// No description provided for @pause.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пауза'**
+  String get pause;
+
+  /// No description provided for @lore.
+  ///
+  /// In ru, this message translates to:
+  /// **'История'**
+  String get lore;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

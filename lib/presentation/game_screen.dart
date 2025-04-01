@@ -11,6 +11,7 @@ import 'package:shelter_ai/presentation/discussion_screen.dart';
 import 'package:shelter_ai/presentation/lore_screen.dart';
 import 'package:shelter_ai/presentation/player_card.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
+import 'package:shelter_ai/presentation/vote_result_screen.dart';
 
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/disaster.dart';
@@ -123,10 +124,10 @@ class GameScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  "РАУНД 1",
-                                  style: TextStyle(
+                                  "РАУНД ${state.roundInfo.roundNumber}",
+                                  style: const TextStyle(
                                     color: headerTextColor,
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
@@ -196,18 +197,12 @@ class GameScreen extends StatelessWidget {
                               roundNumber:
                                   state.roundInfo.roundNumber.toString(),
                             ),
-                          GameStage.voteResult => Column(
-                              children: [
-                                Text("state.roundInfo.roundNumber.toString()"),
-                                CustomButton(
-                                  text: "Дальше",
-                                  onPressed: () =>
-                                      BlocProvider.of<GameBloc>(context).add(
-                                    ReadyGameEvent(),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          GameStage.voteResult => VoteResultScreen(
+                            kickedPlayers: state.players
+                                .where((player) => state.voteInfo.selectedIndexes
+                                .contains(state.players.indexOf(player)))
+                                .toList(),
+                          ),
                           GameStage.finals =>
                             const Center(child: Text("Финал")),
                         },

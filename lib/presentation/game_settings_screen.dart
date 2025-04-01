@@ -12,9 +12,9 @@ import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 import '../core/navigation/navigation_manager.dart';
 
 final Map<int, String> difficulty = {
-  1: "Классика",
-  2: "Хардкор",
-  3: "Безумие",
+  1: "",
+  2: "difficultyHardcore",
+  3: "difficultyInsanity",
 };
 
 class GameSettingsWidget extends StatelessWidget {
@@ -106,19 +106,19 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _buildDifficultyButton(
-                                    difficulty[1]!,
+                                    loc.difficultyClassic,
                                     state.settings.difficulty == 1,
                                     () => BlocProvider.of<GameSettingsCubit>(
                                             context)
                                         .updateDifficulty(1)),
                                 _buildDifficultyButton(
-                                    difficulty[2]!,
+                                    loc.difficultyHardcore,
                                     state.settings.difficulty == 2,
                                     () => BlocProvider.of<GameSettingsCubit>(
                                             context)
                                         .updateDifficulty(2)),
                                 _buildDifficultyButton(
-                                    difficulty[3]!,
+                                    loc.difficultyInsanity,
                                     state.settings.difficulty == 3,
                                     () => BlocProvider.of<GameSettingsCubit>(
                                             context)
@@ -128,12 +128,12 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             const SizedBox(height: 10),
 
                             // Game tone
-                            _buildSettingHeader("Тон игры"),
+                            _buildSettingHeader(loc.gameTone),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const LabelWidget(
-                                  text: "Семейный",
+                                LabelWidget(
+                                  text: loc.familyFriendly,
                                 ),
                                 CustomSwitcher(
                                   initialValue: state.settings.safeMode,
@@ -153,7 +153,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                       // Plot wishes
                       _buildSettingsContainer(
                         child: CustomTextField(
-                          text: "Введите пожелания по сюжету",
+                          text: loc.plotWishes,
                           onChange: (value) {
                             BlocProvider.of<GameSettingsCubit>(context)
                                 .updatePlot(value);

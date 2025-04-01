@@ -14,10 +14,7 @@ class AppSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppSettingsCubit(),
-      child: const GlobalSettingsWidget(),
-    );
+    return const GlobalSettingsWidget();
   }
 }
 
@@ -52,7 +49,6 @@ class GlobalSettingsWidget extends StatelessWidget {
               itemLabel: (item) => item,
               onChanged: (value) {
                 String languageName = value == 'English' ? 'en' : 'ru';
-                AppSharedPreference().saveLanguage(languageName);
                 BlocProvider.of<AppSettingsCubit>(context)
                     .updateLocale(languageName);
               },
@@ -94,9 +90,8 @@ class GlobalSettingsWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: SliderSettings(
-                    defaultValue: AppSharedPreference().getDubbing()?.toDouble() ?? 50,
+                    defaultValue: state.settings.dubbing.toDouble(),
                     onChange: (value) {
-                      AppSharedPreference().saveDubbing(value.toInt());
                       BlocProvider.of<AppSettingsCubit>(context)
                           .updateDubbing(value.toInt());
                     },
@@ -114,9 +109,8 @@ class GlobalSettingsWidget extends StatelessWidget {
 
                 Expanded(
                   child: SliderSettings(
-                    defaultValue: AppSharedPreference().getEffects()?.toDouble() ?? 50,
+                    defaultValue: state.settings.effects.toDouble(),
                     onChange: (value) {
-                      AppSharedPreference().saveEffects(value.toInt());
                       BlocProvider.of<AppSettingsCubit>(context)
                           .updateEffects(value.toInt());
                     },
