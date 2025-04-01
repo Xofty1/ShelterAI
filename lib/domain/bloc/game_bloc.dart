@@ -24,7 +24,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<VotedGameEvent>(_onVoted);
   }
 
-  void _onReady(ReadyGameEvent event, Emitter emit) {
+  Future<void> _onReady(ReadyGameEvent event, Emitter emit) async {
     final prevState = (state as RunningGameState);
     GameStage stage = prevState.stage;
     VoteInfo voteInfo = prevState.voteInfo;
@@ -46,7 +46,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // нового раунда
           stage = prevState.roundInfo.roundNumber < 6
               ? GameStage.roundStarted
-              : GameStage.finals;
+              : GameStage.preFinalLoading;
           voteInfo = const VoteInfo(
               votes: [],
               canBeSelected: [],
@@ -63,6 +63,27 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       stage: stage,
       voteInfo: voteInfo,
     ));
+
+    if (stage == GameStage.preFinalLoading) {
+      _onFinal(emit);
+    }
+  }
+
+  Future<void> _onFinal(Emitter emit) async {
+    final prevState = (state as RunningGameState);
+    final settings = prevState.settings;
+    final disaster = prevState.disaster;
+    final alivePlayers = prevState.players
+        .where((player) => player.lifeStatus == LifeStatus.alive)
+        .toList();
+    final kickedPlayers = prevState.players
+        .where((player) => player.lifeStatus != LifeStatus.alive)
+        .toList();
+
+    final finals = await repository.getFinale(
+        settings, disaster, alivePlayers, kickedPlayers);
+
+    emit(prevState.copyWith(stage: GameStage.finals, finals: finals));
   }
 
   void _onOpenedProperty(OpenedPropertyGameEvent event, Emitter emit) {

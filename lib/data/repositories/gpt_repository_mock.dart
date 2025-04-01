@@ -229,4 +229,9 @@ class GPTRepositoryMock implements GPTRepository {
 
     return players;
   }
+
+  @override
+  Future<String> getFinale(GameSettings settings, Disaster disaster, List<Player> alivePlayers, List<Player> kickedPlayer) {
+
+  }
 }
