@@ -64,13 +64,18 @@ class GlobalSettingsWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            // Music row with 1:3 ratio
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IntrinsicWidth(
-                  child: LabelWidget(text: loc.music),
-                ),
                 Expanded(
+                  flex: 1,
+                  child: IntrinsicWidth(
+                    child: LabelWidget(text: loc.music),
+                  ),
+                ),
+                const SizedBox(width: 16), // Добавляем отступ между элементами
+                Expanded(
+                  flex: 2,
                   child: SliderSettings(
                     defaultValue: state.settings.music.toDouble(),
                     onChange: (value) {
@@ -82,13 +87,18 @@ class GlobalSettingsWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+            // Dubbing row with 1:3 ratio
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IntrinsicWidth(
-                  child: LabelWidget(text: loc.dubbing),
-                ),
                 Expanded(
+                  flex: 1,
+                  child: IntrinsicWidth(
+                    child: LabelWidget(text: loc.dubbing),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
                   child: SliderSettings(
                     defaultValue: state.settings.dubbing.toDouble(),
                     onChange: (value) {
@@ -100,14 +110,18 @@ class GlobalSettingsWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+            // Effects row with 1:3 ratio
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IntrinsicWidth(
-                  child: LabelWidget(text: loc.effects),
-                ),
-
                 Expanded(
+                  flex: 1,
+                  child: IntrinsicWidth(
+                    child: LabelWidget(text: loc.effects),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
                   child: SliderSettings(
                     defaultValue: state.settings.effects.toDouble(),
                     onChange: (value) {

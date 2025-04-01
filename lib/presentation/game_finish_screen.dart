@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:shelter_ai/core/navigation/navigation_manager.dart';
+import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/ui_items/player_votting_card.dart';
 
 class FinishScreen extends StatelessWidget {
+  final List<Player> alivePlayers;
+  final List<Player> deadPlayers;
+  final String finalText;
 
-  final int alivePlayers;
-  final int deadPlayers;
-
-  const FinishScreen({
-    super.key,
-    required this.alivePlayers,
-    required this.deadPlayers
-  });
+  const FinishScreen(
+      {super.key,
+      required this.alivePlayers,
+      required this.deadPlayers,
+      required this.finalText});
 
   @override
   Widget build(BuildContext context) {
-
-
     const headerColor = Color(0xFFB8A876);
     const headerTextColor = Color(0xFF482020);
     const buttonColor = Color(0xFF99582A);
@@ -23,7 +23,6 @@ class FinishScreen extends StatelessWidget {
     const avileTitleTextColor = Color(0xFF432818);
     const deadTextColor = Color(0xFFE9E1DD);
     const deadTitleColor = Color(0xFF6E5227);
-
 
     return Scaffold(
       body: Container(
@@ -50,76 +49,40 @@ class FinishScreen extends StatelessWidget {
                       style: TextStyle(
                           color: headerTextColor,
                           fontSize: 32,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
                 SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Container(
-                  height: 500,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFA38C68),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Container(
-
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Container(
+                    height: 500,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFD9D9D9),
+                      color: const Color(0xFFA38C68),
                       borderRadius: BorderRadius.circular(5),
                     ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
                       child: Container(
-                      padding: const EdgeInsets.all(12),
-                                child: const SingleChildScrollView(
-                      child: Text(
-                        'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n'
-                            'Здесь будет текст...\n',
-                        style: TextStyle(fontSize: 16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD9D9D9),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          child: SingleChildScrollView(
+                            child: Text(
+                              finalText,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
                       ),
-                                ),
-                              ),
                     ),
                   ),
                 ),
-              ),
-
-          const SizedBox(height: 24),
-
+                const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   width: double.infinity,
@@ -130,14 +93,11 @@ class FinishScreen extends StatelessWidget {
                       style: TextStyle(
                           color: avileTitleTextColor,
                           fontSize: 32,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-
-          const SizedBox(height: 8),
-
+                const SizedBox(height: 8),
                 GridView.count(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -145,42 +105,37 @@ class FinishScreen extends StatelessWidget {
                   childAspectRatio: 0.7,
                   crossAxisSpacing: 6,
                   mainAxisSpacing: 6,
-                  children: List.generate(alivePlayers, (index) {
+                  children: List.generate(alivePlayers.length, (index) {
                     return Stack(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: PlayerCardVoting(
                             number: (index + 1).toString(),
-                            name: 'Игрок ${index + 1}',
-                            profession: 'Профессия ${index + 1}',
+                            name: alivePlayers[index].name,
+                            profession: alivePlayers[index].profession,
                           ),
                         ),
                       ],
                     );
                   }),
                 ),
-
-          const SizedBox(height: 24),
-
+                const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   width: double.infinity,
                   color: deadTitleColor,
                   child: const Center(
                     child: Text(
-                      'Не спаслись:',
+                      'Не попали:',
                       style: TextStyle(
                           color: deadTextColor,
                           fontSize: 32,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-
-          const SizedBox(height: 8),
-
+                const SizedBox(height: 8),
                 GridView.count(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -188,31 +143,31 @@ class FinishScreen extends StatelessWidget {
                   childAspectRatio: 0.7,
                   crossAxisSpacing: 6,
                   mainAxisSpacing: 6,
-                  children: List.generate(deadPlayers, (index) {
+                  children: List.generate(deadPlayers.length, (index) {
                     return Stack(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: PlayerCardVoting(
                             number: (index + 1).toString(),
-                            name: 'Игрок ${index + 1}',
-                            profession: 'Профессия ${index + 1}',
+                            name: deadPlayers[index].name,
+                            profession: deadPlayers[index].profession,
                           ),
                         ),
                       ],
                     );
                   }),
                 ),
-
-          const SizedBox(height: 24),
-
+                const SizedBox(height: 24),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                   child: SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: (){},
+                      onPressed: () {
+                        NavigationManager.instance.openHomeReplacment();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: buttonColor,
                         disabledBackgroundColor: Colors.grey,
@@ -231,9 +186,9 @@ class FinishScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-          ],
-              ),
-              ),
+              ],
+            ),
+          ),
         ),
       ),
     );

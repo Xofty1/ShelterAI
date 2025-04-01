@@ -108,7 +108,7 @@ class GameScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       if (state.stage != GameStage.intro &&
-                          state.stage != GameStage.roundStarted)
+                          state.stage != GameStage.roundStarted && state.stage != GameStage.finals && state.stage != GameStage.preFinalLoading )
                         Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 16),
@@ -208,16 +208,15 @@ class GameScreen extends StatelessWidget {
                           GameStage.preFinalLoading =>
                             const CircularProgressIndicator(),
                           GameStage.finals => FinishScreen(
+                              finalText: state.finals,
                               alivePlayers: state.players
                                   .where((element) =>
                                       element.lifeStatus == LifeStatus.alive)
-                                  .toList()
-                                  .length,
+                                  .toList(),
                               deadPlayers: state.players
                                   .where((element) =>
                                       element.lifeStatus != LifeStatus.alive)
-                                  .toList()
-                                  .length,
+                                  .toList(),
                             ),
                         },
                       )

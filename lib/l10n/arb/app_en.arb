@@ -34,5 +34,6 @@
   "difficulty": "Difficulty: {level}",
   "startGame": "Start Game",
   "pause": "Pause",
-  "lore": "Lore"
+  "lore": "Lore",
+  "loading": "Loading..."
 }

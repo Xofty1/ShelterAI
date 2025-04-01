@@ -304,6 +304,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'История'**
   String get lore;
+
+  /// No description provided for @loading.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузка...'**
+  String get loading;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

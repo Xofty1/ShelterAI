@@ -116,4 +116,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get lore => 'История';
+
+  @override
+  String get loading => 'Загрузка...';
 }

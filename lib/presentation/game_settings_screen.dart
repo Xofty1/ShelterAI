@@ -8,13 +8,14 @@ import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
 import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
+import 'package:shelter_ai/core/navigation/routes.dart';
 
 import '../core/navigation/navigation_manager.dart';
 
 final Map<int, String> difficulty = {
-  1: "",
-  2: "difficultyHardcore",
-  3: "difficultyInsanity",
+  1: "Классика",
+  2: "Хардкор",
+  3: "Безумие",
 };
 
 class GameSettingsWidget extends StatelessWidget {
@@ -64,8 +65,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
               child: SafeArea(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   child: Column(
                     children: [
                       // Main settings container
@@ -79,19 +79,16 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 SizedBox(
                                   width: 70,
                                   child: LabelWidget(
-                                    text:
-                                        state.settings.playersCount.toString(),
+                                    text: state.settings.playersCount.toString(),
                                   ),
                                 ),
                                 Expanded(
                                   child: SliderSettings(
-                                    defaultValue:
-                                        state.settings.playersCount.toDouble(),
+                                    defaultValue: state.settings.playersCount.toDouble(),
                                     min: 2,
                                     max: 22,
                                     onChange: (value) =>
-                                        BlocProvider.of<GameSettingsCubit>(
-                                                context)
+                                        BlocProvider.of<GameSettingsCubit>(context)
                                             .updatePlayersCount(value.toInt()),
                                   ),
                                 ),
@@ -106,34 +103,31 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _buildDifficultyButton(
-                                    loc.difficultyClassic,
+                                    difficulty[1]!,
                                     state.settings.difficulty == 1,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
+                                        () => BlocProvider.of<GameSettingsCubit>(context)
                                         .updateDifficulty(1)),
                                 _buildDifficultyButton(
-                                    loc.difficultyHardcore,
+                                    difficulty[2]!,
                                     state.settings.difficulty == 2,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
+                                        () => BlocProvider.of<GameSettingsCubit>(context)
                                         .updateDifficulty(2)),
                                 _buildDifficultyButton(
-                                    loc.difficultyInsanity,
+                                    difficulty[3]!,
                                     state.settings.difficulty == 3,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
+                                        () => BlocProvider.of<GameSettingsCubit>(context)
                                         .updateDifficulty(3)),
                               ],
                             ),
                             const SizedBox(height: 10),
 
                             // Game tone
-                            _buildSettingHeader(loc.gameTone),
+                            _buildSettingHeader("Тон игры"),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                LabelWidget(
-                                  text: loc.familyFriendly,
+                                const LabelWidget(
+                                  text: "Семейный",
                                 ),
                                 CustomSwitcher(
                                   initialValue: state.settings.safeMode,
@@ -153,7 +147,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                       // Plot wishes
                       _buildSettingsContainer(
                         child: CustomTextField(
-                          text: loc.plotWishes,
+                          text: "Введите пожелания по сюжету",
                           onChange: (value) {
                             BlocProvider.of<GameSettingsCubit>(context)
                                 .updatePlot(value);
@@ -168,91 +162,66 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                         child: Column(
                           children: [
                             _buildSettingHeader("Время"),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 70,
+                                      child: LabelWidget(
+                                        text: state.settings.time.toString(),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: SliderSettings(
+                                        defaultValue: state.settings.time.toDouble(),
+                                        min: 30,
+                                        max: 120,
+                                        onChange: isTimerEnabled
+                                            ? (value) => BlocProvider.of<GameSettingsCubit>(context)
+                                            .updateTime(value.toInt())
+                                            : (_) {},
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            // Random mode
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text("Таймер"),
+                                _buildToneButton("Рандом", false, () {
+                                  // Random mode can be added to your GameSettings model
+                                }, width: 160),
                                 CustomSwitcher(
-                                  initialValue: isTimerEnabled,
+                                  initialValue: false,
                                   onToggle: (value) {
-                                    setState(() {
-                                      isTimerEnabled = value;
-                                      BlocProvider.of<GameSettingsCubit>(
-                                              context)
-                                          .updateEnableTime(value);
-                                    });
+                                    // Random mode toggle can be added to your GameSettings model
                                   },
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
-                            Opacity(
-                              opacity: isTimerEnabled ? 1.0 : 0.5,
-                              child: AbsorbPointer(
-                                absorbing: !isTimerEnabled,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 70,
-                                          child: LabelWidget(
-                                            text:
-                                                state.settings.time.toString(),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: SliderSettings(
-                                            defaultValue:
-                                                state.settings.time.toDouble(),
-                                            min: 30,
-                                            max: 120,
-                                            onChange: isTimerEnabled
-                                                ? (value) => BlocProvider.of<
-                                                            GameSettingsCubit>(
-                                                        context)
-                                                    .updateTime(value.toInt())
-                                                : (_) {},
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+
+                            const SizedBox(height: 20),
+
+                            // Continue button
+                            CustomButton(
+                              text: 'Продолжить',
+                              onPressed: () {
+                                BlocProvider.of<GameSettingsCubit>(context).startGame();
+                                // Navigator.pushReplacementNamed(
+                                //   context,
+                                //   RouteNames.loader,
+                                // );
+                              },
                             ),
                           ],
                         ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Random mode
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildToneButton("Рандом", false, () {
-                            // Random mode can be added to your GameSettings model
-                          }, width: 160),
-                          CustomSwitcher(
-                            initialValue: false,
-                            onToggle: (value) {
-                              // Random mode toggle can be added to your GameSettings model
-                            },
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Continue button
-                      CustomButton(
-                        text: 'Продолжить',
-                        onPressed: () {
-                          BlocProvider.of<GameSettingsCubit>(context)
-                              .startGame();
-                        },
                       ),
                     ],
                   ),
@@ -319,8 +288,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     );
   }
 
-  Widget _buildDifficultyButton(
-      String text, bool isSelected, VoidCallback onTap) {
+  Widget _buildDifficultyButton(String text, bool isSelected,
+      VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
