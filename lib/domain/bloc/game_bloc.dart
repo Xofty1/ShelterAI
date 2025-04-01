@@ -11,9 +11,7 @@ import '../models/game_state.dart';
 class GameBloc extends Bloc<GameEvent, GameState> {
   final GPTRepository repository;
 
-  GameBloc(
-    this.repository,
-  ) : super(const LoadingGameState()) {
+  GameBloc(this.repository,) : super(const LoadingGameState()) {
     on<StartedGameEvent>(_onStarted);
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
@@ -49,13 +47,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     VoteInfo voteInfo = prevState.voteInfo;
 
     switch (stage) {
-      // Переходим на следующую стадию, на следующей стадии предпросмотр
+    // Переходим на следующую стадию, на следующей стадии предпросмотр
       case GameStage.intro:
         stage = GameStage.roundStarted;
-      // Переходим на следующую стадию, на следующей стадии предпросмотр
+    // Переходим на следующую стадию, на следующей стадии предпросмотр
       case GameStage.roundStarted:
         stage = GameStage.openCards;
-      // Переходим на следующую стадию, предпросмотр
+    // Переходим на следующую стадию, предпросмотр
       case GameStage.speaking:
         stage = GameStage.voting;
       // Тут разветвление в зависимости от результатов голосования
@@ -89,8 +87,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     var playerIndex = prevState.currentPlayerIndex;
 
     final knownProperties =
-        List.of(prevState.players[playerIndex].knownProperties);
-
+    List.of(prevState.players[playerIndex].knownProperties);
+    print('event length: ${event.propertyIndexes.length}');
     for (var index in event.propertyIndexes) {
       knownProperties[index] = true;
     }
@@ -99,8 +97,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     players[playerIndex] =
         players[playerIndex].copyWith(knownProperties: knownProperties);
 
-    playerIndex = players.indexWhere(
-        (player) => player.lifeStatus == LifeStatus.alive, playerIndex);
+    playerIndex = players. indexWhere(
+            (player) => player.lifeStatus == LifeStatus.alive, playerIndex + 1);
 
     // Есть живые игроки, не сделавшие ход
     if (playerIndex != -1) {
@@ -108,6 +106,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         players: players,
         currentPlayerIndex: playerIndex,
       ));
+      print('Player 0: ${players.first.knownProperties[0]}');
     } else {
       // Ищем первого голосующего игрока
       playerIndex =
@@ -141,8 +140,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     votes[event.voteIndex]++;
 
     var playerIndex = prevState.players.indexWhere(
-        (player) => player.lifeStatus != LifeStatus.killed,
-        prevState.currentPlayerIndex);
+            (player) => player.lifeStatus != LifeStatus.killed,
+        prevState.currentPlayerIndex + 1);
 
     // Голосует следующий игрок
     if (playerIndex != -1) {
@@ -159,14 +158,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value) {
         // Получаем кикнутых игроков
         final selectedIndexes = sortedVotes
-            .getRange(0, lastKicking)
+            .getRange(0, lastKicking + 1)
             .map((element) => element.key)
             .toList();
 
         final players = List.of(prevState.players);
-
         // Меняем статус жизни персонажей: last -> killed,
         // У выбранных персонажей alive -> last
+
         for (int i = 0; i < players.length; i++) {
           if (players[i].lifeStatus == LifeStatus.killed) {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
@@ -174,12 +173,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
           }
         }
-
         emit(prevState.copyWith(
           players: players,
           stage: GameStage.voteResult,
           roundInfo: getRoundInfo(
-              prevState.roundInfo.roundNumber, prevState.settings.playersCount),
+              prevState.roundInfo.roundNumber + 1, prevState.settings.playersCount),
           voteInfo: prevState.voteInfo.copyWith(
             selectedIndexes: selectedIndexes,
             voteStatus: VoteStatus.successful,

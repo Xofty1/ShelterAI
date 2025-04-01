@@ -24,7 +24,7 @@ class NavigationManager {
   }
 
   void openGame(GameSettings settings) {
-    _navigator.pushNamed(RouteNames.game, arguments: [settings]);
+    _navigator.pushNamed(RouteNames.game, arguments: settings);
   }
 
   void pop([Object? result]) {

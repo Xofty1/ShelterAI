@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ScaffoldTemplate extends StatelessWidget {
+class ScaffoldApp extends StatelessWidget {
   final Widget child;
   final String name;
 
-  const ScaffoldTemplate({Key? key, required this.child, required this.name})
-      : super(key: key);
+  const ScaffoldApp({Key? key, required this.child, required this.name}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class ScaffoldTemplate extends StatelessWidget {
         child: Column(
           children: [
             AppBar(
-              backgroundColor: const Color(0xFFD3C0AA),
+              backgroundColor: const Color(0x376B5642),
               centerTitle: true,
               title: Text(name),
             ),
@@ -32,7 +31,7 @@ class ScaffoldTemplate extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 30),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFD3C0AA),
+                      color: const Color(0xFF6B5642),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: child,
