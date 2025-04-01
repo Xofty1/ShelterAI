@@ -142,7 +142,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     var playerIndex = prevState.players.indexWhere(
             (player) => player.lifeStatus != LifeStatus.killed,
         prevState.currentPlayerIndex + 1);
-
+print("player $playerIndex");
     // Голосует следующий игрок
     if (playerIndex != -1) {
       emit(prevState.copyWith(

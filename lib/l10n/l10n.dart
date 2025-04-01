@@ -160,6 +160,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Настройки игры'**
   String get game_settings;
+
+  /// No description provided for @exitGameTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выход из игры'**
+  String get exitGameTitle;
+
+  /// No description provided for @exitGameMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы уверены, что хотите выйти из игры?'**
+  String get exitGameMessage;
+
+  /// No description provided for @cancel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отмена'**
+  String get cancel;
+
+  /// No description provided for @exit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти'**
+  String get exit;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

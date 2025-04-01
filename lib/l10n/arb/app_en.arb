@@ -10,5 +10,9 @@
   "effects": "Effects",
   "language": "Language",
   "settings": "Settings",
-  "game_settings": "Game Settings"
+  "game_settings": "Game Settings",
+  "exitGameTitle": "Exit Game",
+  "exitGameMessage": "Are you sure you want to exit the game?",
+  "cancel": "Cancel",
+  "exit": "Exit"
 }

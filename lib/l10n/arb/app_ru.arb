@@ -10,5 +10,9 @@
     "effects": "Эффекты",
     "language": "Язык",
     "settings": "Настройки",
-    "game_settings": "Настройки игры"
+    "game_settings": "Настройки игры",
+    "exitGameTitle": "Выход из игры",
+    "exitGameMessage": "Вы уверены, что хотите выйти из игры?",
+    "cancel": "Отмена",
+    "exit": "Выйти"
 }

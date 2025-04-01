@@ -58,37 +58,7 @@ class _VotingScreenState extends State<GameVotingScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: headerColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "РАУНД ${widget.roundNumber}",
-                        style: const TextStyle(
-                          color: headerTextColor,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
+              SizedBox(height: 16,),
               Container(
                 width: double.infinity,
                 color: voteHeaderColor,
@@ -174,9 +144,8 @@ class _VotingScreenState extends State<GameVotingScreen> {
                   }),
                 ),
               ),
-              const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8,),
                 child: SizedBox(
                   width: double.infinity,
                   height: 50,

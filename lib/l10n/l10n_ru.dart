@@ -38,4 +38,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get game_settings => 'Настройки игры';
+
+  @override
+  String get exitGameTitle => 'Выход из игры';
+
+  @override
+  String get exitGameMessage => 'Вы уверены, что хотите выйти из игры?';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get exit => 'Выйти';
 }

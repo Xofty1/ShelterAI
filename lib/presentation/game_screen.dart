@@ -7,12 +7,15 @@ import 'package:shelter_ai/domain/services/gpt_repository.dart';
 import 'package:shelter_ai/domain/services/random_gpt_repository.dart';
 import 'package:shelter_ai/presentation/dialogs/lore_dialog.dart';
 import 'package:shelter_ai/presentation/dialogs/settings_dialog.dart';
+import 'package:shelter_ai/presentation/discussion_screen.dart';
 import 'package:shelter_ai/presentation/lore_screen.dart';
 import 'package:shelter_ai/presentation/player_card.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
+import 'package:shelter_ai/presentation/widgets/custom_timer.dart';
 
 import '../domain/bloc/game_bloc.dart';
 import '../l10n/l10n.dart';
+import 'discussion_timer.dart';
 import 'game_round_screen.dart';
 import 'game_votting_screen.dart';
 
@@ -38,6 +41,27 @@ class GameScreenWidget extends StatelessWidget {
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key});
 
+  Future<bool> _onWillPop(BuildContext context) async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(AppLocalizations.of(context).exitGameTitle),
+            content: Text(AppLocalizations.of(context).exitGameMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(AppLocalizations.of(context).cancel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(AppLocalizations.of(context).exit),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   void _showLoreDialog(BuildContext context, RunningGameState state) {
     showDialog(
       context: context,
@@ -59,6 +83,11 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
+    const headerColor = Color(0xFFB8A876);
+    const headerTextColor = Color(0xFF482020);
+    const votingPlayerHeaderColor = Color(0xFF604D4D);
+    const voteHeaderColor = Color(0xFFAB9A7F);
+    const buttonColor = Color(0xFF99582A);
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
         if (state is LoadingGameState) {
@@ -67,96 +96,129 @@ class GameScreen extends StatelessWidget {
           );
         } else {
           final runningState = state as RunningGameState;
-          return Scaffold(
-            body: Stack(
-              children: [
-                // Main game content based on stage
-                _buildGameContent(context, runningState),
-
-                // Floating buttons for lore and settings
-                Positioned(
-                  top: 40,
-                  right: 16,
-                  child: Column(
-                    children: [
-                      _buildFloatingButton(
-                        context: context,
-                        icon: Icons.info_outline,
-                        tooltip: "Информация о катастрофе",
-                        onPressed: () => _showLoreDialog(context, runningState),
-                      ),
-                      const SizedBox(height: 12),
-                      _buildFloatingButton(
-                        context: context,
-                        icon: Icons.settings,
-                        tooltip: "Настройки игры",
-                        onPressed: () =>
-                            _showSettingsDialog(context, runningState),
-                      ),
-                    ],
+          return WillPopScope(
+            onWillPop: () => _onWillPop(context),
+            child: Scaffold(
+              body: Stack(
+                children: [
+                  SafeArea(
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: headerColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  "РАУНД 1",
+                                  style: TextStyle(
+                                    color: headerTextColor,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () =>
+                                        _showSettingsDialog(context, state),
+                                    icon: const Icon(Icons.settings),
+                                    color: headerTextColor,
+                                    iconSize: 28,
+                                    tooltip: 'Настройки',
+                                  ),
+                                  const SizedBox(width: 8),
+                                  IconButton(
+                                    onPressed: () =>
+                                        _showLoreDialog(context, state),
+                                    icon: const Icon(Icons.info_outline),
+                                    color: headerTextColor,
+                                    iconSize: 28,
+                                    tooltip: 'Информация',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: switch (state.stage) {
+                            GameStage.intro =>
+                              LoreScreen(disaster: state.disaster),
+                            GameStage.roundStarted => GameRoundScreen(
+                                alivePlayerCount: state.players
+                                    .where((element) => (element.lifeStatus ==
+                                        LifeStatus.alive))
+                                    .toList()
+                                    .length
+                                    .toString(),
+                                deadPlayerCount: state.players
+                                    .where((element) => (element.lifeStatus !=
+                                        LifeStatus.alive))
+                                    .toList()
+                                    .length
+                                    .toString(),
+                                needToKickCount:
+                                    state.roundInfo.kickedCount.toString(),
+                                roundNumber:
+                                    state.roundInfo.roundNumber.toString(),
+                                showCharacteristicCount:
+                                    state.roundInfo.openCount.toString()),
+                            GameStage.openCards => PlayerCardScreen(
+                                players: state.players,
+                                currentPlayerIndex: state.currentPlayerIndex,
+                                openCount: state.roundInfo.openCount,
+                              ),
+                            GameStage.speaking => DiscussionScreen(
+                                roundNumber: state.roundInfo.roundNumber,
+                              ),
+                            GameStage.voting => GameVotingScreen(
+                                players: state.players,
+                                currentPlayerIndex: state.currentPlayerIndex,
+                                roundNumber:
+                                    state.roundInfo.roundNumber.toString(),
+                                totalPlayers: state.settings.playersCount,
+                              ),
+                            GameStage.voteResult => Column(
+                                children: [
+                                  Text(
+                                      "state.roundInfo.roundNumber.toString()"),
+                                  CustomButton(
+                                    text: "Дальше",
+                                    onPressed: () =>
+                                        BlocProvider.of<GameBloc>(context).add(
+                                      ReadyGameEvent(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            GameStage.finals =>
+                              const Center(child: Text("Финал")),
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }
       },
     );
-  }
-
-  Widget _buildGameContent(BuildContext context, RunningGameState state) {
-    return switch (state.stage) {
-      GameStage.intro => LoreScreen(disaster: state.disaster),
-      GameStage.roundStarted => GameRoundScreen(
-          alivePlayerCount: state.players
-              .where((element) => (element.lifeStatus == LifeStatus.alive))
-              .toList()
-              .length
-              .toString(),
-          deadPlayerCount: state.players
-              .where((element) => (element.lifeStatus != LifeStatus.alive))
-              .toList()
-              .length
-              .toString(),
-          needToKickCount: state.roundInfo.kickedCount.toString(),
-          roundNumber: state.roundInfo.roundNumber.toString(),
-          showCharacteristicCount: state.roundInfo.openCount.toString()),
-      GameStage.openCards => PlayerCardScreen(
-          players: state.players,
-          currentPlayerIndex: state.currentPlayerIndex,
-          openCount: state.roundInfo.openCount,
-        ),
-      GameStage.speaking => Column(
-          children: [
-            Text(state.roundInfo.roundNumber.toString()),
-            CustomButton(
-              text: "Дальше",
-              onPressed: () => BlocProvider.of<GameBloc>(context).add(
-                ReadyGameEvent(),
-              ),
-            ),
-          ],
-        ),
-      GameStage.voting => GameVotingScreen(
-          players: state.players,
-          currentPlayerIndex: state.currentPlayerIndex,
-          roundNumber: state.roundInfo.roundNumber.toString(),
-          totalPlayers: state.settings.playersCount,
-        ),
-      GameStage.voteResult =>
-          Column(
-            children: [
-              Text("state.roundInfo.roundNumber.toString()"),
-              CustomButton(
-                text: "Дальше",
-                onPressed: () => BlocProvider.of<GameBloc>(context).add(
-                  ReadyGameEvent(),
-                ),
-              ),
-            ],
-          ),
-      GameStage.finals => const Center(child: Text("Финал")),
-    };
   }
 
   Widget _buildFloatingButton({
