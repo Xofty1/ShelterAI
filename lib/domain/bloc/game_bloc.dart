@@ -80,6 +80,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     players[playerIndex] =
         players[playerIndex].copyWith(knownProperties: knownProperties);
 
+    // Ищем следущего живого игрока для хода
     playerIndex = players.indexWhere(
         (player) => player.lifeStatus == LifeStatus.alive, playerIndex + 1);
 
@@ -89,10 +90,26 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         players: players,
         currentPlayerIndex: playerIndex,
       ));
-    } else {
-      // Ищем первого голосующего игрока
+    }
+    // Если кикается ноль игроков - переход к следующему раунду
+    else if (prevState.roundInfo.kickedCount == 0) {
+      // Ищем первого живого игрока
       playerIndex =
           players.indexWhere((player) => player.lifeStatus == LifeStatus.alive);
+
+      emit(prevState.copyWith(
+        players: players,
+        currentPlayerIndex: playerIndex,
+        roundInfo: getRoundInfo(
+            prevState.roundInfo.roundNumber, prevState.settings.playersCount),
+        stage: GameStage.roundStarted,
+      ));
+    }
+    // Все хорошо, переход к голосованию
+    else {
+      // Ищем первого голосующего игрока
+      playerIndex = players
+          .indexWhere((player) => player.lifeStatus != LifeStatus.killed);
 
       // Могут быть выбраны только живые игроки
       final canBeSelected = players
@@ -160,8 +177,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(prevState.copyWith(
           players: players,
           stage: GameStage.voteResult,
-          roundInfo: getRoundInfo(
-              prevState.roundInfo.roundNumber + 1, prevState.settings.playersCount),
+          roundInfo: getRoundInfo(prevState.roundInfo.roundNumber + 1,
+              prevState.settings.playersCount),
           voteInfo: prevState.voteInfo.copyWith(
             selectedIndexes: selectedIndexes,
             voteStatus: VoteStatus.successful,
