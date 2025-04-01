@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/data/repositories/gpt_api.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
 import 'package:shelter_ai/l10n/l10n.dart';
@@ -24,7 +25,7 @@ class GameSettingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       // TODO: DI вместо GPTRepositoryMock
-      create: (context) => GameSettingsCubit(GPTRepositoryMock()),
+      create: (context) => GameSettingsCubit(GptRepositoryImpl()),
       child: const GameSettingsScreen(),
     );
   }

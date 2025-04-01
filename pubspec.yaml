@@ -22,6 +22,7 @@ dependencies:
   pair: ^0.1.2
   dio: ^5.8.0+1
   dart_openai: ^5.1.0
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -41,5 +42,7 @@ flutter:
   assets:
     - assets/images/door.png
     - assets/images/hobby.png
+    - assets/request_texts.json
+    - .env
   #   - images/a_dot_ham.jpeg
 
