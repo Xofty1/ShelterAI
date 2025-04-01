@@ -21,6 +21,7 @@ mixin _$GameSettings {
   bool get safeMode;
   String get language;
   int get time;
+  bool get isTimerEnable;
 
   /// Create a copy of GameSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -44,16 +45,18 @@ mixin _$GameSettings {
                 other.safeMode == safeMode) &&
             (identical(other.language, language) ||
                 other.language == language) &&
-            (identical(other.time, time) || other.time == time));
+            (identical(other.time, time) || other.time == time) &&
+            (identical(other.isTimerEnable, isTimerEnable) ||
+                other.isTimerEnable == isTimerEnable));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, playersCount, difficulty, plot, safeMode, language, time);
+  int get hashCode => Object.hash(runtimeType, playersCount, difficulty, plot,
+      safeMode, language, time, isTimerEnable);
 
   @override
   String toString() {
-    return 'GameSettings(playersCount: $playersCount, difficulty: $difficulty, plot: $plot, safeMode: $safeMode, language: $language, time: $time)';
+    return 'GameSettings(playersCount: $playersCount, difficulty: $difficulty, plot: $plot, safeMode: $safeMode, language: $language, time: $time, isTimerEnable: $isTimerEnable)';
   }
 }
 
@@ -69,7 +72,8 @@ abstract mixin class $GameSettingsCopyWith<$Res> {
       String plot,
       bool safeMode,
       String language,
-      int time});
+      int time,
+      bool isTimerEnable});
 }
 
 /// @nodoc
@@ -90,6 +94,7 @@ class _$GameSettingsCopyWithImpl<$Res> implements $GameSettingsCopyWith<$Res> {
     Object? safeMode = null,
     Object? language = null,
     Object? time = null,
+    Object? isTimerEnable = null,
   }) {
     return _then(_self.copyWith(
       playersCount: null == playersCount
@@ -116,6 +121,10 @@ class _$GameSettingsCopyWithImpl<$Res> implements $GameSettingsCopyWith<$Res> {
           ? _self.time
           : time // ignore: cast_nullable_to_non_nullable
               as int,
+      isTimerEnable: null == isTimerEnable
+          ? _self.isTimerEnable
+          : isTimerEnable // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -129,7 +138,8 @@ class _GameSettings implements GameSettings {
       required this.plot,
       required this.safeMode,
       required this.language,
-      required this.time});
+      required this.time,
+      required this.isTimerEnable});
 
   @override
   final int playersCount;
@@ -143,6 +153,8 @@ class _GameSettings implements GameSettings {
   final String language;
   @override
   final int time;
+  @override
+  final bool isTimerEnable;
 
   /// Create a copy of GameSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -166,16 +178,18 @@ class _GameSettings implements GameSettings {
                 other.safeMode == safeMode) &&
             (identical(other.language, language) ||
                 other.language == language) &&
-            (identical(other.time, time) || other.time == time));
+            (identical(other.time, time) || other.time == time) &&
+            (identical(other.isTimerEnable, isTimerEnable) ||
+                other.isTimerEnable == isTimerEnable));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, playersCount, difficulty, plot, safeMode, language, time);
+  int get hashCode => Object.hash(runtimeType, playersCount, difficulty, plot,
+      safeMode, language, time, isTimerEnable);
 
   @override
   String toString() {
-    return 'GameSettings(playersCount: $playersCount, difficulty: $difficulty, plot: $plot, safeMode: $safeMode, language: $language, time: $time)';
+    return 'GameSettings(playersCount: $playersCount, difficulty: $difficulty, plot: $plot, safeMode: $safeMode, language: $language, time: $time, isTimerEnable: $isTimerEnable)';
   }
 }
 
@@ -193,7 +207,8 @@ abstract mixin class _$GameSettingsCopyWith<$Res>
       String plot,
       bool safeMode,
       String language,
-      int time});
+      int time,
+      bool isTimerEnable});
 }
 
 /// @nodoc
@@ -215,6 +230,7 @@ class __$GameSettingsCopyWithImpl<$Res>
     Object? safeMode = null,
     Object? language = null,
     Object? time = null,
+    Object? isTimerEnable = null,
   }) {
     return _then(_GameSettings(
       playersCount: null == playersCount
@@ -241,6 +257,10 @@ class __$GameSettingsCopyWithImpl<$Res>
           ? _self.time
           : time // ignore: cast_nullable_to_non_nullable
               as int,
+      isTimerEnable: null == isTimerEnable
+          ? _self.isTimerEnable
+          : isTimerEnable // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }

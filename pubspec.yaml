@@ -11,12 +11,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  shared_preferences: ^2.5.2
+  flutter_localizations:
+    sdk: flutter
 
   cupertino_icons: ^1.0.2
   flutter_bloc: ^9.1.0
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
+  pair: ^0.1.2
   dio: ^5.8.0+1
   dart_openai: ^5.1.0
 
@@ -30,9 +33,13 @@ dev_dependencies:
   freezed: ^3.0.4
 
 flutter:
+  generate: true
   uses-material-design: true
 
 
-  # assets:
-  #   - images/a_dot_burr.jpeg
+
+  assets:
+    - assets/images/door.png
+    - assets/images/hobby.png
   #   - images/a_dot_ham.jpeg
+

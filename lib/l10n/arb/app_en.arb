@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "appTitle": "Shelter",
+  "newGame": "New Game",
+  "history": "History",
+  "rules": "Rules",
+  "volume": "Volume",
+  "music": "Music",
+  "dubbing": "Dubbing",
+  "effects": "Effects",
+  "language": "Language",
+  "settings": "Settings",
+  "game_settings": "Game Settings"
+}
