@@ -65,25 +65,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     ));
 
     if (stage == GameStage.preFinalLoading) {
-      _onFinal(emit);
+      final finalState = await _getFinalState(state as RunningGameState);
+      emit(finalState);
     }
   }
 
-  Future<void> _onFinal(Emitter emit) async {
-    final prevState = (state as RunningGameState);
-    final settings = prevState.settings;
-    final disaster = prevState.disaster;
-    final alivePlayers = prevState.players
+  Future<GameState> _getFinalState(RunningGameState preFinalState) async {
+    final settings = preFinalState.settings;
+    final disaster = preFinalState.disaster;
+    final alivePlayers = preFinalState.players
         .where((player) => player.lifeStatus == LifeStatus.alive)
         .toList();
-    final kickedPlayers = prevState.players
+    final kickedPlayers = preFinalState.players
         .where((player) => player.lifeStatus != LifeStatus.alive)
         .toList();
 
     final finals = await repository.getFinale(
         settings, disaster, alivePlayers, kickedPlayers);
 
-    emit(prevState.copyWith(stage: GameStage.finals, finals: finals));
+    return preFinalState.copyWith(stage: GameStage.finals, finals: finals);
   }
 
   void _onOpenedProperty(OpenedPropertyGameEvent event, Emitter emit) {
@@ -169,12 +169,16 @@ print("player $playerIndex");
         voteInfo: prevState.voteInfo.copyWith(votes: votes),
         currentPlayerIndex: playerIndex,
       ));
-    } else {
+    }
+    // Переголосование/результаты голосования
+    else {
       final sortedVotes = _getSortedVotes(votes);
       final lastKicking = prevState.roundInfo.kickedCount - 1;
 
       // В отсортированном массиве последний кикаемый игрок должен
       // иметь большее количество голосов, чем следующий после него.
+
+      // Успешный результат голосования
       if (sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value) {
         // Получаем кикнутых игроков
         final selectedIndexes = sortedVotes
@@ -186,7 +190,6 @@ print("player $playerIndex");
 
         // Меняем статус жизни персонажей: last -> killed,
         // У выбранных персонажей alive -> last
-
         for (int i = 0; i < players.length; i++) {
           if (players[i].lifeStatus == LifeStatus.killed) {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
@@ -207,7 +210,9 @@ print("player $playerIndex");
           currentPlayerIndex: players
               .indexWhere((player) => player.lifeStatus == LifeStatus.alive),
         ));
-      } else {
+      }
+      // Переголосование
+      else {
         int votesBorder = sortedVotes[lastKicking].value;
         final canBeSelected = votes.map((vote) => vote >= votesBorder).toList();
 
