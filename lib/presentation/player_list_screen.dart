@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:shelter_ai/presentation/ui_items/app_button.dart';
+import '../domain/models/player.dart';
 import 'ui_items/player_card.dart';
 
 class PlayersListScreen extends StatelessWidget {
-  const PlayersListScreen({super.key});
+
+  final List<Player> players;
+
+  const PlayersListScreen({
+    super.key,
+    required this.players
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF7C6854),
-      body: SafeArea(
-        child: Column(
+    return Column(
           children: [
             _buildHeader(),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: _buildPlayerCards(),
+                child: _buildPlayerCards(players),
               ),
             ),
+            AppButton(
+                text: 'Вернуться',
+                onPressed: () {Navigator.pop(context);}
+            ),
           ],
-        ),
-      ),
     );
   }
 
@@ -39,6 +46,7 @@ class PlayersListScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
+
             ),
           ),
         ),
@@ -46,18 +54,27 @@ class PlayersListScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayerCards() {
+  Widget _buildPlayerCards(List<Player> players) {
     return GridView.count(
+      shrinkWrap: true,
       crossAxisCount: 2,
-      mainAxisSpacing: 12.0,
-      crossAxisSpacing: 12.0,
-      childAspectRatio: 0.65,
-      children: const [
-        PlayerCard(number: '11', name: 'Олег', profession: 'Рабочий',),
-        PlayerCard(number: '12', name: 'Игнат', profession: 'Мурлок',),
-        PlayerCard(number: '23', name: 'Всевол', profession: 'Агент по недвижимости',),
-        PlayerCard(number: '4', name: 'Гена', profession: 'Садовник',)
-      ],
+      childAspectRatio: 0.7,
+      crossAxisSpacing: 6,
+      mainAxisSpacing: 6,
+      children: List.generate(players.length, (index) {
+        return Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PlayerCard(
+                number: (index + 1).toString(),
+                name: players[index].name,
+                profession: players[index].profession,
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

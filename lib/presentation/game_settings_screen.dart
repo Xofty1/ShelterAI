@@ -51,7 +51,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
           return Scaffold(
             body: state is DisasterLoadingState
                 ? const LoaderScreen()
-                : Container(
+                : DecoratedBox(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
