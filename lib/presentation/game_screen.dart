@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shelter_ai/core/di/game_dependencies_container.dart';
+import 'package:shelter_ai/core/di/game_dep_container.dart';
+import 'package:shelter_ai/core/di/global_dep_container.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
@@ -23,26 +24,48 @@ import 'game_finish_screen.dart';
 import 'game_round_screen.dart';
 import 'game_votting_screen.dart';
 
-class GameScreenWidget extends StatelessWidget {
+class GameScreenWidget extends StatefulWidget {
   const GameScreenWidget({super.key});
 
   @override
+  State<GameScreenWidget> createState() => _GameScreenWidgetState();
+}
+
+class _GameScreenWidgetState extends State<GameScreenWidget> {
+  late final GlobalDepContainer globalDepContainer;
+  late final GameDepContainer gameDepContainer;
+
+  late final GameSettings gameSettings;
+  late final Disaster disaster;
+  late final List<Player> players;
+
+  @override
+  void didChangeDependencies() {
+    globalDepContainer = RepositoryProvider.of<GlobalDepContainer>(context);
+    gameDepContainer = GameDepContainer(globalDepContainer);
+
+    final args = ModalRoute.of(context)!.settings.arguments! as Map<String, Object>;
+    gameSettings = args['settings'] as GameSettings;
+    disaster = args['disaster'] as Disaster;
+    players = args['players'] as List<Player>;
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    gameDepContainer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final container = RepositoryProvider.of<GameDependenciesContainer>(context);
     final args =
         ModalRoute.of(context)!.settings.arguments! as Map<String, Object>;
 
-    final gameSettings = args['settings'] as GameSettings;
-    final disaster = args['disaster'] as Disaster;
-    final players = args['players'] as List<Player>;
-
-    return BlocProvider(
-      create: (context) => GameBloc(
-        repository: container.gptRepository,
-        settings: gameSettings,
-        disaster: disaster,
-        players: players,
-      ),
+    return BlocProvider.value(
+      value: gameDepContainer.gameBloc
+        ..add(StartedGameEvent(gameSettings, disaster, players)),
       child: const GameScreen(),
     );
   }
@@ -100,17 +123,18 @@ class GameScreen extends StatelessWidget {
     const buttonColor = Color(0xFF99582A);
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, gameState) {
-        final runningState = gameState as RunningGameState;
+        gameState as RunningGameState;
         return WillPopScope(
           onWillPop: () => _onWillPop(context),
           child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
-            builder: (context,  appSettingsState) =>
-             Scaffold(
+            builder: (context, appSettingsState) => Scaffold(
               body: SafeArea(
                 child: Column(
                   children: [
                     if (gameState.stage != GameStage.intro &&
-                        gameState.stage != GameStage.roundStarted && gameState.stage != GameStage.finals && gameState.stage != GameStage.preFinalLoading )
+                        gameState.stage != GameStage.roundStarted &&
+                        gameState.stage != GameStage.finals &&
+                        gameState.stage != GameStage.preFinalLoading)
                       Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 12, horizontal: 16),
@@ -185,7 +209,7 @@ class GameScreen extends StatelessWidget {
                             showCharacteristicCount:
                                 gameState.roundInfo.openCount.toString()),
                         GameStage.openCards => PlayerCardScreen(
-                          settings: appSettingsState,
+                            settings: appSettingsState,
                             players: gameState.players,
                             currentPlayerIndex: gameState.currentPlayerIndex,
                             openCount: gameState.roundInfo.openCount,
@@ -203,13 +227,12 @@ class GameScreen extends StatelessWidget {
                           ),
                         GameStage.voteResult => VoteResultScreen(
                             kickedPlayers: gameState.players
-                                .where((player) => gameState
-                                    .voteInfo.selectedIndexes
-                                    .contains(gameState.players.indexOf(player)))
+                                .where((player) =>
+                                    gameState.voteInfo.selectedIndexes.contains(
+                                        gameState.players.indexOf(player)))
                                 .toList(),
                           ),
-                        GameStage.preFinalLoading =>
-                          const LoaderScreen(),
+                        GameStage.preFinalLoading => const LoaderScreen(),
                         GameStage.finals => FinishScreen(
                             finalText: gameState.finals,
                             alivePlayers: gameState.players

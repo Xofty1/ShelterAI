@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shelter_ai/core/di/game_dependencies_container.dart';
+import 'package:shelter_ai/core/di/game_settings_dep_container.dart';
+import 'package:shelter_ai/core/di/global_dep_container.dart';
 import 'package:shelter_ai/data/repositories/gpt_api.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
@@ -15,14 +16,34 @@ import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
 
-class GameSettingsWidget extends StatelessWidget {
+class GameSettingsWidget extends StatefulWidget {
   const GameSettingsWidget({super.key});
 
   @override
+  State<GameSettingsWidget> createState() => _GameSettingsWidgetState();
+}
+
+class _GameSettingsWidgetState extends State<GameSettingsWidget> {
+  late final GlobalDepContainer globalDepContainer;
+  late final GameSettingsDepContainer gameSettingsDepContainer;
+
+  @override
+  void didChangeDependencies() {
+    globalDepContainer = RepositoryProvider.of<GlobalDepContainer>(context);
+    gameSettingsDepContainer = GameSettingsDepContainer(globalDepContainer);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    gameSettingsDepContainer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final container = RepositoryProvider.of<GameDependenciesContainer>(context);
-    return BlocProvider(
-      create: (context) => GameSettingsCubit(container.gptRepository),
+    return BlocProvider.value(
+      value: gameSettingsDepContainer.gameSettingsCubit,
       child: const GameSettingsScreen(),
     );
   }

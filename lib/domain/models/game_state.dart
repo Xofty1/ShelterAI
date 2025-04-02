@@ -12,10 +12,9 @@ abstract class GameState {
   const GameState();
 }
 
-// TODO: Загрузка для финала
-// class LoadingGameState extends GameState{
-//   const LoadingGameState();
-// }
+class WaitingForStartGameState extends GameState{
+  const WaitingForStartGameState();
+}
 
 @freezed
 abstract class RunningGameState extends GameState with _$RunningGameState {
