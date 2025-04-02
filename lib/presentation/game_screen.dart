@@ -26,7 +26,7 @@ class GameScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: DI
-    GPTRepository repository = GPTRepositoryMock();
+    GptRepository repository = GptRepositoryMock();
     final args =
         ModalRoute.of(context)!.settings.arguments! as Map<String, Object>;
 

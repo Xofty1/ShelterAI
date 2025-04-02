@@ -10,7 +10,7 @@ import '../models/game_settings.dart';
 import '../models/game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  final GPTRepository repository;
+  final GptRepository repository;
 
   GameBloc({
     required this.repository,

@@ -5,10 +5,16 @@ import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
-class GPTRepositoryMock implements GPTRepository {
+class GptRepositoryMock implements GptRepository {
   final Random _random = Random();
 
   @override
+  Future<Map<String, Object>> createGame(GameSettings settings) async {
+    Disaster disaster = await getDisaster(settings);
+    List<Player> players = await getPlayers(settings);
+    return {'disaster': disaster, 'player_list': players};
+  }
+
   Future<Disaster> getDisaster(GameSettings settings) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 800));
@@ -137,7 +143,6 @@ class GPTRepositoryMock implements GPTRepository {
     return disasters[_random.nextInt(disasters.length)];
   }
 
-  @override
   Future<List<Player>> getPlayers(GameSettings settings) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1200));
