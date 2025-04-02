@@ -20,9 +20,9 @@ jobs:
         with:
           channel: "stable"
 
-      - run: echo "API_KEY=${{ secrets.API_KEY }}" > .env
-
       - uses: actions/checkout@v4.2.2
+
+      - run: echo "API_KEY=${{ secrets.API_KEY }}" > .env
 
       - run: flutter pub get
 
