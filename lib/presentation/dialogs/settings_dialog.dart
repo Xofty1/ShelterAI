@@ -54,29 +54,31 @@ class _SettingsDialogState extends State<SettingsDialog> {
           ],
         ),
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Center(
-                child: Text(
-                  "Настройки игры",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF5A503F),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                    "Настройки игры",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF5A503F),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              // Players count slider
-              LabelWidget(text: "Количество: ${playersCount.toString()}"),
-              const SizedBox(height: 20),
-              LabelWidget(text: "Сложность: ${difficulty.toString()}"),
-
-
-            ],
+                // Players count slider
+                LabelWidget(text: "Количество: ${playersCount.toString()}"),
+                const SizedBox(height: 20),
+                LabelWidget(text: "Сложность: ${difficulty.toString()}"),
+                const SizedBox(height: 20),
+                LabelWidget(text: "Семейный режим: ${safeMode.toString()}"),
+                const SizedBox(height: 20),
+                LabelWidget(text: "Таймер: ${time.toString()} с."),
+              ],
+            ),
           ),
         ),
       ),

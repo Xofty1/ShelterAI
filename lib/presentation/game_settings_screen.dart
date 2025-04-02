@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/core/di/game_settings_dep.dart';
+import 'package:shelter_ai/core/di/global_dep.dart';
+import 'package:shelter_ai/data/repositories/gpt_api.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
+import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
 import 'package:shelter_ai/l10n/l10n.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
@@ -10,21 +14,38 @@ import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 
 import '../core/navigation/navigation_manager.dart';
+import 'loader_screen.dart';
 
-final Map<int, String> difficulty = {
-  1: "Классика",
-  2: "Хардкор",
-  3: "Безумие",
-};
-
-class GameSettingsWidget extends StatelessWidget {
+class GameSettingsWidget extends StatefulWidget {
   const GameSettingsWidget({super.key});
 
   @override
+  State<GameSettingsWidget> createState() => _GameSettingsWidgetState();
+}
+
+class _GameSettingsWidgetState extends State<GameSettingsWidget> {
+  final GameSettingsDepHolder gameSettingsDepHolder = GameSettingsDepHolder();
+
+  @override
+  void didChangeDependencies() {
+    if (!gameSettingsDepHolder.isCreated) {
+      final globalDepContainer =
+          RepositoryProvider.of<GlobalDepHolder>(context).container!;
+      gameSettingsDepHolder.create(globalDepContainer);
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    gameSettingsDepHolder.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      // TODO: DI вместо GPTRepositoryMock
-      create: (context) => GameSettingsCubit(GPTRepositoryMock()),
+    return BlocProvider.value(
+      value: gameSettingsDepHolder.container!.gameSettingsCubit,
       child: const GameSettingsScreen(),
     );
   }
@@ -38,8 +59,6 @@ class GameSettingsScreen extends StatefulWidget {
 }
 
 class _GameSettingsScreenState extends State<GameSettingsScreen> {
-  bool isTimerEnabled = true;
-
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
@@ -47,218 +66,205 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       listener: (context, state) {
         if (state is DisasterUploadedState) {
           NavigationManager.instance
-              .openGame(state.settings, state.disaster, state.players);
+              .openGameReplacement(state.settings, state.disaster, state.players);
         }
       },
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
         builder: (context, state) {
           return Scaffold(
-            body: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF8B7355), Color(0xFFD1A881)],
-                ),
-              ),
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  child: Column(
-                    children: [
-                      // Main settings container
-                      _buildSettingsContainer(
+            body: state is DisasterLoadingState ||
+                    state is DisasterUploadedState
+                ? const LoaderScreen()
+                : Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Color(0xFF8B7355), Color(0xFFD1A881)],
+                      ),
+                    ),
+                    child: SafeArea(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 20),
                         child: Column(
                           children: [
-                            // Players count
-                            _buildSettingHeader("Количество игроков"),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 70,
-                                  child: LabelWidget(
-                                    text:
-                                        state.settings.playersCount.toString(),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: SliderSettings(
-                                    defaultValue:
-                                        state.settings.playersCount.toDouble(),
-                                    min: 2,
-                                    max: 22,
-                                    onChange: (value) =>
-                                        BlocProvider.of<GameSettingsCubit>(
-                                                context)
-                                            .updatePlayersCount(value.toInt()),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            const SizedBox(height: 10),
-
-                            // Difficulty
-                            _buildSettingHeader("Сложность"),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildDifficultyButton(
-                                    difficulty[1]!,
-                                    state.settings.difficulty == 1,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
-                                        .updateDifficulty(1)),
-                                _buildDifficultyButton(
-                                    difficulty[2]!,
-                                    state.settings.difficulty == 2,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
-                                        .updateDifficulty(2)),
-                                _buildDifficultyButton(
-                                    difficulty[3]!,
-                                    state.settings.difficulty == 3,
-                                    () => BlocProvider.of<GameSettingsCubit>(
-                                            context)
-                                        .updateDifficulty(3)),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-
-                            // Game tone
-                            _buildSettingHeader("Тон игры"),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const LabelWidget(
-                                  text: "Семейный",
-                                ),
-                                CustomSwitcher(
-                                  initialValue: state.settings.safeMode,
-                                  onToggle: (value) {
-                                    BlocProvider.of<GameSettingsCubit>(context)
-                                        .updateSafeMode(value);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Plot wishes
-                      _buildSettingsContainer(
-                        child: CustomTextField(
-                          text: "Введите пожелания по сюжету",
-                          onChange: (value) {
-                            BlocProvider.of<GameSettingsCubit>(context)
-                                .updatePlot(value);
-                          },
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Time
-                      _buildSettingsContainer(
-                        child: Column(
-                          children: [
-                            _buildSettingHeader("Время"),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("Таймер"),
-                                CustomSwitcher(
-                                  initialValue: isTimerEnabled,
-                                  onToggle: (value) {
-                                    setState(() {
-                                      isTimerEnabled = value;
-                                      BlocProvider.of<GameSettingsCubit>(
-                                              context)
-                                          .updateEnableTime(value);
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Opacity(
-                              opacity: isTimerEnabled ? 1.0 : 0.5,
-                              child: AbsorbPointer(
-                                absorbing: !isTimerEnabled,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 70,
-                                          child: LabelWidget(
-                                            text:
-                                                state.settings.time.toString(),
-                                          ),
+                            // Main settings container
+                            _buildSettingsContainer(
+                              child: Column(
+                                children: [
+                                  // Players count
+                                  _buildSettingHeader("Количество игроков"),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 70,
+                                        child: LabelWidget(
+                                          text: state.settings.playersCount
+                                              .toString(),
                                         ),
-                                        Expanded(
-                                          child: SliderSettings(
-                                            defaultValue:
-                                                state.settings.time.toDouble(),
-                                            min: 30,
-                                            max: 120,
-                                            onChange: isTimerEnabled
-                                                ? (value) => BlocProvider.of<
-                                                            GameSettingsCubit>(
-                                                        context)
-                                                    .updateTime(value.toInt())
-                                                : (_) {},
-                                          ),
+                                      ),
+                                      Expanded(
+                                        child: SliderSettings(
+                                          defaultValue: state
+                                              .settings.playersCount
+                                              .toDouble(),
+                                          min: 2,
+                                          max: 22,
+                                          onChange: (value) => BlocProvider.of<
+                                                  GameSettingsCubit>(context)
+                                              .updatePlayersCount(
+                                                  value.toInt()),
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  const SizedBox(height: 10),
+
+                                  // Difficulty
+                                  _buildSettingHeader("Сложность"),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _buildDifficultyButton(
+                                          loc.difficultyClassic,
+                                          state.settings.difficulty == 1,
+                                          () => BlocProvider.of<
+                                                  GameSettingsCubit>(context)
+                                              .updateDifficulty(1)),
+                                      _buildDifficultyButton(
+                                          loc.difficultyHardcore,
+                                          state.settings.difficulty == 2,
+                                          () => BlocProvider.of<
+                                                  GameSettingsCubit>(context)
+                                              .updateDifficulty(2)),
+                                      _buildDifficultyButton(
+                                          loc.difficultyInsanity,
+                                          state.settings.difficulty == 3,
+                                          () => BlocProvider.of<
+                                                  GameSettingsCubit>(context)
+                                              .updateDifficulty(3)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+
+                                  // Game tone
+                                  _buildSettingHeader("Тон игры"),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const LabelWidget(
+                                        text: "Семейный",
+                                      ),
+                                      CustomSwitcher(
+                                        initialValue: state.settings.safeMode,
+                                        onToggle: (value) {
+                                          BlocProvider.of<GameSettingsCubit>(
+                                                  context)
+                                              .updateSafeMode(value);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
+
+                            const SizedBox(height: 16),
+
+                            // Plot wishes
+                            _buildSettingsContainer(
+                              child: CustomTextField(
+                                text: "Введите пожелания по сюжету",
+                                onChange: (value) {
+                                  BlocProvider.of<GameSettingsCubit>(context)
+                                      .updatePlot(value);
+                                },
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            // Time
+                            _buildSettingsContainer(
+                              child: Column(
+                                children: [
+                                  _buildSettingHeader("Время"),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 70,
+                                            child: LabelWidget(
+                                              text: state.settings.time
+                                                  .toString(),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: SliderSettings(
+                                              defaultValue: state.settings.time
+                                                  .toDouble(),
+                                              min: 30,
+                                              max: 120,
+                                              onChange: (value) => BlocProvider
+                                                      .of<GameSettingsCubit>(
+                                                          context)
+                                                  .updateTime(value.toInt()),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+
+                                  const SizedBox(height: 16),
+
+                                  // Random mode
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _buildToneButton("Рандом", false, () {
+                                        // Random mode can be added to your GameSettings model
+                                      }, width: 160),
+                                      CustomSwitcher(
+                                        initialValue: false,
+                                        onToggle: (value) {
+                                          // Random mode toggle can be added to your GameSettings model
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Continue button
+                            CustomButton(
+                              text: 'Продолжить',
+                              onPressed: () {
+                                final language =
+                                    BlocProvider.of<AppSettingsCubit>(context)
+                                        .state
+                                        .settings
+                                        .loc;
+                                BlocProvider.of<GameSettingsCubit>(context)
+                                    .startGame(language);
+                              },
+                            ),
                           ],
                         ),
                       ),
-
-                      const SizedBox(height: 16),
-
-                      // Random mode
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildToneButton("Рандом", false, () {
-                            // Random mode can be added to your GameSettings model
-                          }, width: 160),
-                          CustomSwitcher(
-                            initialValue: false,
-                            onToggle: (value) {
-                              // Random mode toggle can be added to your GameSettings model
-                            },
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Continue button
-                      CustomButton(
-                        text: 'Продолжить',
-                        onPressed: () {
-                          BlocProvider.of<GameSettingsCubit>(context)
-                              .startGame();
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
           );
         },
       ),

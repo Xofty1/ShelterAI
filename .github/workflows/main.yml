@@ -1,8 +1,8 @@
-name: Flutter CI
+name: Flutter Pull Request
 
 on:
   pull_request:
-    branches: 
+    branches:
       - "main"
       - "develop"
 
@@ -10,18 +10,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      
+
       - uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: "17"
-      
+
       - uses: subosito/flutter-action@v2.14.0
         with:
           channel: "stable"
-      
+
       - uses: actions/checkout@v4.2.2
-      
+
+      - run: echo "API_KEY=${{ secrets.API_KEY }}" > .env
+
       - run: flutter pub get
 
       - run: flutter test
@@ -32,5 +34,3 @@ jobs:
         with:
           name: Apk Release
           path: build/app/outputs/apk/release/app-release.apk
-
-      

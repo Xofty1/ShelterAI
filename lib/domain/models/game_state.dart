@@ -8,18 +8,15 @@ import 'game_settings.dart';
 
 part 'game_state.freezed.dart';
 
-abstract class GameState {
-  const GameState();
-}
+class GameState {
+  const GameState({required this.stage});
 
-// TODO: Загрузка для финала
-// class LoadingGameState extends GameState{
-//   const LoadingGameState();
-// }
+  final GameStage stage;
+}
 
 @freezed
 abstract class RunningGameState extends GameState with _$RunningGameState {
-  const RunningGameState._();
+  const RunningGameState._({required super.stage}) : super();
 
   const factory RunningGameState({
     // Настройки игры
@@ -39,6 +36,17 @@ abstract class RunningGameState extends GameState with _$RunningGameState {
     // Финальная строка
     required String finals,
   }) = _GameState;
+
+  List<Player> get alive =>
+      players.where((player) => player.lifeStatus == LifeStatus.alive).toList();
+
+  List<Player> get kicked =>
+      players.where((player) => player.lifeStatus != LifeStatus.alive).toList();
+
+  List<Player> get playersKickedThisTurn => players
+      .where((player) =>
+          voteInfo.selectedIndexes.contains(players.indexOf(player)))
+      .toList();
 
   factory RunningGameState.initial(
           {required GameSettings settings,
@@ -62,6 +70,9 @@ abstract class RunningGameState extends GameState with _$RunningGameState {
 
 /// Список этапов игры
 enum GameStage {
+  /// Этап ожидания старта игры
+  waiting,
+
   /// Этап представления игрокам истории
   intro,
 
