@@ -1,15 +1,13 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_bloc.dart';
+import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/asset_image_item.dart';
 import 'dart:math';
 
 import 'package:shelter_ai/presentation/ui_items/state_card_row.dart';
-
-import '../domain/bloc/app_settings_cubit.dart';
 
 class PlayerCardScreen extends StatefulWidget {
   final int openCount;
@@ -190,7 +188,6 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
 
   // Front card content only
   Widget _buildFrontCardContent() {
-    final player = AudioPlayer();
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -295,6 +292,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
                 child: CustomButton(
                   text: "Подтверить",
                   onPressed: () async {
+                    BlocProvider.of<SoundCubit>(context).playButtonClickEffect();
                     _flipCard(
                       onComplete: () {
                         BlocProvider.of<GameBloc>(context)
