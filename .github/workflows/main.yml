@@ -33,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:
+      - name: Go to repository
+        run: cd shelter_ai
+
       - name: Install Flutter dependencies
         run: flutter pub get
 
