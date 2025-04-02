@@ -61,17 +61,12 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     ));
   }
 
-  void updateLanguage(String language) {
-    emit(GameSettingsState(
-        settings: state.settings.copyWith(language: language)));
-  }
-
   void updateEnableTime(bool newEnable) {
     emit(
       GameSettingsState(
           settings: state.settings.copyWith(
-        isTimerEnable: newEnable,
-      )),
+            isTimerEnable: newEnable,
+          )),
     );
   }
 }

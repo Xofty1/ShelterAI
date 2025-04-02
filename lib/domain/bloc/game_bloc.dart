@@ -24,7 +24,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<VotedGameEvent>(_onVoted);
   }
 
-  void _onReady(ReadyGameEvent event, Emitter emit) {
+  Future<void> _onReady(ReadyGameEvent event, Emitter emit) async {
     final prevState = (state as RunningGameState);
     GameStage stage = prevState.stage;
     VoteInfo voteInfo = prevState.voteInfo;
@@ -46,7 +46,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           // нового раунда
           stage = prevState.roundInfo.roundNumber < 6
               ? GameStage.roundStarted
-              : GameStage.finals;
+              : GameStage.preFinalLoading;
           voteInfo = const VoteInfo(
               votes: [],
               canBeSelected: [],
@@ -63,6 +63,27 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       stage: stage,
       voteInfo: voteInfo,
     ));
+
+    if (stage == GameStage.preFinalLoading) {
+      final finalState = await _getFinalState(state as RunningGameState);
+      emit(finalState);
+    }
+  }
+
+  Future<GameState> _getFinalState(RunningGameState preFinalState) async {
+    final settings = preFinalState.settings;
+    final disaster = preFinalState.disaster;
+    final alivePlayers = preFinalState.players
+        .where((player) => player.lifeStatus == LifeStatus.alive)
+        .toList();
+    final kickedPlayers = preFinalState.players
+        .where((player) => player.lifeStatus != LifeStatus.alive)
+        .toList();
+
+    final finals = await repository.getFinale(
+        settings, disaster, alivePlayers, kickedPlayers);
+
+    return preFinalState.copyWith(stage: GameStage.finals, finals: finals);
   }
 
   void _onOpenedProperty(OpenedPropertyGameEvent event, Emitter emit) {
@@ -101,7 +122,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         players: players,
         currentPlayerIndex: playerIndex,
         roundInfo: getRoundInfo(
-            prevState.roundInfo.roundNumber, prevState.settings.playersCount),
+            prevState.roundInfo.roundNumber + 1, prevState.settings.playersCount),
         stage: GameStage.roundStarted,
       ));
     }
@@ -141,19 +162,23 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     var playerIndex = prevState.players.indexWhere(
         (player) => player.lifeStatus != LifeStatus.killed,
         prevState.currentPlayerIndex + 1);
-
+print("player $playerIndex");
     // Голосует следующий игрок
     if (playerIndex != -1) {
       emit(prevState.copyWith(
         voteInfo: prevState.voteInfo.copyWith(votes: votes),
         currentPlayerIndex: playerIndex,
       ));
-    } else {
+    }
+    // Переголосование/результаты голосования
+    else {
       final sortedVotes = _getSortedVotes(votes);
       final lastKicking = prevState.roundInfo.kickedCount - 1;
 
       // В отсортированном массиве последний кикаемый игрок должен
       // иметь большее количество голосов, чем следующий после него.
+
+      // Успешный результат голосования
       if (sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value) {
         // Получаем кикнутых игроков
         final selectedIndexes = sortedVotes
@@ -165,7 +190,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
         // Меняем статус жизни персонажей: last -> killed,
         // У выбранных персонажей alive -> last
-
         for (int i = 0; i < players.length; i++) {
           if (players[i].lifeStatus == LifeStatus.killed) {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
@@ -186,7 +210,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           currentPlayerIndex: players
               .indexWhere((player) => player.lifeStatus == LifeStatus.alive),
         ));
-      } else {
+      }
+      // Переголосование
+      else {
         int votesBorder = sortedVotes[lastKicking].value;
         final canBeSelected = votes.map((vote) => vote >= votesBorder).toList();
 
