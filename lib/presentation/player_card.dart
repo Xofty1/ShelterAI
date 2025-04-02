@@ -1,6 +1,9 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_bloc.dart';
+import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
+import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/asset_image_item.dart';
@@ -8,9 +11,12 @@ import 'dart:math';
 
 import 'package:shelter_ai/presentation/ui_items/state_card_row.dart';
 
+import '../domain/bloc/app_settings_cubit.dart';
+
 class PlayerCardScreen extends StatefulWidget {
   final int openCount;
   final List<Player> players;
+  final AppSettingsState settings;
 
   Player get player => players[currentPlayerIndex];
 
@@ -20,7 +26,7 @@ class PlayerCardScreen extends StatefulWidget {
       {super.key,
       required this.players,
       required this.currentPlayerIndex,
-      required this.openCount});
+      required this.openCount, required this.settings});
 
   @override
   State<PlayerCardScreen> createState() => _PlayerCardScreenState();
@@ -187,6 +193,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
 
   // Front card content only
   Widget _buildFrontCardContent() {
+    final player = AudioPlayer();
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -290,9 +297,11 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
                 ignoring: selectedIndexes.length != widget.openCount,
                 child: CustomButton(
                   text: "Подтверить",
-                  onPressed: () {
+                  onPressed: () async {
+                    await player.setVolume(widget.settings.settings.effects / 100.0);
+                    await player.play(AssetSource('audio/button_tap.mp3'));
                     _flipCard(
-                      onComplete: () {
+                      onComplete: ()  {
                         BlocProvider.of<GameBloc>(context)
                             .add(OpenedPropertyGameEvent(selectedIndexes));
                       },
