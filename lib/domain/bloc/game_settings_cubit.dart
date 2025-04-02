@@ -80,7 +80,7 @@ class GameSettingsState {
           difficulty: 2,
           plot: '',
           safeMode: false,
-          language: '',
+          language: 'ru',
           time: 30,
           isTimerEnable: true,
         );
