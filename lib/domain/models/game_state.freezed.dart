@@ -199,13 +199,13 @@ class _GameState extends RunningGameState {
       {required this.settings,
       required this.disaster,
       required final List<Player> players,
-      required this.stage,
+      required final GameStage stage,
       required this.roundInfo,
       required this.voteInfo,
       required this.currentPlayerIndex,
       required this.finals})
       : _players = players,
-        super._();
+        super._(stage: stage);
 
 // Настройки игры
   @override
@@ -223,9 +223,6 @@ class _GameState extends RunningGameState {
     return EqualUnmodifiableListView(_players);
   }
 
-// Текущая стадия игры
-  @override
-  final GameStage stage;
 // Вся информация по текущему раунду
   @override
   final RoundInfo roundInfo;

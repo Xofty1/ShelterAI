@@ -166,7 +166,7 @@ class FinishScreen extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        NavigationManager.instance.openHomeReplacment();
+                        NavigationManager.instance.openHomeReplacement();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: buttonColor,

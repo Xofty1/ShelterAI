@@ -12,16 +12,18 @@ import '../models/game_state.dart';
 class GameBloc extends Bloc<GameEvent, GameState> {
   final GptRepository repository;
 
-  GameBloc({
-    required this.repository,
-    required Disaster disaster,
-    required List<Player> players,
-    required GameSettings settings,
-  }) : super(RunningGameState.initial(
-            settings: settings, disaster: disaster, players: players)) {
+  GameBloc(this.repository) : super(const GameState(stage: GameStage.waiting)) {
+    on<StartedGameEvent>(_onStarted);
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
     on<VotedGameEvent>(_onVoted);
+  }
+
+  void _onStarted(StartedGameEvent event, Emitter emit) {
+    emit(RunningGameState.initial(
+        settings: event.settings,
+        disaster: event.disaster,
+        players: event.players));
   }
 
   Future<void> _onReady(ReadyGameEvent event, Emitter emit) async {
@@ -121,8 +123,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(prevState.copyWith(
         players: players,
         currentPlayerIndex: playerIndex,
-        roundInfo: getRoundInfo(
-            prevState.roundInfo.roundNumber + 1, prevState.settings.playersCount),
+        roundInfo: getRoundInfo(prevState.roundInfo.roundNumber + 1,
+            prevState.settings.playersCount),
         stage: GameStage.roundStarted,
       ));
     }
@@ -162,7 +164,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     var playerIndex = prevState.players.indexWhere(
         (player) => player.lifeStatus != LifeStatus.killed,
         prevState.currentPlayerIndex + 1);
-print("player $playerIndex");
+    print("player $playerIndex");
     // Голосует следующий игрок
     if (playerIndex != -1) {
       emit(prevState.copyWith(
@@ -243,9 +245,11 @@ abstract class GameEvent {}
 
 /// Событие инициализирует загрузку игры
 class StartedGameEvent extends GameEvent {
-  StartedGameEvent(this.settings);
+  StartedGameEvent(this.settings, this.disaster, this.players);
 
   final GameSettings settings;
+  final Disaster disaster;
+  final List<Player> players;
 }
 
 // Закрытие информационного этапа
