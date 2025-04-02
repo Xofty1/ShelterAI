@@ -26,7 +26,6 @@ class PlayerCardVoting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     const textColor = Color(0xFF654E32);
     return Container(
       decoration: BoxDecoration(
@@ -53,24 +52,20 @@ class PlayerCardVoting extends StatelessWidget {
                         color: const Color(0xFFBFAA8F),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(
-                          number,
+                      child: Text(number,
                           style: const TextStyle(
                             color: textColor,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                          )
-                      ),
+                          )),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                        name,
+                    Text(name,
                         style: const TextStyle(
                           color: textColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                        )
-                    ),
+                        )),
                   ],
                 ),
               ),
@@ -88,14 +83,12 @@ class PlayerCardVoting extends StatelessWidget {
             ),
             margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
             child: Center(
-              child: Text(
-                  profession,
+              child: Text(profession,
                   style: const TextStyle(
                     color: textColor,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                  )
-              ),
+                  )),
             ),
           ),
         ],

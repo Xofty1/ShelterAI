@@ -10,7 +10,6 @@ abstract class GameSettings with _$GameSettings{
     required int difficulty,
     required String plot,
     required bool safeMode,
-    required int time,
-    required bool isTimerEnable
+    required int time
   }) = _GameSettings;
 }

@@ -36,6 +36,8 @@ abstract class RunningGameState extends GameState with _$RunningGameState {
     required VoteInfo voteInfo,
     // Индекс текущего игрока (чей ход)
     required int currentPlayerIndex,
+    // Финальная строка
+    required String finals,
   }) = _GameState;
 
   factory RunningGameState.initial(
@@ -54,7 +56,8 @@ abstract class RunningGameState extends GameState with _$RunningGameState {
             selectedIndexes: [],
             voteStatus: VoteStatus.none,
           ),
-          currentPlayerIndex: 0);
+          currentPlayerIndex: 0,
+          finals: '');
 }
 
 /// Список этапов игры
@@ -76,6 +79,9 @@ enum GameStage {
 
   /// Этап объявления результатов голосования
   voteResult,
+
+  /// Загрузка перед финалом
+  preFinalLoading,
 
   /// Финальный этап
   finals,

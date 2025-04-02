@@ -45,6 +45,6 @@ RoundInfo getRoundInfo(int roundNumber, int playersCount) {
       }
       return RoundInfo(roundNumber: roundNumber, kickedCount: kickedCount, openCount: 1);
     default:
-      throw Exception("Invalid round number");
+      return RoundInfo(roundNumber: roundNumber, kickedCount: 0, openCount: 0);
   }
 }

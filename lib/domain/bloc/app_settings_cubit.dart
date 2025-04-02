@@ -28,13 +28,15 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
   }
 
   void updateEffects(int effects) {
-    AppSharedPreference().saveDubbing(effects);
+    AppSharedPreference().saveEffects(effects);
     emit(AppSettingsState(settings: state.settings.copyWith(effects: effects)));
   }
 
-  void updateLocale(String language) {
-    AppSharedPreference().saveLanguage(language);
+  Future<void> updateLocale(String language) async {
+    await AppSharedPreference().saveLanguage(language);
+    print("52 ${language}");
     emit(AppSettingsState(settings: state.settings.copyWith(loc: language)));
+    print("53 ${state.settings.loc}");
   }
 }
 

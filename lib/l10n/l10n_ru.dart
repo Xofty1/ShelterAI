@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -40,4 +38,85 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get game_settings => 'Настройки игры';
+
+  @override
+  String get exitGameTitle => 'Выход из игры';
+
+  @override
+  String get exitGameMessage => 'Вы уверены, что хотите выйти из игры?';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get exit => 'Выйти';
+
+  @override
+  String get gameTone => 'Тон игры';
+
+  @override
+  String get familyFriendly => 'Семейный';
+
+  @override
+  String get plotWishes => 'Введите пожелания по сюжету';
+
+  @override
+  String get voting => 'Голосование';
+
+  @override
+  String playerVoting(Object playerName) {
+    return 'Голосует игрок $playerName';
+  }
+
+  @override
+  String get round => 'РАУНД';
+
+  @override
+  String get survivors => 'Выжившие:';
+
+  @override
+  String get eliminated => 'Выбывшие:';
+
+  @override
+  String get howManyToKick => 'Сколько человек кикнуть';
+
+  @override
+  String get disasterDescription => 'Описание катастрофы';
+
+  @override
+  String get shelter => 'Бункер';
+
+  @override
+  String get information => 'Информация';
+
+  @override
+  String get difficultyClassic => 'Классика';
+
+  @override
+  String get difficultyHardcore => 'Хардкор';
+
+  @override
+  String get difficultyInsanity => 'Безумие';
+
+  @override
+  String count(Object count) {
+    return 'Количество: $count';
+  }
+
+  @override
+  String difficulty(Object level) {
+    return 'Сложность: $level';
+  }
+
+  @override
+  String get startGame => 'Начать игру';
+
+  @override
+  String get pause => 'Пауза';
+
+  @override
+  String get lore => 'История';
+
+  @override
+  String get loading => 'Загрузка...';
 }

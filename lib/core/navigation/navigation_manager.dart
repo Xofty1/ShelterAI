@@ -18,6 +18,10 @@ class NavigationManager {
     _navigator.pushNamed(RouteNames.home);
   }
 
+  void openHomeReplacment() {
+    _navigator.pushReplacementNamed(RouteNames.home);
+  }
+
   void openSettings() {
     _navigator.pushNamed(RouteNames.settings);
   }

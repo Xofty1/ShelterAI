@@ -103,7 +103,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   @override
   Widget build(BuildContext context) {
     cardWidth = MediaQuery.of(context).size.width * 0.9;
-    cardHeight = MediaQuery.of(context).size.height * 0.9;
+    cardHeight = MediaQuery.of(context).size.height * 0.82;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -209,7 +209,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           Center(
             child: Text(
-              widget.currentPlayerIndex.toString(),
+              widget.player.name,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -284,14 +284,20 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           ),
           const SizedBox(height: 20),
           Center(
-            child: CustomButton(
-              text: "Подтверить",
-              onPressed: () {
-                _flipCard(onComplete: () {
-                  BlocProvider.of<GameBloc>(context)
-                      .add(OpenedPropertyGameEvent(selectedIndexes));
-                });
-              },
+            child: Opacity(
+              opacity: selectedIndexes.length != widget.openCount ? 0.6 : 1.0,
+              child: IgnorePointer(
+                ignoring: selectedIndexes.length != widget.openCount,
+                child: CustomButton(
+                  text: "Подтверить",
+                  onPressed: () {
+                    _flipCard(onComplete: () {
+                      BlocProvider.of<GameBloc>(context)
+                          .add(OpenedPropertyGameEvent(selectedIndexes));
+                    });
+                  },
+                ),
+              ),
             ),
           ),
         ],
