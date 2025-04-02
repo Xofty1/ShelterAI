@@ -41,7 +41,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/lib/hidden_data.txt
 /android/app/.cxx
 .metadata
 
 pubspec.lock
+*.env

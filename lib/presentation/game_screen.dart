@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/core/di/game_dependencies_container.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
@@ -27,8 +28,7 @@ class GameScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: DI
-    GPTRepository repository = GPTRepositoryMock();
+    final container = RepositoryProvider.of<GameDependenciesContainer>(context);
     final args =
         ModalRoute.of(context)!.settings.arguments! as Map<String, Object>;
 
@@ -38,7 +38,7 @@ class GameScreenWidget extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => GameBloc(
-        repository: repository,
+        repository: container.gptRepository,
         settings: gameSettings,
         disaster: disaster,
         players: players,

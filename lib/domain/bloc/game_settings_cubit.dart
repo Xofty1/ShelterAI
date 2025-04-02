@@ -6,7 +6,7 @@ import '../models/game_settings.dart';
 import '../models/player.dart';
 
 class GameSettingsCubit extends Cubit<GameSettingsState> {
-  GPTRepository repository;
+  GptRepository repository;
 
   GameSettingsCubit(this.repository) : super(const GameSettingsState.initial());
 
@@ -45,19 +45,29 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     );
   }
 
-  Future<void> startGame() async {
+  Future<void> startGame(String language) async {
     emit(DisasterLoadingState(
-      settings: state.settings,
+      settings: state.settings.copyWith(language: language),
     ));
 
-    final disaster = await repository.getDisaster(state.settings);
-    final players = await repository.getPlayers(state.settings);
+    final map = await repository.createGame(state.settings);
+    final Disaster disaster = map['disaster'] as Disaster;
+    final players = map['player_list'] as List<Player>;
 
     emit(DisasterUploadedState(
       settings: state.settings,
       disaster: disaster,
       players: players,
     ));
+  }
+
+  void updateEnableTime(bool newEnable) {
+    emit(
+      GameSettingsState(
+          settings: state.settings.copyWith(
+            isTimerEnable: newEnable,
+          )),
+    );
   }
 }
 
@@ -70,7 +80,9 @@ class GameSettingsState {
           difficulty: 2,
           plot: '',
           safeMode: false,
+          language: '',
           time: 30,
+          isTimerEnable: true,
         );
 
   final GameSettings settings;

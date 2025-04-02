@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/core/di/game_dependencies_container.dart';
+import 'package:shelter_ai/data/repositories/gpt_api.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
+import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
 import 'package:shelter_ai/l10n/l10n.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
@@ -17,9 +20,9 @@ class GameSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final container = RepositoryProvider.of<GameDependenciesContainer>(context);
     return BlocProvider(
-      // TODO: DI вместо GPTRepositoryMock
-      create: (context) => GameSettingsCubit(GPTRepositoryMock()),
+      create: (context) => GameSettingsCubit(container.gptRepository),
       child: const GameSettingsScreen(),
     );
   }
@@ -224,8 +227,13 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             CustomButton(
                               text: 'Продолжить',
                               onPressed: () {
+                                final language =
+                                    BlocProvider.of<AppSettingsCubit>(context)
+                                        .state
+                                        .settings
+                                        .loc;
                                 BlocProvider.of<GameSettingsCubit>(context)
-                                    .startGame();
+                                    .startGame(language);
                               },
                             ),
                           ],
