@@ -70,6 +70,10 @@ abstract class RunningGameState extends GameState with _$RunningGameState {
 
 /// Список этапов игры
 enum GameStage {
+
+  /// Этап ожидания игроков для начала игры
+  waitingPlayers,
+
   /// Этап ожидания старта игры
   waiting,
 

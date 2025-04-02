@@ -183,7 +183,7 @@ class GptRepositoryImpl implements GptRepository {
         extra: additionalInfo,
         lifeStatus: LifeStatus.alive,
         knownProperties: knownProperties,
-        notes: notes);
+        notes: notes, id: number);
 
     return player;
   }

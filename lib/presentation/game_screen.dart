@@ -127,6 +127,7 @@ class GameScreen extends StatelessWidget {
               return Column(
                 children: [
                   if (gameState.stage != GameStage.waiting &&
+                      gameState.stage != GameStage.waitingPlayers &&
                       gameState.stage != GameStage.intro &&
                       gameState.stage != GameStage.roundStarted &&
                       gameState.stage != GameStage.finals &&
@@ -183,6 +184,7 @@ class GameScreen extends StatelessWidget {
                     ),
                   Expanded(
                     child: switch (gameState.stage) {
+                      GameStage.waitingPlayers => throw UnimplementedError(),
                       GameStage.preFinalLoading ||
                       GameStage.waiting =>
                         const LoaderScreen(),
@@ -221,6 +223,7 @@ class GameScreen extends StatelessWidget {
                           alivePlayers: gameState.alive,
                           deadPlayers: gameState.kicked,
                         ),
+
                     },
                   )
                 ],
