@@ -45,6 +45,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get exitGameTitle => 'Выход из игры';
 
   @override
+  String get playerAmount => 'Количество игроков';
+
+  @override
+  String get resume => 'Продолжить';
+
+  @override
   String get exitGameMessage => 'Вы уверены, что хотите выйти из игры?';
 
   @override
@@ -54,10 +60,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get exit => 'Выйти';
 
   @override
+  String get close => 'Закрыть';
+
+  @override
   String get gameTone => 'Тон игры';
 
   @override
+  String get random => 'Рандом';
+
+  @override
+  String get difficultySetting => 'Сложность';
+
+  @override
   String get familyFriendly => 'Семейный';
+
+  @override
+  String get timer => 'Таймер';
 
   @override
   String get plotWishes => 'Введите пожелания по сюжету';
@@ -77,16 +95,55 @@ class AppLocalizationsRu extends AppLocalizations {
   String get survivors => 'Выжившие:';
 
   @override
+  String get pressToSeeCard => 'Нажмите, чтобы увидеть карту игрока';
+
+  @override
   String get eliminated => 'Выбывшие:';
 
   @override
-  String get howManyToKick => 'Сколько человек кикнуть';
+  String get finale => 'ФИНАЛ';
+
+  @override
+  String get inBunker => 'В бункер попали:';
+
+  @override
+  String get notInBunker => 'Не попали:';
+
+  @override
+  String get howManyToKick => 'Сколько человек выгнать:';
+
+  @override
+  String get kickedPlayers => 'Выгнанные игроки';
+
+  @override
+  String get characteristicsToOpen => 'Требуется открыть характеристик:';
 
   @override
   String get disasterDescription => 'Описание катастрофы';
 
   @override
   String get shelter => 'Бункер';
+
+  @override
+  String get finish => 'Завершить';
+
+  @override
+  String get shelterDescription => 'Описание бункера';
+
+  @override
+  String get capacity => 'Вместимость';
+
+  @override
+  String get confirmVote => 'Подтвердить голос';
+
+  @override
+  String get rooms => 'Помещения';
+
+  @override
+  String get discussion => 'Обсуждение';
+
+  @override
+  String get resources => 'Ресурсы';
 
   @override
   String get information => 'Информация';
@@ -111,6 +168,16 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String familyMode(Object familyMode) {
+    return 'Семейный режим: $familyMode';
+  }
+
+  @override
+  String timerSettings(Object timer) {
+    return 'Таймер: $timer';
+  }
+
+  @override
   String get startGame => 'Начать игру';
 
   @override
@@ -121,4 +188,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get loading => 'Загрузка...';
+
+  @override
+  String get age => 'Возраст';
+
+  @override
+  String get confirm => 'Подтвердить';
+
+  @override
+  String get health => 'Здоровье';
+
+  @override
+  String get hobbyAndSkills => 'Хобби/Навыки';
+
+  @override
+  String get phobias => 'Фобии';
+
+  @override
+  String get luggage => 'Багаж';
+
+  @override
+  String get additionalInfo => 'Дополнительная информация';
 }

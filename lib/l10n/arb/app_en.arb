@@ -13,7 +13,7 @@
   "game_settings": "Game Settings",
   "exitGameTitle": "Exit Game",
   "playerAmount": "Player amount",
-  "continue": "Continue",
+  "resume": "Continue",
   "exitGameMessage": "Are you sure you want to exit the game?",
   "cancel": "Cancel",
   "exit": "Exit",
@@ -30,7 +30,7 @@
   "survivors": "Survivors:",
   "pressToSeeCard": "Press to see player card",
   "eliminated": "Eliminated:",
-  "final": "FINAL",
+  "finale": "FINAL",
   "inBunker": "Players in shelter",
   "notInBunker": "Players outside",
   "finish": "Finish",
@@ -51,7 +51,7 @@
   "difficultyInsanity": "Insanity",
   "count": "Count: {count}",
   "difficulty": "Difficulty: {level}",
-  "familyMode": "Family mode: {familyMode}"
+  "familyMode": "Family mode: {familyMode}",
   "timerSettings": "Timer: {timer}",
   "startGame": "Start Game",
   "pause": "Pause",
@@ -63,5 +63,5 @@
   "hobbyAndSkills": "Hobby/Skills",
   "phobias": "Phobias",
   "luggage": "Luggage",
-  "additionalInfo": "Additional info.",
+  "additionalInfo": "Additional info."
 }
