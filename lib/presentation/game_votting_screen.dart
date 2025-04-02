@@ -57,7 +57,7 @@ class _VotingScreenState extends State<GameVotingScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               Container(
                 width: double.infinity,
                 color: voteHeaderColor,

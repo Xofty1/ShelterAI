@@ -64,7 +64,7 @@ class GameRoundScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(
                         roundNumber,
                         style: const TextStyle(
@@ -100,7 +100,7 @@ class GameRoundScreen extends StatelessWidget {
                           const Expanded(
                             flex: 2,
                             child: Padding(
-                              padding: const EdgeInsets.all(12.0),
+                              padding: EdgeInsets.all(12.0),
                               child: Text(
                                 'Выжившие:',
                                 style: TextStyle(
@@ -151,7 +151,7 @@ class GameRoundScreen extends StatelessWidget {
                           const Expanded(
                             flex: 2,
                             child: Padding(
-                              padding: const EdgeInsets.all(12.0),
+                              padding: EdgeInsets.all(12.0),
                               child: Text(
                                 'Выбывшие:',
                                 style: TextStyle(

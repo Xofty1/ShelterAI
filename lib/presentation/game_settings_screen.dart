@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shelter_ai/data/repositories/gpt_api.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';

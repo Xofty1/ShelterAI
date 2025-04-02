@@ -10,7 +10,6 @@ import 'package:shelter_ai/presentation/dialogs/settings_dialog.dart';
 import 'package:shelter_ai/presentation/discussion_screen.dart';
 import 'package:shelter_ai/presentation/lore_screen.dart';
 import 'package:shelter_ai/presentation/player_card.dart';
-import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/vote_result_screen.dart';
 
 import '../domain/bloc/game_bloc.dart';

@@ -38,7 +38,7 @@ class FinishScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   width: double.infinity,
@@ -53,7 +53,7 @@ class FinishScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Container(

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/presentation/ui_items/scaffold_template.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 
-import '../../core/app_shared_preference/app_shared_preference.dart';
 import '../../domain/bloc/app_settings_cubit.dart';
 import '../../l10n/l10n.dart';
 import '../ui_items/dropdown_spinner.dart';

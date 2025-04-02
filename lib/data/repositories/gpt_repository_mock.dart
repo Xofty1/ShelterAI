@@ -235,6 +235,7 @@ class GptRepositoryMock implements GptRepository {
     return players;
   }
 
+  @override
   Future<String> getFinale(GameSettings settings, Disaster disaster, List<Player> alivePlayers, List<Player> kickedPlayers) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1000));

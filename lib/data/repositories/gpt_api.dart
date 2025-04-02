@@ -310,6 +310,7 @@ class GptRepositoryImpl implements GptRepository {
   }
 
 // Gets final from GPT
+  @override
   Future<String> getFinale(GameSettings settings, Disaster disaster,
       List<Player> alivePlayers, List<Player> kickedPlayer) async {
     // Sets up type and additional info for request
