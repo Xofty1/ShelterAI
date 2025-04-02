@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AssetImageItem extends StatelessWidget {
   final String imagePath;
@@ -22,6 +23,7 @@ class AssetImageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(8),
       width: width,
       height: height,
       decoration: BoxDecoration(
@@ -37,10 +39,11 @@ class AssetImageItem extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
-        child: Image.asset(
+        child: SvgPicture.asset(
           imagePath,
-          fit: fit,
-        ),
+          width: 100,
+          height: 100,
+        )
       ),
     );
   }

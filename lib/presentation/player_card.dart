@@ -1,6 +1,9 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_bloc.dart';
+import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
+import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/asset_image_item.dart';
@@ -8,9 +11,12 @@ import 'dart:math';
 
 import 'package:shelter_ai/presentation/ui_items/state_card_row.dart';
 
+import '../domain/bloc/app_settings_cubit.dart';
+
 class PlayerCardScreen extends StatefulWidget {
   final int openCount;
   final List<Player> players;
+  final AppSettingsState settings;
 
   Player get player => players[currentPlayerIndex];
 
@@ -20,7 +26,7 @@ class PlayerCardScreen extends StatefulWidget {
       {super.key,
       required this.players,
       required this.currentPlayerIndex,
-      required this.openCount});
+      required this.openCount, required this.settings});
 
   @override
   State<PlayerCardScreen> createState() => _PlayerCardScreenState();
@@ -187,6 +193,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
 
   // Front card content only
   Widget _buildFrontCardContent() {
+    final player = AudioPlayer();
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -220,7 +227,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
               label: "Возраст",
-              assetsPath: "assets/images/hobby.png",
+              assetsPath: "assets/images/age.svg",
               initialActive: widget.player.knownProperties[0],
               isWorked: selectedIndexes.length < widget.openCount,
               content: widget.player.bio,
@@ -230,7 +237,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Здоровье",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/health.svg",
             initialActive: widget.player.knownProperties[1],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.health,
@@ -241,7 +248,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Хобби/Навыки",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/hobby.svg",
             initialActive: widget.player.knownProperties[2],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.hobby,
@@ -252,7 +259,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Фобии",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/phobia.svg",
             initialActive: widget.player.knownProperties[3],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.phobia,
@@ -263,7 +270,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Багаж",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/luggage.svg",
             initialActive: widget.player.knownProperties[4],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.luggage,
@@ -274,7 +281,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Дополнительная информация",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/extra.svg",
             initialActive: widget.player.knownProperties[5],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.extra,
@@ -290,11 +297,15 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
                 ignoring: selectedIndexes.length != widget.openCount,
                 child: CustomButton(
                   text: "Подтверить",
-                  onPressed: () {
-                    _flipCard(onComplete: () {
-                      BlocProvider.of<GameBloc>(context)
-                          .add(OpenedPropertyGameEvent(selectedIndexes));
-                    });
+                  onPressed: () async {
+                    await player.setVolume(widget.settings.settings.effects / 100.0);
+                    await player.play(AssetSource('audio/button_tap.mp3'));
+                    _flipCard(
+                      onComplete: ()  {
+                        BlocProvider.of<GameBloc>(context)
+                            .add(OpenedPropertyGameEvent(selectedIndexes));
+                      },
+                    );
                   },
                 ),
               ),
@@ -311,7 +322,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AssetImageItem(
-          imagePath: "assets/images/door.png",
+          imagePath: "assets/images/door.svg",
           width: 200,
           height: 200,
         ),
