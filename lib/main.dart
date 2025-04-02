@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shelter_ai/core/di/global_dep_container.dart';
+import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/presentation/theme/theme.dart';
 import 'core/navigation/routes.dart';
@@ -23,13 +23,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<GlobalDepContainer>(
-      create: (context) => GlobalDepContainer.mock(),
+    return RepositoryProvider<GlobalDepHolder>(
+      create: (context) => GlobalDepHolder()..create(isMock: true),
       child: Builder(
         builder: (context) {
           return BlocProvider.value(
             value:
-                RepositoryProvider.of<GlobalDepContainer>(context).appSettingsCubit,
+                RepositoryProvider.of<GlobalDepHolder>(context).container!.appSettingsCubit,
             child: Builder(
               builder: (context) {
                 final Brightness platformBrightness =

@@ -12,7 +12,7 @@ import '../models/game_state.dart';
 class GameBloc extends Bloc<GameEvent, GameState> {
   final GptRepository repository;
 
-  GameBloc(this.repository) : super(const WaitingForStartGameState()) {
+  GameBloc(this.repository) : super(const GameState(stage: GameStage.waiting)) {
     on<StartedGameEvent>(_onStarted);
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);

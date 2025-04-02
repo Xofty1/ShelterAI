@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shelter_ai/core/di/game_settings_dep_container.dart';
-import 'package:shelter_ai/core/di/global_dep_container.dart';
+import 'package:shelter_ai/core/di/game_settings_dep.dart';
+import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/data/repositories/gpt_api.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
@@ -24,26 +24,28 @@ class GameSettingsWidget extends StatefulWidget {
 }
 
 class _GameSettingsWidgetState extends State<GameSettingsWidget> {
-  late final GlobalDepContainer globalDepContainer;
-  late final GameSettingsDepContainer gameSettingsDepContainer;
+  final GameSettingsDepHolder gameSettingsDepHolder = GameSettingsDepHolder();
 
   @override
   void didChangeDependencies() {
-    globalDepContainer = RepositoryProvider.of<GlobalDepContainer>(context);
-    gameSettingsDepContainer = GameSettingsDepContainer(globalDepContainer);
+    if (!gameSettingsDepHolder.isCreated) {
+      final globalDepContainer =
+          RepositoryProvider.of<GlobalDepHolder>(context).container!;
+      gameSettingsDepHolder.create(globalDepContainer);
+    }
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    gameSettingsDepContainer.dispose();
+    gameSettingsDepHolder.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: gameSettingsDepContainer.gameSettingsCubit,
+      value: gameSettingsDepHolder.container!.gameSettingsCubit,
       child: const GameSettingsScreen(),
     );
   }
@@ -64,13 +66,14 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       listener: (context, state) {
         if (state is DisasterUploadedState) {
           NavigationManager.instance
-              .openGame(state.settings, state.disaster, state.players);
+              .openGameReplacement(state.settings, state.disaster, state.players);
         }
       },
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
         builder: (context, state) {
           return Scaffold(
-            body: state is DisasterLoadingState
+            body: state is DisasterLoadingState ||
+                    state is DisasterUploadedState
                 ? const LoaderScreen()
                 : Container(
                     decoration: const BoxDecoration(
