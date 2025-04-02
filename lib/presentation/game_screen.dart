@@ -106,129 +106,125 @@ class GameScreen extends StatelessWidget {
           child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
             builder: (context,  appSettingsState) =>
              Scaffold(
-              body: Stack(
-                children: [
-                  SafeArea(
-                    child: Column(
-                      children: [
-                        if (gameState.stage != GameStage.intro &&
-                            gameState.stage != GameStage.roundStarted && gameState.stage != GameStage.finals && gameState.stage != GameStage.preFinalLoading )
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: headerColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
+              body: SafeArea(
+                child: Column(
+                  children: [
+                    if (gameState.stage != GameStage.intro &&
+                        gameState.stage != GameStage.roundStarted && gameState.stage != GameStage.finals && gameState.stage != GameStage.preFinalLoading )
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: headerColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "РАУНД ${gameState.roundInfo.roundNumber}",
+                                style: const TextStyle(
+                                  color: headerTextColor,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Row(
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    "РАУНД ${gameState.roundInfo.roundNumber}",
-                                    style: const TextStyle(
-                                      color: headerTextColor,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                IconButton(
+                                  onPressed: () =>
+                                      _showSettingsDialog(context, gameState),
+                                  icon: const Icon(Icons.settings),
+                                  color: headerTextColor,
+                                  iconSize: 28,
+                                  tooltip: 'Настройки',
                                 ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () =>
-                                          _showSettingsDialog(context, gameState),
-                                      icon: const Icon(Icons.settings),
-                                      color: headerTextColor,
-                                      iconSize: 28,
-                                      tooltip: 'Настройки',
-                                    ),
-                                    const SizedBox(width: 8),
-                                    IconButton(
-                                      onPressed: () =>
-                                          _showLoreDialog(context, gameState),
-                                      icon: const Icon(Icons.info_outline),
-                                      color: headerTextColor,
-                                      iconSize: 28,
-                                      tooltip: 'Информация',
-                                    ),
-                                  ],
+                                const SizedBox(width: 8),
+                                IconButton(
+                                  onPressed: () =>
+                                      _showLoreDialog(context, gameState),
+                                  icon: const Icon(Icons.info_outline),
+                                  color: headerTextColor,
+                                  iconSize: 28,
+                                  tooltip: 'Информация',
                                 ),
                               ],
                             ),
+                          ],
+                        ),
+                      ),
+                    Expanded(
+                      child: switch (gameState.stage) {
+                        GameStage.intro =>
+                          LoreScreen(disaster: gameState.disaster),
+                        GameStage.roundStarted => GameRoundScreen(
+                            alivePlayerCount: gameState.players
+                                .where((element) =>
+                                    (element.lifeStatus == LifeStatus.alive))
+                                .toList()
+                                .length
+                                .toString(),
+                            deadPlayerCount: gameState.players
+                                .where((element) =>
+                                    (element.lifeStatus != LifeStatus.alive))
+                                .toList()
+                                .length
+                                .toString(),
+                            needToKickCount:
+                                gameState.roundInfo.kickedCount.toString(),
+                            roundNumber:
+                                gameState.roundInfo.roundNumber.toString(),
+                            showCharacteristicCount:
+                                gameState.roundInfo.openCount.toString()),
+                        GameStage.openCards => PlayerCardScreen(
+                          settings: appSettingsState,
+                            players: gameState.players,
+                            currentPlayerIndex: gameState.currentPlayerIndex,
+                            openCount: gameState.roundInfo.openCount,
                           ),
-                        Expanded(
-                          child: switch (gameState.stage) {
-                            GameStage.intro =>
-                              LoreScreen(disaster: gameState.disaster),
-                            GameStage.roundStarted => GameRoundScreen(
-                                alivePlayerCount: gameState.players
-                                    .where((element) =>
-                                        (element.lifeStatus == LifeStatus.alive))
-                                    .toList()
-                                    .length
-                                    .toString(),
-                                deadPlayerCount: gameState.players
-                                    .where((element) =>
-                                        (element.lifeStatus != LifeStatus.alive))
-                                    .toList()
-                                    .length
-                                    .toString(),
-                                needToKickCount:
-                                    gameState.roundInfo.kickedCount.toString(),
-                                roundNumber:
-                                    gameState.roundInfo.roundNumber.toString(),
-                                showCharacteristicCount:
-                                    gameState.roundInfo.openCount.toString()),
-                            GameStage.openCards => PlayerCardScreen(
-                              settings: appSettingsState,
-                                players: gameState.players,
-                                currentPlayerIndex: gameState.currentPlayerIndex,
-                                openCount: gameState.roundInfo.openCount,
-                              ),
-                            GameStage.speaking => DiscussionScreen(
-                                roundNumber: gameState.roundInfo.roundNumber,
-                                seconds: gameState.settings.time,
-                              ),
-                            GameStage.voting => GameVotingScreen(
-                                players: gameState.players,
-                                canBeSelected: gameState.voteInfo.canBeSelected,
-                                currentPlayerIndex: gameState.currentPlayerIndex,
-                                roundNumber:
-                                    gameState.roundInfo.roundNumber.toString(),
-                              ),
-                            GameStage.voteResult => VoteResultScreen(
-                                kickedPlayers: gameState.players
-                                    .where((player) => gameState
-                                        .voteInfo.selectedIndexes
-                                        .contains(gameState.players.indexOf(player)))
-                                    .toList(),
-                              ),
-                            GameStage.preFinalLoading =>
-                              const LoaderScreen(),
-                            GameStage.finals => FinishScreen(
-                                finalText: gameState.finals,
-                                alivePlayers: gameState.players
-                                    .where((element) =>
-                                        element.lifeStatus == LifeStatus.alive)
-                                    .toList(),
-                                deadPlayers: gameState.players
-                                    .where((element) =>
-                                        element.lifeStatus != LifeStatus.alive)
-                                    .toList(),
-                              ),
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+                        GameStage.speaking => DiscussionScreen(
+                            roundNumber: gameState.roundInfo.roundNumber,
+                            seconds: gameState.settings.time,
+                          ),
+                        GameStage.voting => GameVotingScreen(
+                            players: gameState.players,
+                            canBeSelected: gameState.voteInfo.canBeSelected,
+                            currentPlayerIndex: gameState.currentPlayerIndex,
+                            roundNumber:
+                                gameState.roundInfo.roundNumber.toString(),
+                          ),
+                        GameStage.voteResult => VoteResultScreen(
+                            kickedPlayers: gameState.players
+                                .where((player) => gameState
+                                    .voteInfo.selectedIndexes
+                                    .contains(gameState.players.indexOf(player)))
+                                .toList(),
+                          ),
+                        GameStage.preFinalLoading =>
+                          const LoaderScreen(),
+                        GameStage.finals => FinishScreen(
+                            finalText: gameState.finals,
+                            alivePlayers: gameState.players
+                                .where((element) =>
+                                    element.lifeStatus == LifeStatus.alive)
+                                .toList(),
+                            deadPlayers: gameState.players
+                                .where((element) =>
+                                    element.lifeStatus != LifeStatus.alive)
+                                .toList(),
+                          ),
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
           ),
