@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,14 +8,19 @@ import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/presentation/theme/theme.dart';
 import 'core/navigation/routes.dart';
 import 'domain/bloc/app_settings_cubit.dart';
+import 'firebase_options.dart';
 import 'l10n/l10n.dart';
 
 import 'core/app_shared_preference/app_shared_preference.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await AppSharedPreference().init();
   await dotenv.load(fileName: '.env');
+  Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

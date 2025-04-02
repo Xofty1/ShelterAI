@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "55805622828",
+    "project_id": "shelterai-d2496",
+    "storage_bucket": "shelterai-d2496.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55805622828:android:a438eda6bf33297ace2f89",
+        "android_client_info": {
+          "package_name": "com.example.shelter_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRdL17H907RZAK7w0g1BvopnRtyGfd_iE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

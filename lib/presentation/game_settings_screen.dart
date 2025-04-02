@@ -12,6 +12,8 @@ import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
 
@@ -226,7 +228,22 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             // Continue button
                             CustomButton(
                               text: 'Продолжить',
-                              onPressed: () {
+                              onPressed: () async{
+
+
+                                Future<void> addData() async {
+                                  CollectionReference users = FirebaseFirestore.instance.collection('users');
+                                  return users
+                                      .add({
+                                    'full_name': 'Gemini in Firebase',
+                                    'company': 'Firebase',
+                                    'age': 42
+                                  })
+                                      .then((value) => print("User Added"))
+                                      .catchError((error) => print("Failed to add user: $error"));
+                                }
+                                await addData();
+
                                 final language =
                                     BlocProvider.of<AppSettingsCubit>(context)
                                         .state
