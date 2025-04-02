@@ -6,7 +6,7 @@ import '../models/game_settings.dart';
 import '../models/player.dart';
 
 class GameSettingsCubit extends Cubit<GameSettingsState> {
-  GPTRepository repository;
+  GptRepository repository;
 
   GameSettingsCubit(this.repository) : super(const GameSettingsState.initial());
 
@@ -45,9 +45,9 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     );
   }
 
-  Future<void> startGame() async {
+  Future<void> startGame(String language) async {
     emit(DisasterLoadingState(
-      settings: state.settings,
+      settings: state.settings.copyWith(language: language),
     ));
 
     final map = await repository.createGame(state.settings);

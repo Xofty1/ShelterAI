@@ -5,7 +5,7 @@ import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
-class GPTRepositoryMock implements GPTRepository {
+class GptRepositoryMock implements GptRepository {
   final Random _random = Random();
 
   @override

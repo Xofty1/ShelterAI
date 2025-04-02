@@ -8,7 +8,7 @@ import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/disaster.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
-class GptRepositoryImpl implements GPTRepository {
+class GptRepositoryImpl implements GptRepository {
 // Returns api key from file hidden_data.txt
   Future<String> getApiKey() async {
     // Reads the file and puts api key from it in API_KEY
