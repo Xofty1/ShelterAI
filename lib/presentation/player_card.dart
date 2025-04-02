@@ -220,7 +220,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
               label: "Возраст",
-              assetsPath: "assets/images/hobby.png",
+              assetsPath: "assets/images/age.svg",
               initialActive: widget.player.knownProperties[0],
               isWorked: selectedIndexes.length < widget.openCount,
               content: widget.player.bio,
@@ -230,7 +230,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Здоровье",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/health.svg",
             initialActive: widget.player.knownProperties[1],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.health,
@@ -241,7 +241,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Хобби/Навыки",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/hobby.svg",
             initialActive: widget.player.knownProperties[2],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.hobby,
@@ -252,7 +252,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Фобии",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/phobia.svg",
             initialActive: widget.player.knownProperties[3],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.phobia,
@@ -263,7 +263,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Багаж",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/luggage.svg",
             initialActive: widget.player.knownProperties[4],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.luggage,
@@ -274,7 +274,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           const SizedBox(height: 12),
           StateCardRow(
             label: "Дополнительная информация",
-            assetsPath: "assets/images/hobby.png",
+            assetsPath: "assets/images/extra.svg",
             initialActive: widget.player.knownProperties[5],
             isWorked: selectedIndexes.length < widget.openCount,
             content: widget.player.extra,
@@ -291,10 +291,12 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
                 child: CustomButton(
                   text: "Подтверить",
                   onPressed: () {
-                    _flipCard(onComplete: () {
-                      BlocProvider.of<GameBloc>(context)
-                          .add(OpenedPropertyGameEvent(selectedIndexes));
-                    });
+                    _flipCard(
+                      onComplete: () {
+                        BlocProvider.of<GameBloc>(context)
+                            .add(OpenedPropertyGameEvent(selectedIndexes));
+                      },
+                    );
                   },
                 ),
               ),
@@ -311,7 +313,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AssetImageItem(
-          imagePath: "assets/images/door.png",
+          imagePath: "assets/images/door.svg",
           width: 200,
           height: 200,
         ),

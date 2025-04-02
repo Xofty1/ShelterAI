@@ -20,6 +20,8 @@ dependencies:
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
   pair: ^0.1.2
+  audioplayers: ^6.4.0
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:
@@ -37,7 +39,12 @@ flutter:
 
 
   assets:
-    - assets/images/door.png
-    - assets/images/hobby.png
-  #   - images/a_dot_ham.jpeg
+    - assets/images/door.svg
+    - assets/images/hobby.svg
+    - assets/images/age.svg
+    - assets/images/health.svg
+    - assets/images/extra.svg
+    - assets/images/phobia.svg
+    - assets/images/luggage.svg
+    - assets/audio/button_tap.mp3
 
