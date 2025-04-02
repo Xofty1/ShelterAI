@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/presentation/ui_items/app_button.dart';
 import '../domain/models/player.dart';
-import 'ui_items/player_card.dart';
+import 'ui_items/player_tap_card.dart';
 
 class PlayersListScreen extends StatelessWidget {
 

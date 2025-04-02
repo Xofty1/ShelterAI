@@ -318,16 +318,26 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
 
   // Back card content only
   Widget _buildBackCardContent() {
-    return const Column(
+    return  Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AssetImageItem(
+        Text(
+          widget.player.name,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Color(0xFFD9D9D9),
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 48),
+        const AssetImageItem(
           imagePath: "assets/images/door.svg",
           width: 200,
           height: 200,
         ),
-        SizedBox(height: 20),
-        Text(
+        const SizedBox(height: 20),
+        const Text(
           "Нажмите, чтобы увидеть карту игрока",
           textAlign: TextAlign.center,
           style: TextStyle(

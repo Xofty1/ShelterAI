@@ -43,29 +43,41 @@ class PlayerCardVoting extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFBFAA8F),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(number,
-                          style: const TextStyle(
-                            color: textColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFBFAA8F),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(number,
+                              style: const TextStyle(
+                                color: textColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(name,
+                            style: const TextStyle(
+                              color: textColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ],
                     ),
-                    const SizedBox(width: 8),
-                    Text(name,
-                        style: const TextStyle(
-                          color: textColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    const SizedBox(height: 4),
+                    const Center(
+                      child: Icon(
+                        Icons.person,
+                        size: 86,
+                        color: Color(0xFF523418),
+                      ),
+                    )
                   ],
                 ),
               ),
