@@ -18,7 +18,7 @@ class NavigationManager {
     _navigator.pushNamed(RouteNames.home);
   }
 
-  void openHomeReplacment() {
+  void openHomeReplacement() {
     _navigator.pushReplacementNamed(RouteNames.home);
   }
 
@@ -33,6 +33,15 @@ class NavigationManager {
   void openGame(
       GameSettings settings, Disaster disaster, List<Player> players) {
     _navigator.pushNamed(RouteNames.game, arguments: {
+      'settings': settings,
+      'disaster': disaster,
+      'players': players,
+    });
+  }
+
+  void openGameReplacement(
+      GameSettings settings, Disaster disaster, List<Player> players) {
+    _navigator.pushReplacementNamed(RouteNames.game, arguments: {
       'settings': settings,
       'disaster': disaster,
       'players': players,
