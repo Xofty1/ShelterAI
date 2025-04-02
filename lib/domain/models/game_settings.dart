@@ -1,10 +1,9 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'game_settings.freezed.dart';
 
 @freezed
-abstract class GameSettings with _$GameSettings{
+abstract class GameSettings with _$GameSettings {
   const factory GameSettings({
     required int playersCount,
     required int difficulty,
@@ -12,6 +11,6 @@ abstract class GameSettings with _$GameSettings{
     required bool safeMode,
     required String language,
     required int time,
-    required bool isTimerEnable
+    required bool isOnline,
   }) = _GameSettings;
 }
