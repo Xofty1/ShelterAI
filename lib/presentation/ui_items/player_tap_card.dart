@@ -47,13 +47,19 @@ class PlayerTapCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
-                        const SizedBox(width: 8),
-                        Text(player.name,
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            player.name,
                             style: const TextStyle(
                               color: textColor,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                            )),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 4),
@@ -81,12 +87,16 @@ class PlayerTapCard extends StatelessWidget {
             ),
             margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
             child: Center(
-              child: Text(player.profession,
-                  style: const TextStyle(
-                    color: textColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  )),
+              child: Text(
+                player.profession,
+                style: const TextStyle(
+                  color: textColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
             ),
           ),
         ],

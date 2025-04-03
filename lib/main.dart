@@ -64,6 +64,7 @@ class MyApp extends StatelessWidget {
                   selector: (state) => state.settings.loc,
                   builder: (context, languageCode) {
                     return MaterialApp(
+                      debugShowCheckedModeBanner: false,
                       locale: Locale(languageCode),
                       supportedLocales: AppLocalizations.supportedLocales,
                       localizationsDelegates: const [

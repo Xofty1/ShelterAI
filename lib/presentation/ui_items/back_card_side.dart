@@ -16,7 +16,6 @@ class PlayerCardBack extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
       Padding(
         padding: const EdgeInsets.all(12.0),
