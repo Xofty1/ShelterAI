@@ -51,19 +51,48 @@ class MyApp extends StatelessWidget {
                   MediaQuery.platformBrightnessOf(context);
               final bool isSystemDark = platformBrightness == Brightness.dark;
 
-              return BlocListener<AppSettingsCubit, AppSettingsState>(
-                listenWhen: (prevState, newState) =>
-                    prevState.settings.effects != newState.settings.effects ||
-                    prevState.settings.music != newState.settings.music ||
-                    prevState.settings.dubbing != newState.settings.dubbing,
-                listener: (context, state) {
-                  BlocProvider.of<SoundCubit>(context)
-                      .setMusicVolume(state.settings.music);
-                  BlocProvider.of<SoundCubit>(context)
-                      .setEffectsVolume(state.settings.effects);
-                  BlocProvider.of<SoundCubit>(context)
-                      .setDubbingVolume(state.settings.dubbing);
-                },
+              return MultiBlocListener(
+                listeners: [
+                  BlocListener<AppSettingsCubit, AppSettingsState>(
+                    listenWhen: (prevState, newState) {
+                      return prevState.settings.effects !=
+                          newState.settings.effects;
+                    },
+                    listener: (context, state) {
+                      BlocProvider.of<SoundCubit>(context)
+                          .setEffectsVolume(state.settings.effects);
+                    },
+                  ),
+                  BlocListener<AppSettingsCubit, AppSettingsState>(
+                    listenWhen: (prevState, newState) {
+                      return prevState.settings.music !=
+                          newState.settings.music;
+                    },
+                    listener: (context, state) {
+                      BlocProvider.of<SoundCubit>(context)
+                          .setMusicVolume(state.settings.music);
+                    },
+                  ),
+                  BlocListener<AppSettingsCubit, AppSettingsState>(
+                    listenWhen: (prevState, newState) {
+                      return prevState.settings.dubbing !=
+                          newState.settings.dubbing;
+                    },
+                    listener: (context, state) {
+                      BlocProvider.of<SoundCubit>(context)
+                          .setDubbingVolume(state.settings.dubbing);
+                    },
+                  ),
+                  BlocListener<AppSettingsCubit, AppSettingsState>(
+                    listenWhen: (prevState, newState) {
+                      return prevState.settings.loc != newState.settings.loc;
+                    },
+                    listener: (context, state) {
+                      BlocProvider.of<SoundCubit>(context)
+                          .setDubbingLocale(state.settings.loc);
+                    },
+                  )
+                ],
                 child: BlocSelector<AppSettingsCubit, AppSettingsState, String>(
                   selector: (state) => state.settings.loc,
                   builder: (context, languageCode) {
