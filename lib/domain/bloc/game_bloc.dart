@@ -4,245 +4,171 @@ import 'package:shelter_ai/domain/models/disaster.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/round_info.dart';
 import 'package:shelter_ai/domain/models/vote_info.dart';
+import 'package:shelter_ai/domain/services/game_service.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
+import 'package:shelter_ai/data/repositories/firebase_repository.dart';
 
 import '../models/game_settings.dart';
 import '../models/game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  final GptRepository repository;
+  final GameService service;
+  final FirebaseRepository? firebaseRepository;
+  final String? roomId;
+  final Player? currentPlayer;
+  bool isHost;
 
-  GameBloc(this.repository) : super(const GameState(stage: GameStage.waiting)) {
+  GameBloc(this.service,
+      {this.firebaseRepository,
+      this.roomId,
+      this.currentPlayer,
+      this.isHost = false})
+      : super(const GameState(stage: GameStage.waiting)) {
     on<StartedGameEvent>(_onStarted);
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
     on<VotedGameEvent>(_onVoted);
-
     on<WaitingGameEvent>(_onWaiting);
+
+    // If online mode, listen to room changes
+    if (firebaseRepository != null && roomId != null) {
+      _listenToRoomChanges();
+    }
+  }
+
+  // Listen to changes in the room
+  void _listenToRoomChanges() {
+    firebaseRepository!.watchRoom(roomId!).listen((room) {
+      if (room != null && state is RunningGameState) {
+        // Only update state if we're not the host or if we're not the current player
+        if (!isHost ||
+            (room.gameState.currentPlayerIndex != currentPlayer?.id)) {
+          emit(room.gameState);
+        }
+      }
+    });
+  }
+
+  // Sync state with Firebase
+  Future<void> _syncState(RunningGameState newState) async {
+    if (firebaseRepository != null && roomId != null && isHost) {
+      await firebaseRepository!.updateGameState(roomId!, newState);
+    }
   }
 
   void _onStarted(StartedGameEvent event, Emitter emit) {
-    emit(RunningGameState.initial(
+    final newState = RunningGameState.initial(
         settings: event.settings,
         disaster: event.disaster,
-        players: event.players));
+        players: event.players);
+
+    emit(newState);
+
+    // Sync with Firebase if online
+    if (firebaseRepository != null && roomId != null && isHost) {
+      _syncState(newState);
+    }
   }
 
   Future<void> _onReady(ReadyGameEvent event, Emitter emit) async {
-    final prevState = (state as RunningGameState);
-    GameStage stage = prevState.stage;
-    VoteInfo voteInfo = prevState.voteInfo;
-
-    switch (stage) {
-      // Переходим на следующую стадию, на следующей стадии предпросмотр
-      case GameStage.intro:
-        stage = GameStage.roundStarted;
-      // Переходим на следующую стадию, на следующей стадии предпросмотр
-      case GameStage.roundStarted:
-        stage = GameStage.openCards;
-      // Переходим на следующую стадию, предпросмотр
-      case GameStage.speaking:
-        stage = GameStage.voting;
-      // Тут разветвление в зависимости от результатов голосования
-      case GameStage.voteResult:
-        if (voteInfo.voteStatus == VoteStatus.successful) {
-          // Если указан 6 раунд, значит игра окончена, иначе идет объявление
-          // нового раунда
-          stage = prevState.roundInfo.roundNumber < 6
-              ? GameStage.roundStarted
-              : GameStage.preFinalLoading;
-          voteInfo = const VoteInfo(
-              votes: [],
-              canBeSelected: [],
-              selectedIndexes: [],
-              voteStatus: VoteStatus.none);
-        } else {
-          stage = GameStage.speaking;
-        }
-      default:
-        break;
+    if (state is! RunningGameState) {
+      // TODO: логирование
+      return;
     }
 
-    emit(prevState.copyWith(
-      stage: stage,
-      voteInfo: voteInfo,
-    ));
+    final prevState = state as RunningGameState;
+    GameState newState = prevState.copyWith();
 
-    if (stage == GameStage.preFinalLoading) {
-      final finalState = await _getFinalState(state as RunningGameState);
-      emit(finalState);
+    // Простой скип стадии
+    if (service.canSkipStage(prevState)) {
+      newState = service.skipStage(prevState);
+      emit(newState);
+    } else {
+      // Работа с результатом голосования
+      if (prevState.stage == GameStage.voteResult) {
+        newState = service.getStateAfterVoteResult(prevState);
+        emit(newState);
+      }
+
+      // Результат голосования может вести к загрузке финала
+      if (newState.stage == GameStage.preFinalLoading) {
+        final finalState = await service.getFinalState(prevState);
+        emit(finalState);
+      }
     }
-  }
 
-  Future<GameState> _getFinalState(RunningGameState preFinalState) async {
-    final settings = preFinalState.settings;
-    final disaster = preFinalState.disaster;
-    final alivePlayers = preFinalState.players
-        .where((player) => player.lifeStatus == LifeStatus.alive)
-        .toList();
-    final kickedPlayers = preFinalState.players
-        .where((player) => player.lifeStatus != LifeStatus.alive)
-        .toList();
-
-    final finals = await repository.getFinale(
-        settings, disaster, alivePlayers, kickedPlayers);
-
-    return preFinalState.copyWith(stage: GameStage.finals, finals: finals);
+    // Sync with Firebase if online
+    if (newState is RunningGameState &&
+        firebaseRepository != null &&
+        roomId != null &&
+        isHost) {
+      _syncState(newState as RunningGameState);
+    }
   }
 
   void _onOpenedProperty(OpenedPropertyGameEvent event, Emitter emit) {
-    final prevState = state as RunningGameState;
-    var playerIndex = prevState.currentPlayerIndex;
-
-    final knownProperties =
-        List.of(prevState.players[playerIndex].knownProperties);
-
-    for (var index in event.propertyIndexes) {
-      knownProperties[index] = true;
-    }
-
-    final players = List.of(prevState.players);
-    players[playerIndex] =
-        players[playerIndex].copyWith(knownProperties: knownProperties);
+    RunningGameState newState =
+        service.updateProperties(event, state as RunningGameState);
 
     // Ищем следущего живого игрока для хода
-    playerIndex = players.indexWhere(
-        (player) => player.lifeStatus == LifeStatus.alive, playerIndex + 1);
+    int playerIndex =
+        service.nextAlive(newState.players, newState.currentPlayerIndex + 1);
 
-    // Есть живые игроки, не сделавшие ход
     if (playerIndex != -1) {
-      emit(prevState.copyWith(
-        players: players,
-        currentPlayerIndex: playerIndex,
-      ));
+      newState = newState.copyWith(currentPlayerIndex: playerIndex);
+      emit(newState);
+    } else if (newState.roundInfo.kickedCount == 0) {
+      newState = service.nextRound(newState);
+      emit(newState);
+    } else {
+      newState = service.startVoting(newState);
+      emit(newState);
     }
-    // Если кикается ноль игроков - переход к следующему раунду
-    else if (prevState.roundInfo.kickedCount == 0) {
-      // Ищем первого живого игрока
-      playerIndex =
-          players.indexWhere((player) => player.lifeStatus == LifeStatus.alive);
 
-      emit(prevState.copyWith(
-        players: players,
-        currentPlayerIndex: playerIndex,
-        roundInfo: getRoundInfo(prevState.roundInfo.roundNumber + 1,
-            prevState.settings.playersCount),
-        stage: GameStage.roundStarted,
-      ));
-    }
-    // Все хорошо, переход к голосованию
-    else {
-      // Ищем первого голосующего игрока
-      playerIndex = players
-          .indexWhere((player) => player.lifeStatus != LifeStatus.killed);
-
-      // Могут быть выбраны только живые игроки
-      final canBeSelected = players
-          .map((player) => player.lifeStatus == LifeStatus.alive)
-          .toList();
-
-      final voteInfo = VoteInfo(
-        votes: List.filled(prevState.settings.playersCount, 0),
-        canBeSelected: canBeSelected,
-        selectedIndexes: [],
-        voteStatus: VoteStatus.running,
-      );
-
-      emit(prevState.copyWith(
-        players: players,
-        currentPlayerIndex: playerIndex,
-        stage: GameStage.speaking,
-        voteInfo: voteInfo,
-      ));
+    // Sync with Firebase if online
+    if (firebaseRepository != null && roomId != null && isHost) {
+      _syncState(newState);
     }
   }
 
   void _onWaiting(WaitingGameEvent event, Emitter emit) {
-    final prevState = state as RunningGameState;
+    // Update host status
+    isHost = event.isHost;
+
+    if (state is RunningGameState) {
+      final prevState = state as RunningGameState;
+
+      // Host can start the game when enough players have joined
+      if (isHost && prevState.stage == GameStage.waiting) {
+        // Logic to check if enough players have joined
+        // and start the game if appropriate
+      }
+    }
   }
 
   void _onVoted(VotedGameEvent event, Emitter emit) {
     final prevState = state as RunningGameState;
 
-    final votes = List.of(prevState.voteInfo.votes);
-    votes[event.voteIndex]++;
+    RunningGameState newState = service.updateVotes(event, prevState);
 
-    var playerIndex = prevState.players.indexWhere(
-        (player) => player.lifeStatus != LifeStatus.killed,
-        prevState.currentPlayerIndex + 1);
-    // Голосует следующий игрок
+    var playerIndex =
+        service.nextVoting(newState.players, newState.currentPlayerIndex + 1);
+
     if (playerIndex != -1) {
-      emit(prevState.copyWith(
-        voteInfo: prevState.voteInfo.copyWith(votes: votes),
-        currentPlayerIndex: playerIndex,
-      ));
+      newState = newState.copyWith(currentPlayerIndex: playerIndex);
+      emit(newState);
+    } else if (service.isVoteSuccess(newState)) {
+      newState = service.finishVote(newState);
+      emit(newState);
+    } else {
+      newState = service.reVote(newState);
+      emit(newState);
     }
-    // Переголосование/результаты голосования
-    else {
-      final sortedVotes = _getSortedVotes(votes);
-      final lastKicking = prevState.roundInfo.kickedCount - 1;
 
-      // В отсортированном массиве последний кикаемый игрок должен
-      // иметь большее количество голосов, чем следующий после него.
-
-      // Успешный результат голосования
-      if (sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value) {
-        // Получаем кикнутых игроков
-        final selectedIndexes = sortedVotes
-            .getRange(0, lastKicking + 1)
-            .map((element) => element.key)
-            .toList();
-
-        final players = List.of(prevState.players);
-
-        // Меняем статус жизни персонажей: last -> killed,
-        // У выбранных персонажей alive -> last
-        for (int i = 0; i < players.length; i++) {
-          if (players[i].lifeStatus == LifeStatus.killed) {
-            players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
-          } else if (selectedIndexes.contains(i)) {
-            players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
-          }
-        }
-
-        emit(prevState.copyWith(
-          players: players,
-          stage: GameStage.voteResult,
-          roundInfo: getRoundInfo(prevState.roundInfo.roundNumber + 1,
-              prevState.settings.playersCount),
-          voteInfo: prevState.voteInfo.copyWith(
-            selectedIndexes: selectedIndexes,
-            voteStatus: VoteStatus.successful,
-          ),
-          currentPlayerIndex: players
-              .indexWhere((player) => player.lifeStatus == LifeStatus.alive),
-        ));
-      }
-      // Переголосование
-      else {
-        int votesBorder = sortedVotes[lastKicking].value;
-        final canBeSelected = votes.map((vote) => vote >= votesBorder).toList();
-
-        emit(prevState.copyWith(
-          stage: GameStage.voteResult,
-          voteInfo: prevState.voteInfo.copyWith(
-            voteStatus: VoteStatus.reRunning,
-            votes: List.filled(prevState.settings.playersCount, 0),
-            canBeSelected: canBeSelected,
-            selectedIndexes: [],
-          ),
-          currentPlayerIndex: prevState.players
-              .indexWhere((player) => player.lifeStatus != LifeStatus.killed),
-        ));
-      }
+    // Sync with Firebase if online
+    if (firebaseRepository != null && roomId != null && isHost) {
+      _syncState(newState);
     }
-  }
-
-  // Получение отсортированных голосов
-  // Ключ - индекс игрока, значение - количество голосов
-  List<Pair<int, int>> _getSortedVotes(List<int> votes) {
-    return List.generate(votes.length, (index) => Pair(index, votes[index]))
-      ..sort((a, b) => b.value.compareTo(a.value));
   }
 }
 

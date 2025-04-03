@@ -71,7 +71,9 @@ class MainMenuScreen extends StatelessWidget {
                               NavigationManager.instance.openGameSettings();
                             }),
                         const SizedBox(height: 16),
-                        CustomButton(text: loc.history, onPressed: () {}),
+                        CustomButton(text: "Присоединиться", onPressed: () {
+                          NavigationManager.instance.openJoinScreen();
+                        }),
                         const SizedBox(height: 16),
                         CustomButton(text: loc.rules, onPressed: () {}),
                       ],

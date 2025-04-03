@@ -1,23 +1,60 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
 import 'package:shelter_ai/domain/models/player.dart';
-import 'package:shelter_ai/domain/models/room.dart';
+import 'package:shelter_ai/data/entities/room/room.dart';
 
 class FirebaseRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
   final String _roomsCollection = 'rooms';
   final String _playersCollection = 'players';
 
+  // Приватный конструктор
+  FirebaseRepository._internal(this._firestore);
+
+  // Единственный экземпляр
+  static final FirebaseRepository _instance =
+      FirebaseRepository._internal(FirebaseFirestore.instance);
+
+  // Фабричный конструктор, возвращающий _instance
+  factory FirebaseRepository() => _instance;
+
+  // Вспомогательный метод для сериализации RunningGameState
+  Map<String, dynamic> _serializeGameState(RunningGameState gameState) {
+    final Map<String, dynamic> gameStateJson = gameState.toJson();
+
+    // Сериализуем все сложные объекты
+    gameStateJson['settings'] = gameState.settings.toJson();
+    gameStateJson['disaster'] = gameState.disaster.toJson();
+    gameStateJson['roundInfo'] = gameState.roundInfo.toJson();
+    gameStateJson['voteInfo'] = gameState.voteInfo.toJson();
+
+    // Сериализуем список игроков
+    gameStateJson['players'] =
+        gameState.players.map((player) => player.toJson()).toList();
+
+    return gameStateJson;
+  }
+
+  // Вспомогательный метод для сериализации Room
+  Map<String, dynamic> _serializeRoom(Room room) {
+    return {
+      'gameState': _serializeGameState(room.gameState),
+      'password': room.password,
+      'currentPlayerIndex': room.currentPlayerIndex,
+      'currentPlayerCounter': room.currentPlayerCounter,
+    };
+  }
+
   // Create a new room
   Future<String> createRoom(Room room) async {
-    final docRef =
-        await _firestore.collection(_roomsCollection).add(room.toJson());
+    final Map<String, dynamic> roomData = _serializeRoom(room);
+    final docRef = await _firestore.collection(_roomsCollection).add(roomData);
     return docRef.id;
   }
 
   // Join a room
   Future<void> joinRoom(String roomId, Player player) async {
-    await _firestore
+    await _firestore // поменять логику присоединения в комнату
         .collection(_roomsCollection)
         .doc(roomId)
         .collection(_playersCollection)
@@ -26,11 +63,14 @@ class FirebaseRepository {
   }
 
   // Update game state
-  Future<void> updateGameState(String roomId, RunningGameState gameState) async {
+  Future<void> updateGameState(
+      String roomId, RunningGameState gameState) async {
+    final Map<String, dynamic> gameStateJson = _serializeGameState(gameState);
+
     await _firestore
         .collection(_roomsCollection)
         .doc(roomId)
-        .update({'gameState': gameState.toJson()});
+        .update({'gameState': gameStateJson});
   }
 
   // Stream of room updates
@@ -96,5 +136,13 @@ class FirebaseRepository {
         .collection(_playersCollection)
         .doc(playerId)
         .update({'isReady': isReady});
+  }
+
+  // Update room player counter
+  Future<void> updateRoomPlayerCounter(String roomId, int newCount) async {
+    await _firestore
+        .collection(_roomsCollection)
+        .doc(roomId)
+        .update({'currentPlayerCounter': newCount});
   }
 }

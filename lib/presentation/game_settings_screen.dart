@@ -15,6 +15,8 @@ import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
@@ -70,6 +72,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         if (state is DisasterUploadedState) {
           NavigationManager.instance.openGameReplacement(
               state.settings, state.disaster, state.players);
+        } else if (state is ErrorLoadingGameState) {
+          const snackBar = SnackBar(content: Text('Ошибка загрузки данных'));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          NavigationManager.instance.pop();
         }
       },
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
@@ -277,22 +283,6 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             CustomButton(
                               text: 'Продолжить',
                               onPressed: () async {
-                                Future<void> addData() async {
-                                  CollectionReference users = FirebaseFirestore
-                                      .instance
-                                      .collection('users');
-                                  return users
-                                      .add({
-                                        'full_name': 'Gemini in Firebase',
-                                        'company': 'Firebase',
-                                        'age': 42
-                                      })
-                                      .then((value) => print("User Added"))
-                                      .catchError((error) =>
-                                          print("Failed to add user: $error"));
-                                }
-                                // await addData();
-
                                 final language =
                                     BlocProvider.of<AppSettingsCubit>(context)
                                         .state
@@ -302,6 +292,13 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                     .startGame(language);
                               },
                             ),
+
+                            // Room Info Widget
+                            if (state is DisasterUploadedState &&
+                                state.settings.isOnline &&
+                                state.roomId != null)
+                              _buildRoomInfoWidget(
+                                  context, state.roomId!, state.roomPassword!),
                           ],
                         ),
                       ),
@@ -367,30 +364,67 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     );
   }
 
-// Widget _buildDifficultyButton(
-//     String text, bool isSelected, VoidCallback onTap) {
-//   return GestureDetector(
-//     onTap: onTap,
-//     child: Container(
-//       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-//       decoration: BoxDecoration(
-//         color: isSelected
-//             ? Colors.white.withOpacity(0.8)
-//             : Colors.white.withOpacity(0.2),
-//         borderRadius: BorderRadius.circular(20),
-//         border: isSelected
-//             ? Border.all(color: const Color(0xFF8B7355), width: 2)
-//             : null,
-//       ),
-//       child: Text(
-//         text,
-//         style: TextStyle(
-//           fontSize: 14,
-//           color: isSelected ? Colors.black87 : Colors.black54,
-//           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-//         ),
-//       ),
-//     ),
-//   );
-// }
+  Widget _buildRoomInfoWidget(
+      BuildContext context, String roomId, String password) {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade100,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.blue),
+      ),
+      child: Column(
+        children: [
+          const Text(
+            'Room Created!',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildInfoRow('Room ID', roomId),
+          const SizedBox(height: 8),
+          _buildInfoRow('Password', password),
+          const SizedBox(height: 16),
+          const Text(
+            'Share these details with other players to join',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '$label:',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        GestureDetector(
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: value));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Copied to clipboard'),
+                duration: Duration(seconds: 1),
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              Text(value),
+              const SizedBox(width: 4),
+              const Icon(Icons.copy, size: 16),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }

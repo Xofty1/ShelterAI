@@ -10,9 +10,8 @@ part 'game_state.freezed.dart';
 part 'game_state.g.dart';
 
 class GameState {
-  const GameState({required this.stage});
-
   final GameStage stage;
+  const GameState({required this.stage});
 }
 
 @freezed

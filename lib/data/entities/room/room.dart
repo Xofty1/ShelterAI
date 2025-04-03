@@ -5,19 +5,17 @@ import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/round_info.dart';
 import 'package:shelter_ai/domain/models/vote_info.dart';
 
-import '../bloc/game_bloc.dart';
+import '../../../domain/bloc/game_bloc.dart';
 part 'room.freezed.dart';
 part 'room.g.dart';
 
 @freezed
 abstract class Room with _$Room {
   const factory Room({
-    required GameSettings gameSettings,
-    required List<Player> players,
+    required RunningGameState gameState,
     required String password,
     required int currentPlayerIndex,
-    required VoteInfo voteInfo,
-    required RoundInfo roundInfo,
+    required int currentPlayerCounter,
   }) = _Room;
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

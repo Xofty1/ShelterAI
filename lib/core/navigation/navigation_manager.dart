@@ -30,6 +30,10 @@ class NavigationManager {
     _navigator.pushNamed(RouteNames.gameSettings);
   }
 
+  void openJoinScreen() {
+    _navigator.pushNamed(RouteNames.joinGame);
+  }
+
   void openGame(
       GameSettings settings, Disaster disaster, List<Player> players) {
     _navigator.pushNamed(RouteNames.game, arguments: {
