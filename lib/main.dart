@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
                   builder: (context, languageCode) {
                     return MaterialApp(
                       title: "Shelter AI",
+                      debugShowCheckedModeBanner: false,
                       locale: Locale(languageCode),
                       supportedLocales: AppLocalizations.supportedLocales,
                       localizationsDelegates: const [
