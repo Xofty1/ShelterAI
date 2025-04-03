@@ -4,6 +4,8 @@ import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/ui_items/front_card_side.dart';
 import 'package:shelter_ai/presentation/vote_result_screen.dart';
 
+import '../l10n/l10n.dart';
+
 class PlayerDetailsScreen extends StatelessWidget {
   final Player player;
 
@@ -14,6 +16,7 @@ class PlayerDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -42,9 +45,9 @@ class PlayerDetailsScreen extends StatelessWidget {
                           color: AppColors.textPrimary),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        "ДЕТАЛИ ИГРОКА",
+                        loc.playerInfo,
                         style: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 24,

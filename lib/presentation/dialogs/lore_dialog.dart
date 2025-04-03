@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shelter_ai/domain/models/disaster.dart';
 
 import '../ui_items/state_section.dart';
+import '../../l10n/l10n.dart';
 
 class LoreDialog extends StatelessWidget {
   final Disaster disaster;
@@ -13,6 +14,7 @@ class LoreDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -50,31 +52,31 @@ class LoreDialog extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               StateSection(
-                  title: "Описание катастрофы",
+                  title: loc.disasterDescription,
                   content: disaster.disasterDescription),
 
               const SizedBox(height: 16),
               StateSection(
-                  title: "Убежище",
+                  title: loc.shelter,
                   content: "${disaster.shelterName} (${disaster.location})"),
 
               const SizedBox(height: 8),
               StateSection(
-                  title: "Описание убежища", content: disaster.description),
+                  title: loc.shelterDescription, content: disaster.description),
 
               const SizedBox(height: 8),
               StateSection(
-                  title: "Вместимость",
-                  content: "${disaster.capacity} человек"),
+                  title: loc.capacity,
+                  content: "${disaster.capacity} ${loc.humans}"),
 
               const SizedBox(height: 16),
 
               StateSection(
-                  title: "Помещения", content: disaster.rooms.join(", ")),
+                  title: loc.rooms, content: disaster.rooms.join(", ")),
 
               const SizedBox(height: 16),
               StateSection(
-                  title: "Ресурсы", content: disaster.resources.join(", ")),
+                  title: loc.resources, content: disaster.resources.join(", ")),
               const SizedBox(height: 20),
 
               // Close button
@@ -90,7 +92,7 @@ class LoreDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text("Закрыть"),
+                  child: Text(loc.close),
                 ),
               ),
             ],

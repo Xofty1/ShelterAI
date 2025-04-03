@@ -3,6 +3,7 @@ import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/player_tap_card.dart';
+import '../../l10n/l10n.dart';
 
 class FinishScreen extends StatelessWidget {
   final List<Player> alivePlayers;
@@ -25,6 +26,7 @@ class FinishScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     const headerColor = Color(0xFFB8A876);
     const headerTextColor = Color(0xFF482020);
     const buttonColor = Color(0xFF99582A);
@@ -42,17 +44,17 @@ class FinishScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               width: double.infinity,
               color: headerColor,
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'ФИНАЛ',
-                  style: TextStyle(
+                  loc.finale,
+                  style: const TextStyle(
                       color: headerTextColor,
                       fontSize: 32,
                       fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Container(
@@ -86,10 +88,10 @@ class FinishScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               width: double.infinity,
               color: aliveTitleColor,
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'В бункер попали:',
-                  style: TextStyle(
+                  loc.inBunker,
+                  style: const TextStyle(
                       color: avileTitleTextColor,
                       fontSize: 32,
                       fontWeight: FontWeight.bold),
@@ -122,10 +124,10 @@ class FinishScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               width: double.infinity,
               color: deadTitleColor,
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'Не попали:',
-                  style: TextStyle(
+                  loc.notInBunker,
+                  style: const TextStyle(
                       color: deadTextColor,
                       fontSize: 32,
                       fontWeight: FontWeight.bold),
@@ -170,9 +172,9 @@ class FinishScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
-                    'Завершить',
-                    style: TextStyle(
+                  child: Text(
+                    loc.finish,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w500,

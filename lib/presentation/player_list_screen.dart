@@ -5,6 +5,7 @@ import 'package:shelter_ai/presentation/ui_items/button.dart';
 import '../domain/models/player.dart';
 import 'ui_items/player_tap_card.dart';
 import 'player_details_screen.dart';
+import '../../l10n/l10n.dart';
 
 class PlayersListScreen extends StatelessWidget {
   final List<Player> players;
@@ -24,6 +25,7 @@ class PlayersListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: AppColors.mainGradient,
@@ -45,10 +47,10 @@ class PlayersListScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Text(
-                "СПИСОК ИГРОКОВ",
+              child: Text(
+                loc.playerList,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -79,7 +81,7 @@ class PlayersListScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: CustomButton(
-                text: 'Вернуться',
+                text: loc.returnWord,
                 onPressed: () => Navigator.pop(context),
               ),
             ),

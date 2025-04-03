@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/l10n.dart';
 import 'asset_image_item.dart';
 
 class PlayerCardBack extends StatelessWidget {
@@ -7,19 +8,20 @@ class PlayerCardBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final loc = AppLocalizations.of(context);
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AssetImageItem(
+        const AssetImageItem(
           imagePath: "assets/images/door.svg",
           width: 200,
           height: 200,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
-          "Нажмите, чтобы увидеть карту игрока",
+          loc.pressToSeeCard,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFFD9D9D9),
             fontSize: 18,
             fontWeight: FontWeight.bold,
