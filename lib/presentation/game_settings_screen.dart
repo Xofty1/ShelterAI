@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/core/di/game_settings_dep.dart';
 import 'package:shelter_ai/core/di/global_dep.dart';
-import 'package:shelter_ai/data/repositories/gpt_api.dart';
-import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
 import 'package:shelter_ai/l10n/l10n.dart';
@@ -14,7 +12,6 @@ import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart' as generated;
 
 class GameSettingsWidget extends StatefulWidget {
   const GameSettingsWidget({super.key});

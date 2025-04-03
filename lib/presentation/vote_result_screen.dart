@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_bloc.dart';
 import 'package:shelter_ai/domain/models/player.dart';
-import 'package:shelter_ai/presentation/player_details_screen.dart';
-import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/players_list.dart';
 import '../../l10n/l10n.dart';
