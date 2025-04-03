@@ -178,11 +178,15 @@ class GameService {
 
     // Меняем статус жизни персонажей: last -> killed,
     // У выбранных персонажей alive -> last
+    // Вскрываем все характеристики персонажей
     for (int i = 0; i < players.length; i++) {
       if (players[i].lifeStatus == LifeStatus.last) {
         players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
       } else if (selectedIndexes.contains(i)) {
-        players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
+        players[i] = players[i].copyWith(
+            lifeStatus: LifeStatus.last,
+            knownProperties: List.filled(6, true),
+        );
       }
     }
 
