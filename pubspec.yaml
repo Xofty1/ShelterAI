@@ -24,6 +24,7 @@ dependencies:
   flutter_svg: ^2.0.17
   dart_openai: ^5.1.0
   flutter_dotenv: ^5.2.1
+  mocktail: ^1.0.4
   flutter_tts: ^4.2.2
 
 dev_dependencies:

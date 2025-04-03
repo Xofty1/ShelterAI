@@ -45,8 +45,14 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final container = gameSettingsDepHolder.container;
+
+    if (container == null) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider.value(
-      value: gameSettingsDepHolder.container!.gameSettingsCubit,
+      value: container.gameSettingsCubit,
       child: const GameSettingsScreen(),
     );
   }

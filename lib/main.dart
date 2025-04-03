@@ -16,28 +16,32 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppSharedPreference().init();
   await dotenv.load(fileName: '.env');
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final globalDepHolder = GlobalDepHolder()..create(isMock: true);
 
   @override
   Widget build(BuildContext context) {
+    final container = globalDepHolder.container;
+
+    if (container == null) {
+      return const SizedBox.shrink();
+    }
+
     return RepositoryProvider<GlobalDepHolder>(
-      create: (context) => GlobalDepHolder()..create(isMock: true),
+      create: (context) => globalDepHolder..create(isMock: true),
       child: Builder(builder: (context) {
         return MultiBlocProvider(
           providers: [
             BlocProvider.value(
-              value: RepositoryProvider.of<GlobalDepHolder>(context)
-                  .container!
-                  .appSettingsCubit,
+              value: container.appSettingsCubit,
             ),
             BlocProvider.value(
-              value: RepositoryProvider.of<GlobalDepHolder>(context)
-                  .container!
-                  .soundCubit,
+              value: container.soundCubit,
             ),
           ],
           child: Builder(
