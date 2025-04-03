@@ -47,19 +47,21 @@ flutter pub get
 flutter run
 ```
 
+---
+
 📦 Зависимости
 Этот проект использует следующие пакеты:
 
   🔹   [cupertino_icons](https://pub.dev/packages/cupertino_icons) <br>
-  🔹   [flutter_bloc](https://pub.dev/packages/flutter_bloc) 
-  🔹   [freezed_annotation](https://pub.dev/packages/freezed_annotation) 
-  🔹   [freezed](https://pub.dev/packages/freezed) 
-  🔹   [json_annotation](https://pub.dev/packages/json_annotation) 
-  🔹   [dart_openai](https://pub.dev/packages/dart_openai) 
-  🔹   [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) 
-  🔹   [flutter_tts](https://pub.dev/packages/flutter_tts) 
+  🔹   [flutter_bloc](https://pub.dev/packages/flutter_bloc) <br>
+  🔹   [freezed_annotation](https://pub.dev/packages/freezed_annotation) <br>
+  🔹   [freezed](https://pub.dev/packages/freezed) <br>
+  🔹   [json_annotation](https://pub.dev/packages/json_annotation) <br>
+  🔹   [dart_openai](https://pub.dev/packages/dart_openai) <br>
+  🔹   [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) <br>
+  🔹   [flutter_tts](https://pub.dev/packages/flutter_tts) <br>
 
-
+---
 
 📜 Лицензия
 Этот проект распространяется под лицензией MIT. Подробнее см. LICENSE.
