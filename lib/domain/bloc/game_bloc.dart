@@ -18,6 +18,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
     on<VotedGameEvent>(_onVoted);
+
+    on<WaitingGameEvent>(_onWaiting);
   }
 
   void _onStarted(StartedGameEvent event, Emitter emit) {
@@ -74,6 +76,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
   }
 
+  void _onWaiting(WaitingGameEvent event, Emitter emit) {
+    final prevState = state as RunningGameState;
+
+
+  }
+
   void _onVoted(VotedGameEvent event, Emitter emit) {
     final prevState = state as RunningGameState;
 
@@ -124,4 +132,11 @@ class VotedGameEvent extends GameEvent {
   VotedGameEvent(this.voteIndex);
 
   final int voteIndex;
+}
+
+
+class WaitingGameEvent extends GameEvent {
+  WaitingGameEvent(this.isHost);
+
+  final bool isHost;
 }

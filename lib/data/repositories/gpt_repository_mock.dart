@@ -216,6 +216,7 @@ class GptRepositoryMock implements GptRepository {
           _random.nextBool() ? "Имеет скрытые мотивы" : "Нет особенностей";
 
       players.add(Player(
+        id: i+1,
         name: "Игрок ${i + 1}",
         profession: profession,
         bio: bio,

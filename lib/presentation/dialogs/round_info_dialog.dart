@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:shelter_ai/domain/models/game_settings.dart';
+import 'package:shelter_ai/core/theme/app_colors.dart';
+import 'package:shelter_ai/domain/models/round_info.dart';
 import 'package:shelter_ai/presentation/ui_items/info_row.dart';
 
-class SettingsDialog extends StatelessWidget {
-  final GameSettings settings;
+import '../ui_items/label.dart';
+import '../ui_items/state_section.dart';
 
-  const SettingsDialog({
+class RoundInfoDialog extends StatelessWidget {
+  final RoundInfo roundInfo;
+
+  const RoundInfoDialog({
     super.key,
-    required this.settings,
+    required this.roundInfo,
   });
 
   @override
@@ -37,7 +41,7 @@ class SettingsDialog extends StatelessWidget {
             children: [
               // Title
               const Text(
-                "Настройки игры",
+                "Информация о раунде",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -46,7 +50,7 @@ class SettingsDialog extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              // Settings Info
+              // Round Info
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -57,31 +61,19 @@ class SettingsDialog extends StatelessWidget {
                 child: Column(
                   children: [
                     InfoRow(
-                      label: "Количество игроков",
-                      value: settings.playersCount.toString(),
+                      label: "Номер раунда",
+                      value: roundInfo.roundNumber.toString(),
                     ),
                     const SizedBox(height: 16),
                     InfoRow(
-                      label: "Сложность",
-                      value: settings.difficulty.toString(),
+                      label: "Способностей открыть",
+                      value: roundInfo.openCount.toString(),
                     ),
                     const SizedBox(height: 16),
                     InfoRow(
-                      label: "Время на обсуждение",
-                      value: "${settings.time} с.",
+                      label: "Человек исключить",
+                      value: roundInfo.kickedCount.toString(),
                     ),
-                    const SizedBox(height: 16),
-                    InfoRow(
-                      label: "Семейный режим",
-                      value: settings.safeMode ? "Вкл" : "Выкл",
-                    ),
-                    if (settings.plot.isNotEmpty) ...[
-                      const SizedBox(height: 16),
-                      InfoRow(
-                        label: "Пожелания",
-                        value: settings.plot,
-                      ),
-                    ],
                   ],
                 ),
               ),

@@ -15,6 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Player {
+  int get id;
   String get name;
   String get profession;
   String get bio;
@@ -39,6 +40,7 @@ mixin _$Player {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Player &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.profession, profession) ||
                 other.profession == profession) &&
@@ -58,6 +60,7 @@ mixin _$Player {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       name,
       profession,
       bio,
@@ -72,7 +75,7 @@ mixin _$Player {
 
   @override
   String toString() {
-    return 'Player(name: $name, profession: $profession, bio: $bio, health: $health, hobby: $hobby, phobia: $phobia, luggage: $luggage, extra: $extra, lifeStatus: $lifeStatus, knownProperties: $knownProperties, notes: $notes)';
+    return 'Player(id: $id, name: $name, profession: $profession, bio: $bio, health: $health, hobby: $hobby, phobia: $phobia, luggage: $luggage, extra: $extra, lifeStatus: $lifeStatus, knownProperties: $knownProperties, notes: $notes)';
   }
 }
 
@@ -82,7 +85,8 @@ abstract mixin class $PlayerCopyWith<$Res> {
       _$PlayerCopyWithImpl;
   @useResult
   $Res call(
-      {String name,
+      {int id,
+      String name,
       String profession,
       String bio,
       String health,
@@ -107,6 +111,7 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? profession = null,
     Object? bio = null,
@@ -120,6 +125,10 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
     Object? notes = null,
   }) {
     return _then(_self.copyWith(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -172,7 +181,8 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
 
 class _Player implements Player {
   const _Player(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.profession,
       required this.bio,
       required this.health,
@@ -186,6 +196,8 @@ class _Player implements Player {
       : _knownProperties = knownProperties,
         _notes = notes;
 
+  @override
+  final int id;
   @override
   final String name;
   @override
@@ -233,6 +245,7 @@ class _Player implements Player {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Player &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.profession, profession) ||
                 other.profession == profession) &&
@@ -252,6 +265,7 @@ class _Player implements Player {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       name,
       profession,
       bio,
@@ -266,7 +280,7 @@ class _Player implements Player {
 
   @override
   String toString() {
-    return 'Player(name: $name, profession: $profession, bio: $bio, health: $health, hobby: $hobby, phobia: $phobia, luggage: $luggage, extra: $extra, lifeStatus: $lifeStatus, knownProperties: $knownProperties, notes: $notes)';
+    return 'Player(id: $id, name: $name, profession: $profession, bio: $bio, health: $health, hobby: $hobby, phobia: $phobia, luggage: $luggage, extra: $extra, lifeStatus: $lifeStatus, knownProperties: $knownProperties, notes: $notes)';
   }
 }
 
@@ -277,7 +291,8 @@ abstract mixin class _$PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String name,
+      {int id,
+      String name,
       String profession,
       String bio,
       String health,
@@ -302,6 +317,7 @@ class __$PlayerCopyWithImpl<$Res> implements _$PlayerCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? profession = null,
     Object? bio = null,
@@ -315,6 +331,10 @@ class __$PlayerCopyWithImpl<$Res> implements _$PlayerCopyWith<$Res> {
     Object? notes = null,
   }) {
     return _then(_Player(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
