@@ -50,14 +50,14 @@ flutter run
 📦 Зависимости
 Этот проект использует следующие пакеты:
 
-  🔹   [cupertino_icons](https://pub.dev/packages/cupertino_icons) \n
-  🔹   [flutter_bloc](https://pub.dev/packages/flutter_bloc) \n
-  🔹   [freezed_annotation](https://pub.dev/packages/freezed_annotation) \n
-  🔹   [freezed](https://pub.dev/packages/freezed) \n
-  🔹   [json_annotation](https://pub.dev/packages/json_annotation) \n
-  🔹   [dart_openai](https://pub.dev/packages/dart_openai) \n
-  🔹   [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) \n
-  🔹   [flutter_tts](https://pub.dev/packages/flutter_tts) \n
+  🔹   [cupertino_icons](https://pub.dev/packages/cupertino_icons) <br>
+  🔹   [flutter_bloc](https://pub.dev/packages/flutter_bloc) 
+  🔹   [freezed_annotation](https://pub.dev/packages/freezed_annotation) 
+  🔹   [freezed](https://pub.dev/packages/freezed) 
+  🔹   [json_annotation](https://pub.dev/packages/json_annotation) 
+  🔹   [dart_openai](https://pub.dev/packages/dart_openai) 
+  🔹   [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) 
+  🔹   [flutter_tts](https://pub.dev/packages/flutter_tts) 
 
 
 
