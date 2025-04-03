@@ -7,7 +7,7 @@ import 'game_settings.dart';
 part 'game_state.freezed.dart';
 
 @freezed
-abstract class GameState with _$GameState{
+abstract class GameState with _$GameState {
   const factory GameState({
     required GameSettings settings,
     required Disaster disaster,
@@ -19,23 +19,31 @@ abstract class GameState with _$GameState{
 }
 
 /// Список этапов игры
-enum GameStage{
+enum GameStage {
   /// Этап представления игрокам истории
   storytelling,
+
   /// Этап объявления раунда
   roundInfo,
+
   /// Этап вскрытия данных
   openCards,
+
   /// Этаб обсуждения
   speaking,
+
   /// Этап голосования
   voting,
+
   /// Этап дообсуждения
   reSpeaking,
+
   /// Этап переголосования
   reVoting,
+
   /// Этап объявления результатов голосования
   voteResult,
+
   /// Финальный этап
   finals,
 }
