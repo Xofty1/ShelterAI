@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/custom_timer.dart';
 
 import '../domain/bloc/game_bloc.dart';
+import '../domain/models/game_state.dart';
+import '../domain/models/player.dart';
 
 class DiscussionScreen extends StatelessWidget {
   final int roundNumber;
   final int seconds;
+  final List<Player> players;
 
-  const DiscussionScreen({super.key, required this.roundNumber, required this.seconds});
+  const DiscussionScreen(
+      {super.key,
+      required this.roundNumber,
+      required this.seconds,
+      required this.players});
+
+  void _showPlayersScreen(BuildContext context, List<Player> players) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => PlayersListScreen(players: players),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +77,9 @@ class DiscussionScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    _buildButton('Игроки', onPressed: () {}),
+                    _buildButton('Игроки', onPressed: () {
+                      _showPlayersScreen(context, players);
+                    }),
                     const SizedBox(height: 12),
                     _buildButton(
                       'Голосование',

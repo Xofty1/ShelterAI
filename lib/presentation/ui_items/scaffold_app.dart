@@ -4,12 +4,13 @@ class ScaffoldApp extends StatelessWidget {
   final Widget child;
   final String name;
 
-  const ScaffoldApp({Key? key, required this.child, required this.name}) : super(key: key);
+  const ScaffoldApp({Key? key, required this.child, required this.name})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: DecoratedBox(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF6B5642), Color(0xFFD1A881)],
@@ -20,9 +21,14 @@ class ScaffoldApp extends StatelessWidget {
         child: Column(
           children: [
             AppBar(
-              backgroundColor: const Color(0x376B5642),
+              iconTheme: const IconThemeData(color: Colors.white70),
+              backgroundColor: Colors.transparent,
               centerTitle: true,
-              title: Text(name),
+              title: Text(
+                name,
+                style: const TextStyle(
+                    color: Colors.white70, fontWeight: FontWeight.w600),
+              ),
             ),
             Expanded(
               child: SingleChildScrollView(

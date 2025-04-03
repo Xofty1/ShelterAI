@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_bloc.dart';
 import 'package:shelter_ai/domain/models/player.dart';
+import 'package:shelter_ai/presentation/player_details_screen.dart';
+import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
+import 'package:shelter_ai/presentation/ui_items/players_list.dart';
 
 class VoteResultScreen extends StatelessWidget {
   final List<Player> kickedPlayers;
@@ -35,101 +38,7 @@ class VoteResultScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: kickedPlayers.length,
-              itemBuilder: (context, index) {
-                final player = kickedPlayers[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Hero(
-                    tag: 'player_card_${player.name}',
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlayerCardDetailScreen(
-                                player: player,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF8B7355),
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFD9D9D9),
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                    color: const Color(0xFF6B5642),
-                                    width: 2,
-                                  ),
-                                ),
-                                child: const Icon(
-                                  Icons.person,
-                                  size: 40,
-                                  color: Color(0xFF6B5642),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Игрок ${player.name}",
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFFD9D9D9),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "Нажмите, чтобы увидеть карту игрока",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: const Color(0xFFD9D9D9)
-                                            .withOpacity(0.8),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Color(0xFFD9D9D9),
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+          Expanded(child: PlayerList(players: kickedPlayers)),
           Padding(
             padding: const EdgeInsets.all(16),
             child: CustomButton(
@@ -145,92 +54,72 @@ class VoteResultScreen extends StatelessWidget {
   }
 }
 
-class PlayerCardDetailScreen extends StatelessWidget {
+class PlayerCardDetail extends StatelessWidget {
   final Player player;
 
-  const PlayerCardDetailScreen({
+  const PlayerCardDetail({
     super.key,
-    required this.player,
+    required this.player
   });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF6B5642),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF8B7355),
-        title: Text(
-          "Карта игрока ${player.name}",
-          style: const TextStyle(
-            color: Color(0xFFD9D9D9),
-            fontWeight: FontWeight.bold,
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFD9D9D9),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
           ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFFD9D9D9)),
-          onPressed: () => Navigator.pop(context),
-        ),
+        ],
       ),
-      body: Hero(
-        tag: 'player_card_${player.name}',
-        child: Container(
-          margin: const EdgeInsets.all(16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color(0xFFD9D9D9),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFD9D9D9),
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        color: const Color(0xFF6B5642),
-                        width: 3,
-                      ),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      size: 60,
-                      color: Color(0xFF6B5642),
-                    ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(
+                    color: const Color(0xFF6B5642),
+                    width: 3,
                   ),
                 ),
-                const SizedBox(height: 24),
-                _buildInfoSection("Возраст", player.bio),
-                const SizedBox(height: 16),
-                _buildInfoSection("Здоровье", player.health),
-                const SizedBox(height: 16),
-                _buildInfoSection("Хобби/Навыки", player.hobby),
-                const SizedBox(height: 16),
-                _buildInfoSection("Фобии", player.phobia),
-                const SizedBox(height: 16),
-                _buildInfoSection("Багаж", player.luggage),
-                const SizedBox(height: 16),
-                _buildInfoSection("Дополнительная информация", player.extra),
-              ],
+                child: const Icon(
+                  Icons.person,
+                  size: 60,
+                  color: Color(0xFF6B5642),
+                ),
+              ),
             ),
-          ),
+            const SizedBox(height: 24),
+            _buildInfoSection("Возраст", player.bio, player.knownProperties[0]),
+            const SizedBox(height: 16),
+            _buildInfoSection("Здоровье", player.health, player.knownProperties[1]),
+            const SizedBox(height: 16),
+            _buildInfoSection("Хобби/Навыки", player.hobby, player.knownProperties[2]),
+            const SizedBox(height: 16),
+            _buildInfoSection("Фобии", player.phobia, player.knownProperties[3]),
+            const SizedBox(height: 16),
+            _buildInfoSection("Багаж", player.luggage, player.knownProperties[4]),
+            const SizedBox(height: 16),
+            _buildInfoSection("Дополнительная информация", player.extra, player.knownProperties[5]),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoSection(String title, String content) {
+  Widget _buildInfoSection(String title, String content, bool isKnown) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -244,7 +133,7 @@ class PlayerCardDetailScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          content,
+          isKnown ? content : "Неизвестно",
           style: const TextStyle(
             fontSize: 16,
             color: Color(0xFF482020),

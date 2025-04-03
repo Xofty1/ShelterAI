@@ -33,10 +33,10 @@ class LoreScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Color(0xFFCCC6C1),
+                          color: const Color(0xFFCCC6C1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SingleChildScrollView(
@@ -74,7 +74,7 @@ class LoreScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
