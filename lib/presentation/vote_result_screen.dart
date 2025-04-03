@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_bloc.dart';
 import 'package:shelter_ai/domain/models/player.dart';
-import 'package:shelter_ai/presentation/player_details_screen.dart';
-import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/players_list.dart';
 import '../../l10n/l10n.dart';
+
+import '../l10n/l10n.dart';
 
 class VoteResultScreen extends StatelessWidget {
   final List<Player> kickedPlayers;
@@ -40,7 +40,15 @@ class VoteResultScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Expanded(child: PlayerList(players: kickedPlayers)),
+          Expanded(child: kickedPlayers.isNotEmpty ? PlayerList(players: kickedPlayers) : Center(
+            child: Text(
+              loc.noKickedOutPlayers,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Color(0xFF482020),
+              ),
+            ),
+          )),
           Padding(
             padding: const EdgeInsets.all(16),
             child: CustomButton(

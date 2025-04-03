@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shelter_ai/presentation/game_screen.dart';
 import 'package:shelter_ai/presentation/game_settings_screen.dart';
 import 'package:shelter_ai/presentation/global_settings_screen/global_settings_widget.dart';
+import 'package:shelter_ai/presentation/loader_screen.dart';
+import 'package:shelter_ai/presentation/rules_screen.dart';
 import 'package:shelter_ai/presentation/shelter_home.dart';
 
 abstract class RouteNames {
@@ -9,6 +11,7 @@ abstract class RouteNames {
   static const settings = '/settings';
   static const gameSettings = 'game_settings';
   static const game = '/game';
+  static const rules = '/rules';
 }
 
 abstract class RoutesBuilder {
@@ -35,6 +38,12 @@ abstract class RoutesBuilder {
       case RouteNames.game:
         return MaterialPageRoute(
           builder: (_) => const GameScreenWidget(),
+          settings: settings,
+        );
+
+      case RouteNames.rules:
+        return MaterialPageRoute(
+          builder: (_) => const RulesScreen(),
           settings: settings,
         );
     }
