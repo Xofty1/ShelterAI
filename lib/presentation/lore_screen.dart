@@ -17,7 +17,6 @@ class LoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     return ScaffoldApp(
-
       name: loc.lore,
       child: Column(
         children: [

@@ -24,14 +24,14 @@ class PlayersListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: AppColors.mainGradient,
       ),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 12,),
+            const SizedBox(height: 12),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

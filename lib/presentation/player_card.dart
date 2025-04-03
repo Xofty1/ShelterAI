@@ -102,7 +102,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   @override
   Widget build(BuildContext context) {
     cardWidth = MediaQuery.of(context).size.width * 0.9;
-    cardHeight = MediaQuery.of(context).size.height * 0.82;
+    cardHeight = MediaQuery.of(context).size.height * 0.72;
     return Scaffold(
       body: Container(
         width: double.infinity,
