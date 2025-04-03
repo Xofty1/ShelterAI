@@ -17,7 +17,7 @@ class AppColors {
   static const Color cardIcon = Color(0xFF523418);
 
   // Цвета кнопок
-  static const Color buttonBackground = Color(0xFFBAA17A);
+  static const Color buttonBackground = Color(0xFFD9C08D);
   static const Color buttonText = Colors.black;
 
   // Цвета теней
