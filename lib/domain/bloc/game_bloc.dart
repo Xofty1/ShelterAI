@@ -4,15 +4,17 @@ import 'package:shelter_ai/domain/models/disaster.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/round_info.dart';
 import 'package:shelter_ai/domain/models/vote_info.dart';
+import 'package:shelter_ai/domain/services/game_service.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
 import '../models/game_settings.dart';
 import '../models/game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  final GptRepository repository;
+  final GameService service;
 
-  GameBloc(this.repository) : super(const GameState(stage: GameStage.waiting)) {
+  GameBloc(this.service)
+      : super(const GameState(stage: GameStage.waiting)) {
     on<StartedGameEvent>(_onStarted);
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
@@ -27,131 +29,50 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   Future<void> _onReady(ReadyGameEvent event, Emitter emit) async {
-    final prevState = (state as RunningGameState);
-    GameStage stage = prevState.stage;
-    VoteInfo voteInfo = prevState.voteInfo;
-
-    switch (stage) {
-      // Переходим на следующую стадию, на следующей стадии предпросмотр
-      case GameStage.intro:
-        stage = GameStage.roundStarted;
-      // Переходим на следующую стадию, на следующей стадии предпросмотр
-      case GameStage.roundStarted:
-        stage = GameStage.openCards;
-      // Переходим на следующую стадию, предпросмотр
-      case GameStage.speaking:
-        stage = GameStage.voting;
-      // Тут разветвление в зависимости от результатов голосования
-      case GameStage.voteResult:
-        if (voteInfo.voteStatus == VoteStatus.successful) {
-          // Если указан 6 раунд, значит игра окончена, иначе идет объявление
-          // нового раунда
-          stage = prevState.roundInfo.roundNumber < 6
-              ? GameStage.roundStarted
-              : GameStage.preFinalLoading;
-          voteInfo = const VoteInfo(
-              votes: [],
-              canBeSelected: [],
-              selectedIndexes: [],
-              voteStatus: VoteStatus.none);
-        } else {
-          stage = GameStage.speaking;
-        }
-      default:
-        break;
+    if (state is! RunningGameState) {
+      // TODO: логирование
+      return;
     }
 
-    emit(prevState.copyWith(
-      stage: stage,
-      voteInfo: voteInfo,
-    ));
+    final prevState = state as RunningGameState;
+    GameState newState = prevState.copyWith();
 
-    if (stage == GameStage.preFinalLoading) {
-      final finalState = await _getFinalState(state as RunningGameState);
-      emit(finalState);
+    // Простой скип стадии
+    if (service.canSkipStage(prevState)) {
+      newState = service.skipStage(prevState);
+      emit(newState);
+    } else {
+      // Работа с результатом голосования
+      if (prevState.stage == GameStage.voteResult) {
+        newState = service.getStateAfterVoteResult(prevState);
+        emit(newState);
+      }
+
+      // Результат голосования может вести к загрузке финала
+      if (newState.stage == GameStage.preFinalLoading) {
+        final finalState = await service.getFinalState(prevState);
+        emit(finalState);
+      }
     }
-  }
-
-  Future<GameState> _getFinalState(RunningGameState preFinalState) async {
-    final settings = preFinalState.settings;
-    final disaster = preFinalState.disaster;
-    final alivePlayers = preFinalState.players
-        .where((player) => player.lifeStatus == LifeStatus.alive)
-        .toList();
-    final kickedPlayers = preFinalState.players
-        .where((player) => player.lifeStatus != LifeStatus.alive)
-        .toList();
-
-    final finals = await repository.getFinale(
-        settings, disaster, alivePlayers, kickedPlayers);
-
-    return preFinalState.copyWith(stage: GameStage.finals, finals: finals);
   }
 
   void _onOpenedProperty(OpenedPropertyGameEvent event, Emitter emit) {
-    final prevState = state as RunningGameState;
-    var playerIndex = prevState.currentPlayerIndex;
-
-    final knownProperties =
-        List.of(prevState.players[playerIndex].knownProperties);
-
-    for (var index in event.propertyIndexes) {
-      knownProperties[index] = true;
-    }
-
-    final players = List.of(prevState.players);
-    players[playerIndex] =
-        players[playerIndex].copyWith(knownProperties: knownProperties);
+    RunningGameState newState =
+        service.updateProperties(event, state as RunningGameState);
 
     // Ищем следущего живого игрока для хода
-    playerIndex = players.indexWhere(
-        (player) => player.lifeStatus == LifeStatus.alive, playerIndex + 1);
-
-    // Есть живые игроки, не сделавшие ход
+    int playerIndex =
+        service.nextAlive(newState.players, newState.currentPlayerIndex + 1);
+    print(newState.players.first.knownProperties.first);
     if (playerIndex != -1) {
-      emit(prevState.copyWith(
-        players: players,
-        currentPlayerIndex: playerIndex,
-      ));
+      emit(newState.copyWith(currentPlayerIndex: playerIndex));
+    } else if (newState.roundInfo.kickedCount == 0) {
+      newState = service.nextRound(newState);
+      emit(newState);
     }
-    // Если кикается ноль игроков - переход к следующему раунду
-    else if (prevState.roundInfo.kickedCount == 0) {
-      // Ищем первого живого игрока
-      playerIndex =
-          players.indexWhere((player) => player.lifeStatus == LifeStatus.alive);
-
-      emit(prevState.copyWith(
-        players: players,
-        currentPlayerIndex: playerIndex,
-        roundInfo: getRoundInfo(prevState.roundInfo.roundNumber + 1,
-            prevState.settings.playersCount),
-        stage: GameStage.roundStarted,
-      ));
-    }
-    // Все хорошо, переход к голосованию
     else {
-      // Ищем первого голосующего игрока
-      playerIndex = players
-          .indexWhere((player) => player.lifeStatus != LifeStatus.killed);
-
-      // Могут быть выбраны только живые игроки
-      final canBeSelected = players
-          .map((player) => player.lifeStatus == LifeStatus.alive)
-          .toList();
-
-      final voteInfo = VoteInfo(
-        votes: List.filled(prevState.settings.playersCount, 0),
-        canBeSelected: canBeSelected,
-        selectedIndexes: [],
-        voteStatus: VoteStatus.running,
-      );
-
-      emit(prevState.copyWith(
-        players: players,
-        currentPlayerIndex: playerIndex,
-        stage: GameStage.speaking,
-        voteInfo: voteInfo,
-      ));
+      newState = service.startVoting(newState);
+      emit(newState);
     }
   }
 
@@ -164,7 +85,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     var playerIndex = prevState.players.indexWhere(
         (player) => player.lifeStatus != LifeStatus.killed,
         prevState.currentPlayerIndex + 1);
-    print("player $playerIndex");
+
     // Голосует следующий игрок
     if (playerIndex != -1) {
       emit(prevState.copyWith(
@@ -193,7 +114,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         // Меняем статус жизни персонажей: last -> killed,
         // У выбранных персонажей alive -> last
         for (int i = 0; i < players.length; i++) {
-          if (players[i].lifeStatus == LifeStatus.killed) {
+          if (players[i].lifeStatus == LifeStatus.last) {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
           } else if (selectedIndexes.contains(i)) {
             players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
@@ -203,8 +124,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(prevState.copyWith(
           players: players,
           stage: GameStage.voteResult,
-          roundInfo: getRoundInfo(prevState.roundInfo.roundNumber + 1,
-              prevState.settings.playersCount),
           voteInfo: prevState.voteInfo.copyWith(
             selectedIndexes: selectedIndexes,
             voteStatus: VoteStatus.successful,

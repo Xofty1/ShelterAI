@@ -39,6 +39,7 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
     if (!gameDepHolder.isCreated) {
       final globalDepContainer =
           RepositoryProvider.of<GlobalDepHolder>(context).container!;
+
       gameDepHolder.create(globalDepContainer);
 
       final args =
@@ -46,6 +47,9 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
       gameSettings = args['settings'] as GameSettings;
       disaster = args['disaster'] as Disaster;
       players = args['players'] as List<Player>;
+
+      gameDepHolder.container?.gameBloc
+          .add(StartedGameEvent(gameSettings, disaster, players));
     }
     super.didChangeDependencies();
   }
@@ -59,8 +63,7 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: gameDepHolder.container!.gameBloc
-        ..add(StartedGameEvent(gameSettings, disaster, players)),
+      value: gameDepHolder.container!.gameBloc,
       child: const GameScreen(),
     );
   }
