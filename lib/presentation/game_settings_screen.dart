@@ -15,6 +15,7 @@ import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart' as generated;
 
 class GameSettingsWidget extends StatefulWidget {
   const GameSettingsWidget({super.key});
@@ -65,9 +66,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
         if (state is DisasterUploadedState) {
-          NavigationManager.instance
-              .openGameReplacement(state.settings, state.disaster, state.players);
-        } else if(state is ErrorLoadingGameState){
+          NavigationManager.instance.openGameReplacement(
+              state.settings, state.disaster, state.players);
+        } else if (state is ErrorLoadingGameState) {
           const snackBar = SnackBar(content: Text('Ошибка загрузки данных'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           NavigationManager.instance.pop();
@@ -100,11 +101,11 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                         child: Column(
                           children: [
                             // Main settings container
-                            _buildSettingsContainer(
+                            SettingsContainer(
                               child: Column(
                                 children: [
                                   // Players count
-                                  _buildSettingHeader("Количество игроков"),
+                                  SettingHeader(text: "Количество игроков"),
                                   Row(
                                     children: [
                                       SizedBox(
@@ -133,27 +134,30 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Difficulty
-                                  _buildSettingHeader(loc.difficulty),
+                                  SettingHeader(text: loc.difficulty),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      _buildDifficultyButton(
-                                          loc.difficultyClassic,
-                                          state.settings.difficulty == 1,
-                                          () => BlocProvider.of<
+                                      DifficultyButton(
+                                          text: loc.difficultyClassic,
+                                          isSelected:
+                                              state.settings.difficulty == 1,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(1)),
-                                      _buildDifficultyButton(
-                                          loc.difficultyHardcore,
-                                          state.settings.difficulty == 2,
-                                          () => BlocProvider.of<
+                                      DifficultyButton(
+                                          text: loc.difficultyHardcore,
+                                          isSelected:
+                                              state.settings.difficulty == 2,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(2)),
-                                      _buildDifficultyButton(
-                                          loc.difficultyInsanity,
-                                          state.settings.difficulty == 3,
-                                          () => BlocProvider.of<
+                                      DifficultyButton(
+                                          text: loc.difficultyInsanity,
+                                          isSelected:
+                                              state.settings.difficulty == 3,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(3)),
                                     ],
@@ -161,7 +165,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Game tone
-                                  _buildSettingHeader("Тон игры"),
+                                  SettingHeader(text: "Тон игры"),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -186,9 +190,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             const SizedBox(height: 16),
 
                             // Plot wishes
-                            _buildSettingsContainer(
+                            SettingsContainer(
                               child: CustomTextField(
                                 text: "Введите пожелания по сюжету",
+                                initialValue: state.settings.plot,
                                 onChange: (value) {
                                   BlocProvider.of<GameSettingsCubit>(context)
                                       .updatePlot(value);
@@ -199,10 +204,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             const SizedBox(height: 16),
 
                             // Time
-                            _buildSettingsContainer(
+                            SettingsContainer(
                               child: Column(
                                 children: [
-                                  _buildSettingHeader("Время"),
+                                  SettingHeader(text: "Время"),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -240,9 +245,13 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      _buildToneButton("Рандом", false, () {
-                                        // Random mode can be added to your GameSettings model
-                                      }, width: 160),
+                                      ToneButton(
+                                          text: "Рандом",
+                                          isSelected: false,
+                                          onTap: () {
+                                            // Random mode can be added to your GameSettings model
+                                          },
+                                          width: 160),
                                       CustomSwitcher(
                                         initialValue: false,
                                         onToggle: (value) {
@@ -279,8 +288,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       ),
     );
   }
+}
 
-  Widget _buildSettingsContainer({required Widget child}) {
+class SettingsContainer extends StatelessWidget {
+  final Widget child;
+
+  const SettingsContainer({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -291,8 +307,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       child: child,
     );
   }
+}
 
-  Widget _buildSettingHeader(String text) {
+class SettingHeader extends StatelessWidget {
+  final String text;
+
+  const SettingHeader({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
@@ -307,9 +330,24 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       ),
     );
   }
+}
 
-  Widget _buildToneButton(String text, bool isSelected, VoidCallback onTap,
-      {double width = 100}) {
+class ToneButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final double width;
+
+  const ToneButton({
+    super.key,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+    this.width = 100,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -333,9 +371,22 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       ),
     );
   }
+}
 
-  Widget _buildDifficultyButton(
-      String text, bool isSelected, VoidCallback onTap) {
+class DifficultyButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const DifficultyButton({
+    super.key,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

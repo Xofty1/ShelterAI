@@ -38,7 +38,15 @@ class VoteResultScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Expanded(child: PlayerList(players: kickedPlayers)),
+          Expanded(child: kickedPlayers.length != 0 ? PlayerList(players: kickedPlayers) : const Center(
+            child: Text(
+              "Нет выгнанных игроков",
+              style: TextStyle(
+                fontSize: 18,
+                color: Color(0xFF482020),
+              ),
+            ),
+          )),
           Padding(
             padding: const EdgeInsets.all(16),
             child: CustomButton(

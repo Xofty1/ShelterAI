@@ -19,6 +19,24 @@ class LoreScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF231C08),
+        title: Text(
+          loc.lore,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: 1.2,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -30,7 +48,6 @@ class LoreScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              _buildAppBar(context, loc),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -292,16 +309,20 @@ class LoreScreen extends StatelessWidget {
           size: 18,
         ),
         const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFD1A881),
+        Expanded(
+          flex: 2, // соотношение 1 часть для label
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFD1A881),
+            ),
           ),
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 2),
         Expanded(
+          flex: 3, // соотношение 2 части для value
           child: Text(
             value,
             style: const TextStyle(
