@@ -68,13 +68,13 @@ class _SettingsDialogState extends State<SettingsDialog> {
                     ),
                   ),
                 const SizedBox(height: 20),
-
-                // Players count slider
                 LabelWidget(text: "Количество: ${playersCount.toString()}"),
+                const SizedBox(height: 20),
+                LabelWidget(text: "Пожелания: $plot"),
                 const SizedBox(height: 20),
                 LabelWidget(text: "Сложность: ${difficulty.toString()}"),
                 const SizedBox(height: 20),
-                LabelWidget(text: "Семейный режим: ${safeMode.toString()}"),
+                LabelWidget(text: "Семейный режим: ${safeMode ? "Включен" : "Выключен"}"),
                 const SizedBox(height: 20),
                 LabelWidget(text: "Таймер: ${time.toString()} с."),
               ],
