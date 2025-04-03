@@ -2,27 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:shelter_ai/core/theme/app_colors.dart';
 import 'package:shelter_ai/presentation/ui_items/app_button.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
-import 'package:shelter_ai/presentation/ui_items/players_list.dart';
 import '../domain/models/player.dart';
+import 'ui_items/player_tap_card.dart';
+import 'player_details_screen.dart';
 
 class PlayersListScreen extends StatelessWidget {
   final List<Player> players;
 
   const PlayersListScreen({super.key, required this.players});
 
+  void _showPlayerDetails(BuildContext context, Player player, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PlayerDetailsScreen(
+          player: player,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.mainGradient,
-        ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: AppColors.mainGradient,
+      ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 12,),
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
                 color: AppColors.accent,
@@ -36,6 +47,7 @@ class PlayersListScreen extends StatelessWidget {
               ),
               child: const Text(
                 "СПИСОК ИГРОКОВ",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 24,
@@ -43,11 +55,26 @@ class PlayersListScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
-            Expanded(
-              child: PlayerList(players: players),
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              crossAxisCount: 2,
+              childAspectRatio: 0.7,
+              crossAxisSpacing: 6,
+              mainAxisSpacing: 6,
+              children: List.generate(players.length, (index) {
+                return GestureDetector(
+                  onTap: () =>
+                      _showPlayerDetails(context, players[index], index),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PlayerTapCard(
+                      player: players[index],
+                    ),
+                  ),
+                );
+              }),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -61,4 +88,5 @@ class PlayersListScreen extends StatelessWidget {
       ),
     );
   }
+
 }

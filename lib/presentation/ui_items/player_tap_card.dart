@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shelter_ai/core/theme/app_colors.dart';
 
 import '../../domain/models/player.dart';
 

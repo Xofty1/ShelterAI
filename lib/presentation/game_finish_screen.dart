@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/domain/models/player.dart';
+import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/player_tap_card.dart';
 
 class FinishScreen extends StatelessWidget {
@@ -13,6 +14,14 @@ class FinishScreen extends StatelessWidget {
       required this.alivePlayers,
       required this.deadPlayers,
       required this.finalText});
+
+  void _showPlayersScreen(BuildContext context, List<Player> players) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => PlayersListScreen(players: players),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,15 +115,15 @@ class FinishScreen extends StatelessWidget {
                   crossAxisSpacing: 6,
                   mainAxisSpacing: 6,
                   children: List.generate(alivePlayers.length, (index) {
-                    return Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: PlayerTapCard(
-                            player: alivePlayers[index],
-                          ),
+                    return GestureDetector(
+                      onTap: () =>
+                          _showPlayersScreen(context, alivePlayers),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PlayerTapCard(
+                          player: alivePlayers[index],
                         ),
-                      ],
+                      ),
                     );
                   }),
                 ),
@@ -142,15 +151,15 @@ class FinishScreen extends StatelessWidget {
                   crossAxisSpacing: 6,
                   mainAxisSpacing: 6,
                   children: List.generate(deadPlayers.length, (index) {
-                    return Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: PlayerTapCard(
-                            player: deadPlayers[index],
-                          ),
+                    return GestureDetector(
+                      onTap: () =>
+                          _showPlayersScreen(context, deadPlayers),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PlayerTapCard(
+                          player: deadPlayers[index],
                         ),
-                      ],
+                      ),
                     );
                   }),
                 ),

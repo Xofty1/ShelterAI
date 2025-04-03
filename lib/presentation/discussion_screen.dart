@@ -18,7 +18,7 @@ class DiscussionScreen extends StatelessWidget {
       required this.seconds,
       required this.players});
 
-  void _showPlayersScreen(BuildContext context, List<Player> player) {
+  void _showPlayersScreen(BuildContext context, List<Player> players) {
     showDialog(
       context: context,
       builder: (BuildContext context) => PlayersListScreen(players: players),
