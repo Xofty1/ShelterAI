@@ -9,15 +9,9 @@ class GptRepositoryMock implements GptRepository {
   final Random _random = Random();
 
   @override
-  Future<Map<String, Object>> createGame(GameSettings settings) async {
-    Disaster disaster = await getDisaster(settings);
-    List<Player> players = await getPlayers(settings);
-    return {'disaster': disaster, 'player_list': players};
-  }
-
-  Future<Disaster> getDisaster(GameSettings settings) async {
+  Future<Disaster> createGame(GameSettings settings) async {
     // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(seconds: 20, milliseconds: 800));
 
     // List of random disasters
     final disasters = [
@@ -39,6 +33,7 @@ class GptRepositoryMock implements GptRepository {
           "Технический блок"
         ],
         resources: ["Еда", "Вода", "Медикаменты", "Инструменты", "Генератор"],
+        answer: 'Offline mode',
       ),
       const Disaster(
         name: "Пандемия",
@@ -63,6 +58,7 @@ class GptRepositoryMock implements GptRepository {
           "Еда",
           "Вода"
         ],
+        answer: 'Offline mode',
       ),
       const Disaster(
         name: "Климатическая катастрофа",
@@ -88,6 +84,7 @@ class GptRepositoryMock implements GptRepository {
           "Инструменты",
           "Запасы еды"
         ],
+        answer: 'Offline mode',
       ),
       const Disaster(
         name: "Восстание ИИ",
@@ -111,6 +108,7 @@ class GptRepositoryMock implements GptRepository {
           "Ручные генераторы",
           "Консервы"
         ],
+        answer: 'Offline mode',
       ),
       const Disaster(
         name: "Вторжение пришельцев",
@@ -136,6 +134,7 @@ class GptRepositoryMock implements GptRepository {
           "Провизия",
           "Медикаменты"
         ],
+        answer: 'Offline mode',
       ),
     ];
 
@@ -143,7 +142,8 @@ class GptRepositoryMock implements GptRepository {
     return disasters[_random.nextInt(disasters.length)];
   }
 
-  Future<List<Player>> getPlayers(GameSettings settings) async {
+  @override
+  Future<List<Player>> createPlayers(GameSettings settings, Disaster disaster) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1200));
 

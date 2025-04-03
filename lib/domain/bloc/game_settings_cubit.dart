@@ -51,9 +51,8 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     ));
 
     try{
-      final map = await repository.createGame(state.settings);
-      final Disaster disaster = map['disaster'] as Disaster;
-      final players = map['player_list'] as List<Player>;
+      final Disaster disaster = await repository.createGame(state.settings);
+      final List<Player> players = await repository.createPlayers(state.settings, disaster);
 
       emit(DisasterUploadedState(
         settings: state.settings,

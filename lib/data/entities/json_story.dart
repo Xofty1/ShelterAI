@@ -1,18 +1,21 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'json_decoder.freezed.dart';
-part 'json_decoder.g.dart';
+part 'json_story.freezed.dart';
+part 'json_story.g.dart';
 
 @freezed
 sealed class Story with _$Story{
   @JsonSerializable(explicitToJson: true)
   const factory Story({
-    required int player_amount,
+    @JsonKey(name: 'player_amount')
+    required int playerAmount,
     required String language,
-    required bool family_mode,
+    @JsonKey(name: 'family_mode')
+    required bool familyMode,
     required String wishes,
     required DisasterJs disaster,
-    required String short_description,
+    @JsonKey(name: 'short_description')
+    required String shortDescription,
     required Bunker bunker
   }) = _Story;
 
@@ -40,34 +43,9 @@ sealed class DisasterJs with _$DisasterJs{
     required String name,
     required String history,
     required String distribution,
-    required String world_situation
+    @JsonKey(name: 'world_situation')
+    required String worldSituation
   }) = _DisasterJs;
 
   factory DisasterJs.fromJson(Map<String, dynamic> json) => _$DisasterJsFromJson(json);
-}
-
-@freezed
-sealed class PlayersJs with _$PlayersJs{
-  @JsonSerializable(explicitToJson: true)
-  const factory PlayersJs({
-    required List<Map<String, dynamic>> player_cards,
-  }) = _PlayersJs;
-
-  factory PlayersJs.fromJson(Map<String, dynamic> json) => _$PlayersJsFromJson(json);
-}
-
-@freezed
-sealed class PlayerCard with _$PlayerCard{
-  @JsonSerializable(explicitToJson: true)
-  const factory PlayerCard({
-    required String profession,
-    required String age,
-    required String health,
-    required String hobby_skills,
-    required String phobias,
-    required String baggage,
-    required String additional_information
-  }) = _PlayerCard;
-
-  factory PlayerCard.fromJson(Map<String, dynamic> json) => _$PlayerCardFromJson(json);
 }

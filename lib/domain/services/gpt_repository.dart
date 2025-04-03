@@ -10,5 +10,9 @@ abstract interface class GptRepository {
   Future<String> getFinale(GameSettings settings, Disaster disaster,
       List<Player> alivePlayers, List<Player> kickedPlayer);
 
-  Future<Map<String, Object>> createGame(GameSettings settings);
+  Future<Disaster> createGame(GameSettings settings);
+
+  Future<List<Player>> createPlayers(GameSettings settings, Disaster disaster);
+
+  // Future<Disaster> createStory(GameSettings settings);
 }

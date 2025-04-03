@@ -7,10 +7,11 @@ import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/disaster.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
-import 'package:shelter_ai/data/entities/json_decoder.dart';
+import 'package:shelter_ai/data/entities/json_story.dart';
+import 'package:shelter_ai/data/entities/json_player.dart';
 
 class GptRepositoryImpl implements GptRepository {
-// Returns api key from file hidden_data.txt
+  // Returns api key from file hidden_data.txt
   Future<String> getApiKey() async {
     // Returns API_KEY, type String
     return dotenv.env['API_KEY'] ?? '';
@@ -159,10 +160,10 @@ class GptRepositoryImpl implements GptRepository {
         profession: playerInforamtion.profession,
         bio: playerInforamtion.age,
         health: playerInforamtion.health,
-        hobby: playerInforamtion.hobby_skills,
+        hobby: playerInforamtion.hobbySkills,
         phobia: playerInforamtion.phobias,
         luggage: playerInforamtion.baggage,
-        extra: playerInforamtion.additional_information,
+        extra: playerInforamtion.additionalInformation,
         lifeStatus: LifeStatus.alive,
         knownProperties: knownProperties,
         notes: notes);
@@ -171,18 +172,19 @@ class GptRepositoryImpl implements GptRepository {
   }
 
 // Creates a players from request
-  Future<List<Player>> createPlayers(String story, String difficulty,
-      Disaster disasterSample, int playersAmount) async {
+  @override
+  Future<List<Player>> createPlayers(GameSettings settings, Disaster disaster) async {
     // additionalInfo - Map object that will go in gptRequest
     // type - choice('player', 'story')
+    final difficulty = ['normal', 'medium', 'crazy'][settings.difficulty - 1];
     Map<String, String> additionalInfo = {
-      "story": story,
+      "story": disaster.answer,
       "difficulty": difficulty
     };
-    String type = 'player';
+    const type = 'player';
 
     // Sends request to Chat GPT 4o
-    String answer = await gptRequest(type, additionalInfo);
+    final answer = await gptRequest(type, additionalInfo);
 
     // Jsonifies response
     // playerInfo.keys: "player_cards"(Map<String, String>),
@@ -192,9 +194,9 @@ class GptRepositoryImpl implements GptRepository {
     List<Player> players = [];
 
     // In loop creates players
-    for (int i = 0; i < playersAmount; i++) {
+    for (int i = 0; i < settings.playersCount; i++) {
       Player player =
-          createPlayer(i + 1, playerInfo.player_cards[i], playersAmount);
+          createPlayer(i + 1, playerInfo.playerCards[i], settings.playersCount);
       players.add(player);
     }
 
@@ -203,14 +205,14 @@ class GptRepositoryImpl implements GptRepository {
 
 // Creates story for game
 // needs user wishes, user amount, user language and if they wanna play with family mode on
-  Future<List<Object>> createStory(
-      String wishes, int playerAmount, String language, bool familyMode) async {
+  @override
+  Future<Disaster> createGame(GameSettings settings) async {
     // Sets up additional information and type
     Map<String, String> additionalInfo = {
-      "wishes": wishes,
-      "player_amount": playerAmount.toString(),
-      "language": language,
-      "family_mode": familyMode.toString()
+      "wishes": settings.plot,
+      "player_amount": settings.playersCount.toString(),
+      "language": settings.language,
+      "family_mode": settings.safeMode.toString()
     };
     String type = 'story';
 
@@ -229,56 +231,54 @@ class GptRepositoryImpl implements GptRepository {
 
     // Sets parameters for Disaster object
     var disasterDesc = StringBuffer();
-    disasterDesc.writeAll([story.disaster.history, '\n', story.disaster.distribution, '\n', story.disaster.world_situation]);
+    disasterDesc.writeAll([story.disaster.history, '\n', story.disaster.distribution, '\n', story.disaster.worldSituation]);
     String disasterDescription = disasterDesc.toString();
-    int shelterCapacity = (playerAmount / 2 - 0.1).round();
+    int shelterCapacity = (settings.playersCount / 2 - 0.1).round();
 
     // Creates sample of Disaster object
     Disaster disasterSample = Disaster(
         name: story.disaster.name,
         disasterDescription: disasterDescription,
-        disasterShortDescription: story.short_description,
+        disasterShortDescription: story.shortDescription,
         shelterName: story.bunker.name,
         location: story.bunker.location,
         description: story.bunker.capacity,
         capacity: shelterCapacity,
         rooms: story.bunker.rooms,
-        resources: story.bunker.resources);
+        resources: story.bunker.resources,
+        answer: answer);
 
-    // Structs returnData in one variable
-    List<Object> returnData = [disasterSample, answer];
-
-    return returnData;
+    return disasterSample;
   }
 
 // Player amount(int), Language(String), family_mode(bool), wishes(String), difficulty(String)
 // Difficulty - choice('crazy', 'medium', 'normal')
 // Returns {'disaster': Disaster, 'players': List<Player>}
-  @override
+/*  @override
   Future<Map<String, Object>> createGame(GameSettings settings) async {
     // Gets answer from first request (Creating game story) and Gets Disaster object
     // response = [Disaster, String]
-    List<Object> response = await createStory(settings.plot,
-        settings.playersCount, settings.language, settings.safeMode);
+    // List<Object> response = await createStory(settings.plot,
+    //    settings.playersCount, settings.language, settings.safeMode);
 
     // Unpacks response into disasterSample and story
-    String? story = response[1] as String?;
-    Disaster? disasterSample = response[0] as Disaster?;
+    *//*String? story = response[1] as String?;
+    Disaster? disasterSample = response[0] as Disaster?;*//*
 
     // Gets answer from second request (Creating players for game)
     // response = [Player, Player, Player, ...] in general playerAmount
-    List<Player> playerList = await createPlayers(
+    *//*List<Player> playerList = await createPlayers(
         story!,
         ['normal', 'medium', 'crazy'][settings.difficulty - 1],
         disasterSample!,
-        settings.playersCount);
+        settings.playersCount);*//*
 
-    Map<String, Object> answer = {
-      'disaster': disasterSample,
-      'player_list': playerList
-    };
-    return answer;
-  }
+    // Map<String, Object> answer = {
+    //   'disaster': disasterSample,
+    //   'player_list': playerList
+    // };
+    // return answer;
+  }*/
 
 // Gets final from GPT
   @override

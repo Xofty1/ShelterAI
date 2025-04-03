@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'json_decoder.dart';
+part of 'json_story.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,12 +15,15 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Story {
-  int get player_amount;
+  @JsonKey(name: 'player_amount')
+  int get playerAmount;
   String get language;
-  bool get family_mode;
+  @JsonKey(name: 'family_mode')
+  bool get familyMode;
   String get wishes;
   DisasterJs get disaster;
-  String get short_description;
+  @JsonKey(name: 'short_description')
+  String get shortDescription;
   Bunker get bunker;
 
   /// Create a copy of Story
@@ -38,28 +41,28 @@ mixin _$Story {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Story &&
-            (identical(other.player_amount, player_amount) ||
-                other.player_amount == player_amount) &&
+            (identical(other.playerAmount, playerAmount) ||
+                other.playerAmount == playerAmount) &&
             (identical(other.language, language) ||
                 other.language == language) &&
-            (identical(other.family_mode, family_mode) ||
-                other.family_mode == family_mode) &&
+            (identical(other.familyMode, familyMode) ||
+                other.familyMode == familyMode) &&
             (identical(other.wishes, wishes) || other.wishes == wishes) &&
             (identical(other.disaster, disaster) ||
                 other.disaster == disaster) &&
-            (identical(other.short_description, short_description) ||
-                other.short_description == short_description) &&
+            (identical(other.shortDescription, shortDescription) ||
+                other.shortDescription == shortDescription) &&
             (identical(other.bunker, bunker) || other.bunker == bunker));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, player_amount, language,
-      family_mode, wishes, disaster, short_description, bunker);
+  int get hashCode => Object.hash(runtimeType, playerAmount, language,
+      familyMode, wishes, disaster, shortDescription, bunker);
 
   @override
   String toString() {
-    return 'Story(player_amount: $player_amount, language: $language, family_mode: $family_mode, wishes: $wishes, disaster: $disaster, short_description: $short_description, bunker: $bunker)';
+    return 'Story(playerAmount: $playerAmount, language: $language, familyMode: $familyMode, wishes: $wishes, disaster: $disaster, shortDescription: $shortDescription, bunker: $bunker)';
   }
 }
 
@@ -69,12 +72,12 @@ abstract mixin class $StoryCopyWith<$Res> {
       _$StoryCopyWithImpl;
   @useResult
   $Res call(
-      {int player_amount,
+      {@JsonKey(name: 'player_amount') int playerAmount,
       String language,
-      bool family_mode,
+      @JsonKey(name: 'family_mode') bool familyMode,
       String wishes,
       DisasterJs disaster,
-      String short_description,
+      @JsonKey(name: 'short_description') String shortDescription,
       Bunker bunker});
 
   $DisasterJsCopyWith<$Res> get disaster;
@@ -93,26 +96,26 @@ class _$StoryCopyWithImpl<$Res> implements $StoryCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? player_amount = null,
+    Object? playerAmount = null,
     Object? language = null,
-    Object? family_mode = null,
+    Object? familyMode = null,
     Object? wishes = null,
     Object? disaster = null,
-    Object? short_description = null,
+    Object? shortDescription = null,
     Object? bunker = null,
   }) {
     return _then(_self.copyWith(
-      player_amount: null == player_amount
-          ? _self.player_amount
-          : player_amount // ignore: cast_nullable_to_non_nullable
+      playerAmount: null == playerAmount
+          ? _self.playerAmount
+          : playerAmount // ignore: cast_nullable_to_non_nullable
               as int,
       language: null == language
           ? _self.language
           : language // ignore: cast_nullable_to_non_nullable
               as String,
-      family_mode: null == family_mode
-          ? _self.family_mode
-          : family_mode // ignore: cast_nullable_to_non_nullable
+      familyMode: null == familyMode
+          ? _self.familyMode
+          : familyMode // ignore: cast_nullable_to_non_nullable
               as bool,
       wishes: null == wishes
           ? _self.wishes
@@ -122,9 +125,9 @@ class _$StoryCopyWithImpl<$Res> implements $StoryCopyWith<$Res> {
           ? _self.disaster
           : disaster // ignore: cast_nullable_to_non_nullable
               as DisasterJs,
-      short_description: null == short_description
-          ? _self.short_description
-          : short_description // ignore: cast_nullable_to_non_nullable
+      shortDescription: null == shortDescription
+          ? _self.shortDescription
+          : shortDescription // ignore: cast_nullable_to_non_nullable
               as String,
       bunker: null == bunker
           ? _self.bunker
@@ -159,27 +162,30 @@ class _$StoryCopyWithImpl<$Res> implements $StoryCopyWith<$Res> {
 @JsonSerializable(explicitToJson: true)
 class _Story implements Story {
   const _Story(
-      {required this.player_amount,
+      {@JsonKey(name: 'player_amount') required this.playerAmount,
       required this.language,
-      required this.family_mode,
+      @JsonKey(name: 'family_mode') required this.familyMode,
       required this.wishes,
       required this.disaster,
-      required this.short_description,
+      @JsonKey(name: 'short_description') required this.shortDescription,
       required this.bunker});
   factory _Story.fromJson(Map<String, dynamic> json) => _$StoryFromJson(json);
 
   @override
-  final int player_amount;
+  @JsonKey(name: 'player_amount')
+  final int playerAmount;
   @override
   final String language;
   @override
-  final bool family_mode;
+  @JsonKey(name: 'family_mode')
+  final bool familyMode;
   @override
   final String wishes;
   @override
   final DisasterJs disaster;
   @override
-  final String short_description;
+  @JsonKey(name: 'short_description')
+  final String shortDescription;
   @override
   final Bunker bunker;
 
@@ -203,28 +209,28 @@ class _Story implements Story {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Story &&
-            (identical(other.player_amount, player_amount) ||
-                other.player_amount == player_amount) &&
+            (identical(other.playerAmount, playerAmount) ||
+                other.playerAmount == playerAmount) &&
             (identical(other.language, language) ||
                 other.language == language) &&
-            (identical(other.family_mode, family_mode) ||
-                other.family_mode == family_mode) &&
+            (identical(other.familyMode, familyMode) ||
+                other.familyMode == familyMode) &&
             (identical(other.wishes, wishes) || other.wishes == wishes) &&
             (identical(other.disaster, disaster) ||
                 other.disaster == disaster) &&
-            (identical(other.short_description, short_description) ||
-                other.short_description == short_description) &&
+            (identical(other.shortDescription, shortDescription) ||
+                other.shortDescription == shortDescription) &&
             (identical(other.bunker, bunker) || other.bunker == bunker));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, player_amount, language,
-      family_mode, wishes, disaster, short_description, bunker);
+  int get hashCode => Object.hash(runtimeType, playerAmount, language,
+      familyMode, wishes, disaster, shortDescription, bunker);
 
   @override
   String toString() {
-    return 'Story(player_amount: $player_amount, language: $language, family_mode: $family_mode, wishes: $wishes, disaster: $disaster, short_description: $short_description, bunker: $bunker)';
+    return 'Story(playerAmount: $playerAmount, language: $language, familyMode: $familyMode, wishes: $wishes, disaster: $disaster, shortDescription: $shortDescription, bunker: $bunker)';
   }
 }
 
@@ -235,12 +241,12 @@ abstract mixin class _$StoryCopyWith<$Res> implements $StoryCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int player_amount,
+      {@JsonKey(name: 'player_amount') int playerAmount,
       String language,
-      bool family_mode,
+      @JsonKey(name: 'family_mode') bool familyMode,
       String wishes,
       DisasterJs disaster,
-      String short_description,
+      @JsonKey(name: 'short_description') String shortDescription,
       Bunker bunker});
 
   @override
@@ -261,26 +267,26 @@ class __$StoryCopyWithImpl<$Res> implements _$StoryCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? player_amount = null,
+    Object? playerAmount = null,
     Object? language = null,
-    Object? family_mode = null,
+    Object? familyMode = null,
     Object? wishes = null,
     Object? disaster = null,
-    Object? short_description = null,
+    Object? shortDescription = null,
     Object? bunker = null,
   }) {
     return _then(_Story(
-      player_amount: null == player_amount
-          ? _self.player_amount
-          : player_amount // ignore: cast_nullable_to_non_nullable
+      playerAmount: null == playerAmount
+          ? _self.playerAmount
+          : playerAmount // ignore: cast_nullable_to_non_nullable
               as int,
       language: null == language
           ? _self.language
           : language // ignore: cast_nullable_to_non_nullable
               as String,
-      family_mode: null == family_mode
-          ? _self.family_mode
-          : family_mode // ignore: cast_nullable_to_non_nullable
+      familyMode: null == familyMode
+          ? _self.familyMode
+          : familyMode // ignore: cast_nullable_to_non_nullable
               as bool,
       wishes: null == wishes
           ? _self.wishes
@@ -290,9 +296,9 @@ class __$StoryCopyWithImpl<$Res> implements _$StoryCopyWith<$Res> {
           ? _self.disaster
           : disaster // ignore: cast_nullable_to_non_nullable
               as DisasterJs,
-      short_description: null == short_description
-          ? _self.short_description
-          : short_description // ignore: cast_nullable_to_non_nullable
+      shortDescription: null == shortDescription
+          ? _self.shortDescription
+          : shortDescription // ignore: cast_nullable_to_non_nullable
               as String,
       bunker: null == bunker
           ? _self.bunker
@@ -570,7 +576,8 @@ mixin _$DisasterJs {
   String get name;
   String get history;
   String get distribution;
-  String get world_situation;
+  @JsonKey(name: 'world_situation')
+  String get worldSituation;
 
   /// Create a copy of DisasterJs
   /// with the given fields replaced by the non-null parameter values.
@@ -591,18 +598,18 @@ mixin _$DisasterJs {
             (identical(other.history, history) || other.history == history) &&
             (identical(other.distribution, distribution) ||
                 other.distribution == distribution) &&
-            (identical(other.world_situation, world_situation) ||
-                other.world_situation == world_situation));
+            (identical(other.worldSituation, worldSituation) ||
+                other.worldSituation == worldSituation));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, name, history, distribution, world_situation);
+      Object.hash(runtimeType, name, history, distribution, worldSituation);
 
   @override
   String toString() {
-    return 'DisasterJs(name: $name, history: $history, distribution: $distribution, world_situation: $world_situation)';
+    return 'DisasterJs(name: $name, history: $history, distribution: $distribution, worldSituation: $worldSituation)';
   }
 }
 
@@ -616,7 +623,7 @@ abstract mixin class $DisasterJsCopyWith<$Res> {
       {String name,
       String history,
       String distribution,
-      String world_situation});
+      @JsonKey(name: 'world_situation') String worldSituation});
 }
 
 /// @nodoc
@@ -634,7 +641,7 @@ class _$DisasterJsCopyWithImpl<$Res> implements $DisasterJsCopyWith<$Res> {
     Object? name = null,
     Object? history = null,
     Object? distribution = null,
-    Object? world_situation = null,
+    Object? worldSituation = null,
   }) {
     return _then(_self.copyWith(
       name: null == name
@@ -649,9 +656,9 @@ class _$DisasterJsCopyWithImpl<$Res> implements $DisasterJsCopyWith<$Res> {
           ? _self.distribution
           : distribution // ignore: cast_nullable_to_non_nullable
               as String,
-      world_situation: null == world_situation
-          ? _self.world_situation
-          : world_situation // ignore: cast_nullable_to_non_nullable
+      worldSituation: null == worldSituation
+          ? _self.worldSituation
+          : worldSituation // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -665,7 +672,7 @@ class _DisasterJs implements DisasterJs {
       {required this.name,
       required this.history,
       required this.distribution,
-      required this.world_situation});
+      @JsonKey(name: 'world_situation') required this.worldSituation});
   factory _DisasterJs.fromJson(Map<String, dynamic> json) =>
       _$DisasterJsFromJson(json);
 
@@ -676,7 +683,8 @@ class _DisasterJs implements DisasterJs {
   @override
   final String distribution;
   @override
-  final String world_situation;
+  @JsonKey(name: 'world_situation')
+  final String worldSituation;
 
   /// Create a copy of DisasterJs
   /// with the given fields replaced by the non-null parameter values.
@@ -702,18 +710,18 @@ class _DisasterJs implements DisasterJs {
             (identical(other.history, history) || other.history == history) &&
             (identical(other.distribution, distribution) ||
                 other.distribution == distribution) &&
-            (identical(other.world_situation, world_situation) ||
-                other.world_situation == world_situation));
+            (identical(other.worldSituation, worldSituation) ||
+                other.worldSituation == worldSituation));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, name, history, distribution, world_situation);
+      Object.hash(runtimeType, name, history, distribution, worldSituation);
 
   @override
   String toString() {
-    return 'DisasterJs(name: $name, history: $history, distribution: $distribution, world_situation: $world_situation)';
+    return 'DisasterJs(name: $name, history: $history, distribution: $distribution, worldSituation: $worldSituation)';
   }
 }
 
@@ -729,7 +737,7 @@ abstract mixin class _$DisasterJsCopyWith<$Res>
       {String name,
       String history,
       String distribution,
-      String world_situation});
+      @JsonKey(name: 'world_situation') String worldSituation});
 }
 
 /// @nodoc
@@ -747,7 +755,7 @@ class __$DisasterJsCopyWithImpl<$Res> implements _$DisasterJsCopyWith<$Res> {
     Object? name = null,
     Object? history = null,
     Object? distribution = null,
-    Object? world_situation = null,
+    Object? worldSituation = null,
   }) {
     return _then(_DisasterJs(
       name: null == name
@@ -762,421 +770,9 @@ class __$DisasterJsCopyWithImpl<$Res> implements _$DisasterJsCopyWith<$Res> {
           ? _self.distribution
           : distribution // ignore: cast_nullable_to_non_nullable
               as String,
-      world_situation: null == world_situation
-          ? _self.world_situation
-          : world_situation // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-mixin _$PlayersJs {
-  List<Map<String, dynamic>> get player_cards;
-
-  /// Create a copy of PlayersJs
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $PlayersJsCopyWith<PlayersJs> get copyWith =>
-      _$PlayersJsCopyWithImpl<PlayersJs>(this as PlayersJs, _$identity);
-
-  /// Serializes this PlayersJs to a JSON map.
-  Map<String, dynamic> toJson();
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is PlayersJs &&
-            const DeepCollectionEquality()
-                .equals(other.player_cards, player_cards));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(player_cards));
-
-  @override
-  String toString() {
-    return 'PlayersJs(player_cards: $player_cards)';
-  }
-}
-
-/// @nodoc
-abstract mixin class $PlayersJsCopyWith<$Res> {
-  factory $PlayersJsCopyWith(PlayersJs value, $Res Function(PlayersJs) _then) =
-      _$PlayersJsCopyWithImpl;
-  @useResult
-  $Res call({List<Map<String, dynamic>> player_cards});
-}
-
-/// @nodoc
-class _$PlayersJsCopyWithImpl<$Res> implements $PlayersJsCopyWith<$Res> {
-  _$PlayersJsCopyWithImpl(this._self, this._then);
-
-  final PlayersJs _self;
-  final $Res Function(PlayersJs) _then;
-
-  /// Create a copy of PlayersJs
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? player_cards = null,
-  }) {
-    return _then(_self.copyWith(
-      player_cards: null == player_cards
-          ? _self.player_cards
-          : player_cards // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(explicitToJson: true)
-class _PlayersJs implements PlayersJs {
-  const _PlayersJs({required final List<Map<String, dynamic>> player_cards})
-      : _player_cards = player_cards;
-  factory _PlayersJs.fromJson(Map<String, dynamic> json) =>
-      _$PlayersJsFromJson(json);
-
-  final List<Map<String, dynamic>> _player_cards;
-  @override
-  List<Map<String, dynamic>> get player_cards {
-    if (_player_cards is EqualUnmodifiableListView) return _player_cards;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_player_cards);
-  }
-
-  /// Create a copy of PlayersJs
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$PlayersJsCopyWith<_PlayersJs> get copyWith =>
-      __$PlayersJsCopyWithImpl<_PlayersJs>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$PlayersJsToJson(
-      this,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _PlayersJs &&
-            const DeepCollectionEquality()
-                .equals(other._player_cards, _player_cards));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_player_cards));
-
-  @override
-  String toString() {
-    return 'PlayersJs(player_cards: $player_cards)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$PlayersJsCopyWith<$Res>
-    implements $PlayersJsCopyWith<$Res> {
-  factory _$PlayersJsCopyWith(
-          _PlayersJs value, $Res Function(_PlayersJs) _then) =
-      __$PlayersJsCopyWithImpl;
-  @override
-  @useResult
-  $Res call({List<Map<String, dynamic>> player_cards});
-}
-
-/// @nodoc
-class __$PlayersJsCopyWithImpl<$Res> implements _$PlayersJsCopyWith<$Res> {
-  __$PlayersJsCopyWithImpl(this._self, this._then);
-
-  final _PlayersJs _self;
-  final $Res Function(_PlayersJs) _then;
-
-  /// Create a copy of PlayersJs
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? player_cards = null,
-  }) {
-    return _then(_PlayersJs(
-      player_cards: null == player_cards
-          ? _self._player_cards
-          : player_cards // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>,
-    ));
-  }
-}
-
-/// @nodoc
-mixin _$PlayerCard {
-  String get profession;
-  String get age;
-  String get health;
-  String get hobby_skills;
-  String get phobias;
-  String get baggage;
-  String get additional_information;
-
-  /// Create a copy of PlayerCard
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $PlayerCardCopyWith<PlayerCard> get copyWith =>
-      _$PlayerCardCopyWithImpl<PlayerCard>(this as PlayerCard, _$identity);
-
-  /// Serializes this PlayerCard to a JSON map.
-  Map<String, dynamic> toJson();
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is PlayerCard &&
-            (identical(other.profession, profession) ||
-                other.profession == profession) &&
-            (identical(other.age, age) || other.age == age) &&
-            (identical(other.health, health) || other.health == health) &&
-            (identical(other.hobby_skills, hobby_skills) ||
-                other.hobby_skills == hobby_skills) &&
-            (identical(other.phobias, phobias) || other.phobias == phobias) &&
-            (identical(other.baggage, baggage) || other.baggage == baggage) &&
-            (identical(other.additional_information, additional_information) ||
-                other.additional_information == additional_information));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, profession, age, health,
-      hobby_skills, phobias, baggage, additional_information);
-
-  @override
-  String toString() {
-    return 'PlayerCard(profession: $profession, age: $age, health: $health, hobby_skills: $hobby_skills, phobias: $phobias, baggage: $baggage, additional_information: $additional_information)';
-  }
-}
-
-/// @nodoc
-abstract mixin class $PlayerCardCopyWith<$Res> {
-  factory $PlayerCardCopyWith(
-          PlayerCard value, $Res Function(PlayerCard) _then) =
-      _$PlayerCardCopyWithImpl;
-  @useResult
-  $Res call(
-      {String profession,
-      String age,
-      String health,
-      String hobby_skills,
-      String phobias,
-      String baggage,
-      String additional_information});
-}
-
-/// @nodoc
-class _$PlayerCardCopyWithImpl<$Res> implements $PlayerCardCopyWith<$Res> {
-  _$PlayerCardCopyWithImpl(this._self, this._then);
-
-  final PlayerCard _self;
-  final $Res Function(PlayerCard) _then;
-
-  /// Create a copy of PlayerCard
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? profession = null,
-    Object? age = null,
-    Object? health = null,
-    Object? hobby_skills = null,
-    Object? phobias = null,
-    Object? baggage = null,
-    Object? additional_information = null,
-  }) {
-    return _then(_self.copyWith(
-      profession: null == profession
-          ? _self.profession
-          : profession // ignore: cast_nullable_to_non_nullable
-              as String,
-      age: null == age
-          ? _self.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as String,
-      health: null == health
-          ? _self.health
-          : health // ignore: cast_nullable_to_non_nullable
-              as String,
-      hobby_skills: null == hobby_skills
-          ? _self.hobby_skills
-          : hobby_skills // ignore: cast_nullable_to_non_nullable
-              as String,
-      phobias: null == phobias
-          ? _self.phobias
-          : phobias // ignore: cast_nullable_to_non_nullable
-              as String,
-      baggage: null == baggage
-          ? _self.baggage
-          : baggage // ignore: cast_nullable_to_non_nullable
-              as String,
-      additional_information: null == additional_information
-          ? _self.additional_information
-          : additional_information // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-@JsonSerializable(explicitToJson: true)
-class _PlayerCard implements PlayerCard {
-  const _PlayerCard(
-      {required this.profession,
-      required this.age,
-      required this.health,
-      required this.hobby_skills,
-      required this.phobias,
-      required this.baggage,
-      required this.additional_information});
-  factory _PlayerCard.fromJson(Map<String, dynamic> json) =>
-      _$PlayerCardFromJson(json);
-
-  @override
-  final String profession;
-  @override
-  final String age;
-  @override
-  final String health;
-  @override
-  final String hobby_skills;
-  @override
-  final String phobias;
-  @override
-  final String baggage;
-  @override
-  final String additional_information;
-
-  /// Create a copy of PlayerCard
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$PlayerCardCopyWith<_PlayerCard> get copyWith =>
-      __$PlayerCardCopyWithImpl<_PlayerCard>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$PlayerCardToJson(
-      this,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _PlayerCard &&
-            (identical(other.profession, profession) ||
-                other.profession == profession) &&
-            (identical(other.age, age) || other.age == age) &&
-            (identical(other.health, health) || other.health == health) &&
-            (identical(other.hobby_skills, hobby_skills) ||
-                other.hobby_skills == hobby_skills) &&
-            (identical(other.phobias, phobias) || other.phobias == phobias) &&
-            (identical(other.baggage, baggage) || other.baggage == baggage) &&
-            (identical(other.additional_information, additional_information) ||
-                other.additional_information == additional_information));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, profession, age, health,
-      hobby_skills, phobias, baggage, additional_information);
-
-  @override
-  String toString() {
-    return 'PlayerCard(profession: $profession, age: $age, health: $health, hobby_skills: $hobby_skills, phobias: $phobias, baggage: $baggage, additional_information: $additional_information)';
-  }
-}
-
-/// @nodoc
-abstract mixin class _$PlayerCardCopyWith<$Res>
-    implements $PlayerCardCopyWith<$Res> {
-  factory _$PlayerCardCopyWith(
-          _PlayerCard value, $Res Function(_PlayerCard) _then) =
-      __$PlayerCardCopyWithImpl;
-  @override
-  @useResult
-  $Res call(
-      {String profession,
-      String age,
-      String health,
-      String hobby_skills,
-      String phobias,
-      String baggage,
-      String additional_information});
-}
-
-/// @nodoc
-class __$PlayerCardCopyWithImpl<$Res> implements _$PlayerCardCopyWith<$Res> {
-  __$PlayerCardCopyWithImpl(this._self, this._then);
-
-  final _PlayerCard _self;
-  final $Res Function(_PlayerCard) _then;
-
-  /// Create a copy of PlayerCard
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? profession = null,
-    Object? age = null,
-    Object? health = null,
-    Object? hobby_skills = null,
-    Object? phobias = null,
-    Object? baggage = null,
-    Object? additional_information = null,
-  }) {
-    return _then(_PlayerCard(
-      profession: null == profession
-          ? _self.profession
-          : profession // ignore: cast_nullable_to_non_nullable
-              as String,
-      age: null == age
-          ? _self.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as String,
-      health: null == health
-          ? _self.health
-          : health // ignore: cast_nullable_to_non_nullable
-              as String,
-      hobby_skills: null == hobby_skills
-          ? _self.hobby_skills
-          : hobby_skills // ignore: cast_nullable_to_non_nullable
-              as String,
-      phobias: null == phobias
-          ? _self.phobias
-          : phobias // ignore: cast_nullable_to_non_nullable
-              as String,
-      baggage: null == baggage
-          ? _self.baggage
-          : baggage // ignore: cast_nullable_to_non_nullable
-              as String,
-      additional_information: null == additional_information
-          ? _self.additional_information
-          : additional_information // ignore: cast_nullable_to_non_nullable
+      worldSituation: null == worldSituation
+          ? _self.worldSituation
+          : worldSituation // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
