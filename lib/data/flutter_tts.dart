@@ -9,11 +9,11 @@ enum TtsState { playing, stopped, paused, continued }
 class Tts {
   // Sets default values for Tts
   late FlutterTts flutterTts;
-  String language = "Русский";
+  String language = "ru";
   String? engine;
   double volume = 0.5;
-  double pitch = 1.0;
-  double rate = 0.5;
+  final pitch = 1.0;
+  final rate = 0.9;
   bool isCurrentLanguageInstalled = false;
 
   String? _VoiceText;
@@ -46,38 +46,28 @@ class Tts {
     }
 
     // Creates Handlers
-    flutterTts.setStartHandler(() {() {
+    flutterTts.setStartHandler(() {
       ttsState = TtsState.playing;
-    };
     });
 
     flutterTts.setCompletionHandler(() {
-          () {
         ttsState = TtsState.stopped;
-      };
     });
 
-    flutterTts.setCancelHandler(() {() {
+    flutterTts.setCancelHandler(() {
       ttsState = TtsState.stopped;
-    };
     });
 
     flutterTts.setPauseHandler(() {
-          () {
         ttsState = TtsState.paused;
-      };
     });
 
     flutterTts.setContinueHandler(() {
-          () {
         ttsState = TtsState.continued;
-      };
     });
 
     flutterTts.setErrorHandler((msg) {
-          () {
         ttsState = TtsState.stopped;
-      };
     });
   }
 
@@ -87,13 +77,11 @@ class Tts {
 
 
   Future<void> _getDefaultEngine() async {
-    var engine = await flutterTts.getDefaultEngine;
-    if (engine != null) {}
+    await flutterTts.getDefaultEngine;
   }
 
   Future<void> _getDefaultVoice() async {
-    var voice = await flutterTts.getDefaultVoice;
-    if (voice != null) {}
+    await flutterTts.getDefaultVoice;
   }
 
   // Updates settings
@@ -104,10 +92,8 @@ class Tts {
   // Function that plays _VoiceText
   Future<void> _speak() async {
     Future.delayed(const Duration(seconds: 1, milliseconds: 500));
-    if (_VoiceText != null) {
-      if (_VoiceText!.isNotEmpty) {
-        await flutterTts.speak(_VoiceText!);
-      }
+    if (_VoiceText != null && _VoiceText!.isNotEmpty) {
+      await flutterTts.speak(_VoiceText!);
     }
   }
 
@@ -131,8 +117,8 @@ class Tts {
   void _updateLanguage(String? lang) {
     // Reforms it
     switch (lang) {
-      case "English": lang = "en-US"; break;
-      case "Русский": lang = "ru-RU"; break;
+      case "en": lang = "en-US"; break;
+      case "ru": lang = "ru-RU"; break;
       default: throw(Error);
     }
     language = lang;

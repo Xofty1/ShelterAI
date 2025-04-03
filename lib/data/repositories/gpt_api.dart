@@ -135,6 +135,7 @@ class GptRepositoryImpl implements GptRepository {
     );
 
     // Creates request to GPT 4o, asking for JSON answer and giving the request
+
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
       model: "gpt-4o",
@@ -173,7 +174,8 @@ class GptRepositoryImpl implements GptRepository {
 
 // Creates a players from request
   @override
-  Future<List<Player>> createPlayers(GameSettings settings, Disaster disaster) async {
+  Future<List<Player>> createPlayers(
+      GameSettings settings, Disaster disaster) async {
     // additionalInfo - Map object that will go in gptRequest
     // type - choice('player', 'story')
     final difficulty = ['normal', 'medium', 'crazy'][settings.difficulty - 1];
@@ -231,7 +233,13 @@ class GptRepositoryImpl implements GptRepository {
 
     // Sets parameters for Disaster object
     var disasterDesc = StringBuffer();
-    disasterDesc.writeAll([story.disaster.history, '\n', story.disaster.distribution, '\n', story.disaster.worldSituation]);
+    disasterDesc.writeAll([
+      story.disaster.history,
+      '\n',
+      story.disaster.distribution,
+      '\n',
+      story.disaster.worldSituation
+    ]);
     String disasterDescription = disasterDesc.toString();
     int shelterCapacity = (settings.playersCount / 2 - 0.1).round();
 
@@ -262,16 +270,16 @@ class GptRepositoryImpl implements GptRepository {
     //    settings.playersCount, settings.language, settings.safeMode);
 
     // Unpacks response into disasterSample and story
-    *//*String? story = response[1] as String?;
-    Disaster? disasterSample = response[0] as Disaster?;*//*
+    */ /*String? story = response[1] as String?;
+    Disaster? disasterSample = response[0] as Disaster?;*/ /*
 
     // Gets answer from second request (Creating players for game)
     // response = [Player, Player, Player, ...] in general playerAmount
-    *//*List<Player> playerList = await createPlayers(
+    */ /*List<Player> playerList = await createPlayers(
         story!,
         ['normal', 'medium', 'crazy'][settings.difficulty - 1],
         disasterSample!,
-        settings.playersCount);*//*
+        settings.playersCount);*/ /*
 
     // Map<String, Object> answer = {
     //   'disaster': disasterSample,
