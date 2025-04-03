@@ -12,7 +12,6 @@ import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
 import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
-
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
 import '../../l10n/l10n.dart';
@@ -31,7 +30,7 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
   void didChangeDependencies() {
     if (!gameSettingsDepHolder.isCreated) {
       final globalDepContainer =
-          RepositoryProvider.of<GlobalDepHolder>(context).container!;
+      RepositoryProvider.of<GlobalDepHolder>(context).container!;
       gameSettingsDepHolder.create(globalDepContainer);
     }
     super.didChangeDependencies();
@@ -68,6 +67,9 @@ class GameSettingsScreen extends StatefulWidget {
 class _GameSettingsScreenState extends State<GameSettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    const headerColor = Color(0xFFB8A876);
+    const headerTextColor = Color(0xFF482020);
+
     final loc = AppLocalizations.of(context);
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
@@ -84,17 +86,37 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         builder: (context, state) {
           return Scaffold(
             body: state is DisasterLoadingState ||
-                    state is DisasterUploadedState
+                state is DisasterUploadedState
                 ? const LoaderScreen()
                 : DecoratedBox(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Color(0xFF8B7355), Color(0xFFD1A881)],
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF8B7355), Color(0xFFD1A881)],
+                ),
+              ),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    // Заголовок (прилипший к верху экрана)
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      width: double.infinity,
+                      color: headerColor,
+                      child: const Center(
+                        child: Text(
+                          'Настройка игры',
+                          style: TextStyle(
+                            color: headerTextColor,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                    child: SafeArea(
+                    // Основной контент с прокруткой
+                    Expanded(
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
@@ -124,9 +146,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                           min: 4,
                                           max: 22,
                                           onChange: (value) => BlocProvider.of<
-                                                  GameSettingsCubit>(context)
+                                              GameSettingsCubit>(context)
                                               .updatePlayersCount(
-                                                  value.toInt()),
+                                              value.toInt()),
                                         ),
                                       ),
                                     ],
@@ -138,25 +160,25 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   _buildSettingHeader(loc.difficultySetting),
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       _buildDifficultyButton(
                                           loc.difficultyClassic,
                                           state.settings.difficulty == 1,
-                                          () => BlocProvider.of<
-                                                  GameSettingsCubit>(context)
+                                              () => BlocProvider.of<
+                                              GameSettingsCubit>(context)
                                               .updateDifficulty(1)),
                                       _buildDifficultyButton(
                                           loc.difficultyHardcore,
                                           state.settings.difficulty == 2,
-                                          () => BlocProvider.of<
-                                                  GameSettingsCubit>(context)
+                                              () => BlocProvider.of<
+                                              GameSettingsCubit>(context)
                                               .updateDifficulty(2)),
                                       _buildDifficultyButton(
                                           loc.difficultyInsanity,
                                           state.settings.difficulty == 3,
-                                          () => BlocProvider.of<
-                                                  GameSettingsCubit>(context)
+                                              () => BlocProvider.of<
+                                              GameSettingsCubit>(context)
                                               .updateDifficulty(3)),
                                     ],
                                   ),
@@ -166,7 +188,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   _buildSettingHeader(loc.gameTone),
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       LabelWidget(
                                         text: loc.familyFriendly,
@@ -175,7 +197,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                         initialValue: state.settings.safeMode,
                                         onToggle: (value) {
                                           BlocProvider.of<GameSettingsCubit>(
-                                                  context)
+                                              context)
                                               .updateSafeMode(value);
                                         },
                                       ),
@@ -207,7 +229,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   _buildSettingHeader(loc.time),
                                   Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -225,8 +247,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                               min: 30,
                                               max: 120,
                                               onChange: (value) => BlocProvider
-                                                      .of<GameSettingsCubit>(
-                                                          context)
+                                                  .of<GameSettingsCubit>(
+                                                  context)
                                                   .updateTime(value.toInt()),
                                             ),
                                           ),
@@ -240,7 +262,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   // Random mode
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       _buildToneButton(loc.random, false, () {
                                         // Random mode can be added to your GameSettings model
@@ -275,7 +297,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                         ),
                       ),
                     ),
-                  ),
+                  ],
+                ),
+              ),
+            ),
           );
         },
       ),
