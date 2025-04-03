@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/info_row.dart';
 
+import '../../l10n/l10n.dart';
+
 class SettingsDialog extends StatelessWidget {
   final GameSettings settings;
 
@@ -12,6 +14,7 @@ class SettingsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),

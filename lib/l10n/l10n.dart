@@ -257,6 +257,12 @@ abstract class AppLocalizations {
   /// **'Информация'**
   String get information;
 
+  /// No description provided for @difficulty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сложность'**
+  String get difficulty;
+
   /// No description provided for @difficultyClassic.
   ///
   /// In ru, this message translates to:
@@ -281,12 +287,6 @@ abstract class AppLocalizations {
   /// **'Количество: {count}'**
   String count(Object count);
 
-  /// No description provided for @difficulty.
-  ///
-  /// In ru, this message translates to:
-  /// **'Сложность: {level}'**
-  String difficulty(Object level);
-
   /// No description provided for @startGame.
   ///
   /// In ru, this message translates to:
@@ -310,6 +310,150 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Загрузка...'**
   String get loading;
+
+  /// No description provided for @goBack.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вернуться'**
+  String get goBack;
+
+  /// No description provided for @rulesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Правила игры'**
+  String get rulesTitle;
+
+  /// No description provided for @gameTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Игра \"Бункер\"'**
+  String get gameTitle;
+
+  /// No description provided for @gameDescription.
+  ///
+  /// In ru, this message translates to:
+  /// **'Популярная социально-стратегическая игра, в которой участники должны убедить остальных, что именно они достойны места в бункере после глобальной катастрофы.'**
+  String get gameDescription;
+
+  /// No description provided for @disasterScenario.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сценарий катастрофы'**
+  String get disasterScenario;
+
+  /// No description provided for @disasterScenarioDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'В начале игры объявляется тип апокалипсиса (ядерная война, пандемия, падение астероида и т.д.), что влияет на стратегию выживания.'**
+  String get disasterScenarioDesc;
+
+  /// No description provided for @characterRoles.
+  ///
+  /// In ru, this message translates to:
+  /// **'Раздача ролей и характеристик'**
+  String get characterRoles;
+
+  /// No description provided for @characterRolesDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Каждый игрок получает случайные параметры:'**
+  String get characterRolesDesc;
+
+  /// No description provided for @profession.
+  ///
+  /// In ru, this message translates to:
+  /// **'Профессия (врач, инженер, военный, учитель и т.д.)'**
+  String get profession;
+
+  /// No description provided for @age.
+  ///
+  /// In ru, this message translates to:
+  /// **'Возраст (может влиять на физические возможности)'**
+  String get age;
+
+  /// No description provided for @health.
+  ///
+  /// In ru, this message translates to:
+  /// **'Здоровье (хронические болезни, инвалидность, отличная форма)'**
+  String get health;
+
+  /// No description provided for @hobbies.
+  ///
+  /// In ru, this message translates to:
+  /// **'Хобби/навыки (может быть полезным или бесполезным в бункере)'**
+  String get hobbies;
+
+  /// No description provided for @phobias.
+  ///
+  /// In ru, this message translates to:
+  /// **'Фобии (страхи, которые могут помешать выживанию)'**
+  String get phobias;
+
+  /// No description provided for @luggage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Багаж (предмет, который игрок взял с собой, например, оружие, аптечка, книги)'**
+  String get luggage;
+
+  /// No description provided for @additionalInfo.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дополнительная информация (например, беременность, криминальное прошлое)'**
+  String get additionalInfo;
+
+  /// No description provided for @discussionDebate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обсуждение и дебаты'**
+  String get discussionDebate;
+
+  /// No description provided for @discussionDebateDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Процесс принятия решений:'**
+  String get discussionDebateDesc;
+
+  /// No description provided for @discussionDebatePoint1.
+  ///
+  /// In ru, this message translates to:
+  /// **'Игроки по очереди рассказывают о себе и доказывают, почему их нужно оставить в бункере'**
+  String get discussionDebatePoint1;
+
+  /// No description provided for @discussionDebatePoint2.
+  ///
+  /// In ru, this message translates to:
+  /// **'Можно задавать друг другу вопросы, выявлять слабые стороны'**
+  String get discussionDebatePoint2;
+
+  /// No description provided for @votingTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Голосование'**
+  String get votingTitle;
+
+  /// No description provided for @votingDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбор выживших:'**
+  String get votingDesc;
+
+  /// No description provided for @votingPoint1.
+  ///
+  /// In ru, this message translates to:
+  /// **'После обсуждения участники голосуют, кого выгнать из бункера'**
+  String get votingPoint1;
+
+  /// No description provided for @votingPoint2.
+  ///
+  /// In ru, this message translates to:
+  /// **'В некоторых версиях можно голосовать за нескольких игроков'**
+  String get votingPoint2;
+
+  /// No description provided for @votingPoint3.
+  ///
+  /// In ru, this message translates to:
+  /// **'Процесс повторяется, пока не останется нужное количество выживших'**
+  String get votingPoint3;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

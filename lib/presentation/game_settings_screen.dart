@@ -76,6 +76,11 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
         builder: (context, state) {
           return Scaffold(
+            appBar: AppBar(
+              backgroundColor: const Color(0xFFD3C0AA),
+              title: Text(loc.game_settings),
+              centerTitle: true,
+            ),
             body: state is DisasterLoadingState ||
                     state is DisasterUploadedState
                 ? const LoaderScreen()
@@ -91,7 +96,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 20),
+                            horizontal: 12, vertical: 16),
                         child: Column(
                           children: [
                             // Main settings container
@@ -115,7 +120,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                               .settings.playersCount
                                               .toDouble(),
                                           min: 4,
-                                          max: 22,
+                                          max: 16,
                                           onChange: (value) => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updatePlayersCount(
@@ -128,7 +133,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Difficulty
-                                  _buildSettingHeader("Сложность"),
+                                  _buildSettingHeader(loc.difficulty),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,

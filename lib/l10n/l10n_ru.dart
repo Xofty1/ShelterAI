@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -92,6 +90,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get information => 'Информация';
 
   @override
+  String get difficulty => 'Сложность';
+
+  @override
   String get difficultyClassic => 'Классика';
 
   @override
@@ -106,11 +107,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String difficulty(Object level) {
-    return 'Сложность: $level';
-  }
-
-  @override
   String get startGame => 'Начать игру';
 
   @override
@@ -121,4 +117,76 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get loading => 'Загрузка...';
+
+  @override
+  String get goBack => 'Вернуться';
+
+  @override
+  String get rulesTitle => 'Правила игры';
+
+  @override
+  String get gameTitle => 'Игра \"Бункер\"';
+
+  @override
+  String get gameDescription => 'Популярная социально-стратегическая игра, в которой участники должны убедить остальных, что именно они достойны места в бункере после глобальной катастрофы.';
+
+  @override
+  String get disasterScenario => 'Сценарий катастрофы';
+
+  @override
+  String get disasterScenarioDesc => 'В начале игры объявляется тип апокалипсиса (ядерная война, пандемия, падение астероида и т.д.), что влияет на стратегию выживания.';
+
+  @override
+  String get characterRoles => 'Раздача ролей и характеристик';
+
+  @override
+  String get characterRolesDesc => 'Каждый игрок получает случайные параметры:';
+
+  @override
+  String get profession => 'Профессия (врач, инженер, военный, учитель и т.д.)';
+
+  @override
+  String get age => 'Возраст (может влиять на физические возможности)';
+
+  @override
+  String get health => 'Здоровье (хронические болезни, инвалидность, отличная форма)';
+
+  @override
+  String get hobbies => 'Хобби/навыки (может быть полезным или бесполезным в бункере)';
+
+  @override
+  String get phobias => 'Фобии (страхи, которые могут помешать выживанию)';
+
+  @override
+  String get luggage => 'Багаж (предмет, который игрок взял с собой, например, оружие, аптечка, книги)';
+
+  @override
+  String get additionalInfo => 'Дополнительная информация (например, беременность, криминальное прошлое)';
+
+  @override
+  String get discussionDebate => 'Обсуждение и дебаты';
+
+  @override
+  String get discussionDebateDesc => 'Процесс принятия решений:';
+
+  @override
+  String get discussionDebatePoint1 => 'Игроки по очереди рассказывают о себе и доказывают, почему их нужно оставить в бункере';
+
+  @override
+  String get discussionDebatePoint2 => 'Можно задавать друг другу вопросы, выявлять слабые стороны';
+
+  @override
+  String get votingTitle => 'Голосование';
+
+  @override
+  String get votingDesc => 'Выбор выживших:';
+
+  @override
+  String get votingPoint1 => 'После обсуждения участники голосуют, кого выгнать из бункера';
+
+  @override
+  String get votingPoint2 => 'В некоторых версиях можно голосовать за нескольких игроков';
+
+  @override
+  String get votingPoint3 => 'Процесс повторяется, пока не останется нужное количество выживших';
 }
