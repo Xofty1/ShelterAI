@@ -78,43 +78,65 @@ class PlayerCardDetail extends StatelessWidget {
           ),
         ],
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFD9D9D9),
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(
-                    color: const Color(0xFF6B5642),
-                    width: 3,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Column(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD9D9D9),
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      color: const Color(0xFF6B5642),
+                      width: 3,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    size: 60,
+                    color: Color(0xFF6B5642),
                   ),
                 ),
-                child: const Icon(
-                  Icons.person,
-                  size: 60,
-                  color: Color(0xFF6B5642),
+                const SizedBox(height: 8),
+                Text(
+                  player.name,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF6B5642),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 8),
+                Text(
+                  player.profession,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF6B5642),
+                  ),
+                )
+              ],
             ),
-            const SizedBox(height: 24),
-            _buildInfoSection("Возраст", player.bio, player.knownProperties[0]),
-            const SizedBox(height: 16),
-            _buildInfoSection("Здоровье", player.health, player.knownProperties[1]),
-            const SizedBox(height: 16),
-            _buildInfoSection("Хобби/Навыки", player.hobby, player.knownProperties[2]),
-            const SizedBox(height: 16),
-            _buildInfoSection("Фобии", player.phobia, player.knownProperties[3]),
-            const SizedBox(height: 16),
-            _buildInfoSection("Багаж", player.luggage, player.knownProperties[4]),
-            const SizedBox(height: 16),
-            _buildInfoSection("Дополнительная информация", player.extra, player.knownProperties[5]),
-          ],
-        ),
+          ),
+          const SizedBox(height: 24),
+          _buildInfoSection("Возраст", player.bio, player.knownProperties[0]),
+          const SizedBox(height: 16),
+          _buildInfoSection("Здоровье", player.health, player.knownProperties[1]),
+          const SizedBox(height: 16),
+          _buildInfoSection("Хобби/Навыки", player.hobby, player.knownProperties[2]),
+          const SizedBox(height: 16),
+          _buildInfoSection("Фобии", player.phobia, player.knownProperties[3]),
+          const SizedBox(height: 16),
+          _buildInfoSection("Багаж", player.luggage, player.knownProperties[4]),
+          const SizedBox(height: 16),
+          _buildInfoSection(
+              "Дополнительная информация"
+              , player.extra, player.knownProperties[5]),
+        ],
       ),
     );
   }
