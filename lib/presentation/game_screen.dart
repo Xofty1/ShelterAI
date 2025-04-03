@@ -22,7 +22,6 @@ import '../l10n/l10n.dart';
 import 'game_finish_screen.dart';
 import 'game_round_screen.dart';
 import 'game_votting_screen.dart';
-import '../../l10n/l10n.dart';
 
 class GameScreenWidget extends StatefulWidget {
   const GameScreenWidget({super.key});

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/core/theme/app_colors.dart';
-import 'package:shelter_ai/presentation/ui_items/app_button.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import '../domain/models/player.dart';
 import 'ui_items/player_tap_card.dart';

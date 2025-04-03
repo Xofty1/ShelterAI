@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,6 +15,7 @@ import 'core/app_shared_preference/app_shared_preference.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await AppSharedPreference().init();
   await dotenv.load(fileName: '.env');
   runApp(MyApp());
@@ -64,6 +66,7 @@ class MyApp extends StatelessWidget {
                   selector: (state) => state.settings.loc,
                   builder: (context, languageCode) {
                     return MaterialApp(
+                      title: "Shelter AI",
                       locale: Locale(languageCode),
                       supportedLocales: AppLocalizations.supportedLocales,
                       localizationsDelegates: const [
