@@ -13,7 +13,7 @@
     "game_settings": "Настройки игры",
     "exitGameTitle": "Выход из игры",
     "playerAmount": "Количество игроков",
-    "continue": "Продолжить",
+    "continueWord": "Продолжить",
     "exitGameMessage": "Вы уверены, что хотите выйти из игры?",
     "cancel": "Отмена",
     "exit": "Выйти",
@@ -30,7 +30,7 @@
     "survivors": "Выжившие:",
     "pressToSeeCard": "Нажмите, чтобы увидеть карту игрока",
     "eliminated": "Выбывшие:",
-    "final": "ФИНАЛ",
+    "finale": "ФИНАЛ",
     "inBunker": "В бункер попали:",
     "notInBunker": "Не попали:",
     "howManyToKick": "Сколько человек выгнать:",
@@ -63,5 +63,5 @@
     "hobbyAndSkills": "Хобби/Навыки",
     "phobias": "Фобии",
     "luggage": "Багаж",
-    "additionalInfo": "Дополнительная информация",
+    "additionalInfo": "Дополнительная информация"
 }

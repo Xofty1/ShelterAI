@@ -11,19 +11,8 @@ import 'package:shelter_ai/domain/services/gpt_repository.dart';
 class GptRepositoryImpl implements GptRepository {
 // Returns api key from file hidden_data.txt
   Future<String> getApiKey() async {
-    // Reads the file and puts api key from it in API_KEY
-    // In txtContent holds jsnoDecoded data.
-
-    String apiKey = '';
-
-    try {
-      apiKey = dotenv.env['API_KEY'] ?? '';
-    } catch (e) {
-      print('Error $e');
-    }
-
     // Returns API_KEY, type String
-    return apiKey;
+    return dotenv.env['API_KEY'] ?? '';
   }
 
 // Sets up request for story-generating procces in GPT 4.o
@@ -43,12 +32,10 @@ class GptRepositoryImpl implements GptRepository {
 
     // Reads file to get all story_requests
     // In txt_cont_difficulty holds request text in String
-    String cont = '';
-
     late Map<String, dynamic> txtCont;
 
     try {
-      cont = await rootBundle.loadString('assets/request_texts.json');
+      String cont = await rootBundle.loadString('assets/request_texts.json');
       txtCont = jsonDecode(cont);
       txtCont['story'] = txtCont['story'] + additionalText;
     } catch (e) {
@@ -119,18 +106,22 @@ class GptRepositoryImpl implements GptRepository {
     // Sets an API key
     OpenAI.apiKey = await getApiKey();
 
-    String message = ''; // message that gonna be sent to gpt
+    late String message; // message that gonna be sent to gpt
 
     // Gets the message
-    if (type == "player") {
-      message = await playerSetup(additioanlInfo);
-    } else if (type == "story") {
-      message = await storySetup(additioanlInfo);
-    } else if (type == "finale") {
-      message = await finaleSetup(additioanlInfo);
-    } else {
-      print('Wrong type!');
-      throw Error();
+    switch (type) {
+      case "player":
+        message = await playerSetup(additioanlInfo);
+        break;
+      case "story":
+        message = await storySetup(additioanlInfo);
+        break;
+      case "finale":
+        message = await finaleSetup(additioanlInfo);
+        break;
+      default:
+        print("Wrong type!");
+        throw Error();
     }
 
     // Sets up the message as an OpenAiMessage object and gives role
@@ -149,17 +140,12 @@ class GptRepositoryImpl implements GptRepository {
       messages: [systemMessage],
     );
 
-    String answer = chatCompletion.choices.first.message.content!.first.text!;
-
-    return answer;
+    return chatCompletion.choices.first.message.content!.first.text!;
   }
 
 // Creates Player sample for game
   Player createPlayer(
       int number, Map<String, dynamic> playerInfo, playerAmount) {
-    // Corrects number to surely become natural
-    ++number;
-
     // Sets all properties for Player
     String profession = playerInfo['profession']!;
     String age = playerInfo['age']!;
@@ -212,7 +198,7 @@ class GptRepositoryImpl implements GptRepository {
     // In loop creates players
     for (int i = 0; i < playersAmount; i++) {
       Player player =
-          createPlayer(i, playerInfo['player_cards'][i], playersAmount);
+          createPlayer(i + 1, playerInfo['player_cards'][i], playersAmount);
       players.add(player);
     }
 
@@ -247,11 +233,14 @@ class GptRepositoryImpl implements GptRepository {
 
     // Sets parameters for Disaster object
     String disasterName = story['disaster']["name"];
-    String disasterDescription = story['disaster']['history'] +
-        '\n' +
-        story['disaster']['distribution'] +
-        '\n' +
-        story['disaster']['world_situation'];
+    var disasterDesc = StringBuffer();
+    disasterDesc.writeAll([story['disaster']['history'], '\n', story['disaster']['distribution'], '\n', story['disaster']['world_situation']]);
+    String disasterDescription = disasterDesc.toString();
+    // String disasterDescription = story['disaster']['history'] +
+    //     '\n' +
+    //     story['disaster']['distribution'] +
+    //     '\n' +
+    //     story['disaster']['world_situation'];
     String disasterShortDescription = story['short_description'];
     String shelterName = story['bunker']['name'];
     String shelterLocation = story['bunker']['location'];

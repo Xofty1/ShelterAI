@@ -83,6 +83,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final finals = await repository.getFinale(
         settings, disaster, alivePlayers, kickedPlayers);
 
+
     return preFinalState.copyWith(stage: GameStage.finals, finals: finals);
   }
 
@@ -162,7 +163,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     var playerIndex = prevState.players.indexWhere(
         (player) => player.lifeStatus != LifeStatus.killed,
         prevState.currentPlayerIndex + 1);
-print("player $playerIndex");
+    print("player $playerIndex");
     // Голосует следующий игрок
     if (playerIndex != -1) {
       emit(prevState.copyWith(
