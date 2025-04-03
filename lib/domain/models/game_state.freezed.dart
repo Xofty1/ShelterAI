@@ -12,6 +12,9 @@ part of 'game_state.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+RunningGameState _$RunningGameStateFromJson(Map<String, dynamic> json) {
+  return _GameState.fromJson(json);
+}
 
 /// @nodoc
 mixin _$RunningGameState {
@@ -33,6 +36,9 @@ mixin _$RunningGameState {
       _$RunningGameStateCopyWithImpl<RunningGameState>(
           this as RunningGameState, _$identity);
 
+  /// Serializes this RunningGameState to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -53,6 +59,7 @@ mixin _$RunningGameState {
             (identical(other.finals, finals) || other.finals == finals));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -193,7 +200,7 @@ class _$RunningGameStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _GameState extends RunningGameState {
   const _GameState(
       {required this.settings,
@@ -206,6 +213,8 @@ class _GameState extends RunningGameState {
       required this.finals})
       : _players = players,
         super._(stage: stage);
+  factory _GameState.fromJson(Map<String, dynamic> json) =>
+      _$GameStateFromJson(json);
 
 // Настройки игры
   @override
@@ -245,6 +254,13 @@ class _GameState extends RunningGameState {
       __$GameStateCopyWithImpl<_GameState>(this, _$identity);
 
   @override
+  Map<String, dynamic> toJson() {
+    return _$GameStateToJson(
+      this,
+    );
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -264,6 +280,7 @@ class _GameState extends RunningGameState {
             (identical(other.finals, finals) || other.finals == finals));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'vote_info.freezed.dart';
+part 'vote_info.g.dart';
 
 @freezed
 abstract class VoteInfo with _$VoteInfo{
@@ -16,6 +17,8 @@ abstract class VoteInfo with _$VoteInfo{
     // Статус голосования
     required VoteStatus voteStatus,
   }) = _VoteInfo;
+
+  factory VoteInfo.fromJson(Map<String, dynamic> json) => _$VoteInfoFromJson(json);
 }
 
 enum VoteStatus{

@@ -10,6 +10,8 @@ import 'package:shelter_ai/presentation/ui_items/front_card_side.dart';
 
 import 'package:shelter_ai/presentation/ui_items/state_card_row.dart';
 
+import 'package:shelter_ai/presentation/ui_items/front_card_side.dart';
+
 class PlayerCardScreen extends StatefulWidget {
   final int openCount;
   final List<Player> players;

@@ -30,6 +30,9 @@ mixin _$VoteInfo {
   $VoteInfoCopyWith<VoteInfo> get copyWith =>
       _$VoteInfoCopyWithImpl<VoteInfo>(this as VoteInfo, _$identity);
 
+  /// Serializes this VoteInfo to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -44,6 +47,7 @@ mixin _$VoteInfo {
                 other.voteStatus == voteStatus));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -109,7 +113,7 @@ class _$VoteInfoCopyWithImpl<$Res> implements $VoteInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _VoteInfo implements VoteInfo {
   const _VoteInfo(
       {required final List<int> votes,
@@ -119,6 +123,8 @@ class _VoteInfo implements VoteInfo {
       : _votes = votes,
         _canBeSelected = canBeSelected,
         _selectedIndexes = selectedIndexes;
+  factory _VoteInfo.fromJson(Map<String, dynamic> json) =>
+      _$VoteInfoFromJson(json);
 
 // Голоса (по индексам)
   final List<int> _votes;
@@ -167,6 +173,13 @@ class _VoteInfo implements VoteInfo {
       __$VoteInfoCopyWithImpl<_VoteInfo>(this, _$identity);
 
   @override
+  Map<String, dynamic> toJson() {
+    return _$VoteInfoToJson(
+      this,
+    );
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -180,6 +193,7 @@ class _VoteInfo implements VoteInfo {
                 other.voteStatus == voteStatus));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,

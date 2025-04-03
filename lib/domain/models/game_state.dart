@@ -7,6 +7,7 @@ import 'disaster.dart';
 import 'game_settings.dart';
 
 part 'game_state.freezed.dart';
+part 'game_state.g.dart';
 
 class GameState {
   const GameState({required this.stage});
@@ -36,6 +37,9 @@ abstract class RunningGameState extends GameState with _$RunningGameState {
     // Финальная строка
     required String finals,
   }) = _GameState;
+
+  factory RunningGameState.fromJson(Map<String, dynamic> json) =>
+      _$RunningGameStateFromJson(json);
 
   List<Player> get alive =>
       players.where((player) => player.lifeStatus == LifeStatus.alive).toList();
@@ -70,6 +74,9 @@ abstract class RunningGameState extends GameState with _$RunningGameState {
 
 /// Список этапов игры
 enum GameStage {
+  /// Этап ожидания игроков для начала игры
+  waitingPlayers,
+
   /// Этап ожидания старта игры
   waiting,
 

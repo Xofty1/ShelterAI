@@ -32,6 +32,9 @@ mixin _$Disaster {
   $DisasterCopyWith<Disaster> get copyWith =>
       _$DisasterCopyWithImpl<Disaster>(this as Disaster, _$identity);
 
+  /// Serializes this Disaster to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -55,6 +58,7 @@ mixin _$Disaster {
             const DeepCollectionEquality().equals(other.resources, resources));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -155,7 +159,7 @@ class _$DisasterCopyWithImpl<$Res> implements $DisasterCopyWith<$Res> {
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _Disaster implements Disaster {
   const _Disaster(
       {required this.name,
@@ -169,6 +173,8 @@ class _Disaster implements Disaster {
       required final List<String> resources})
       : _rooms = rooms,
         _resources = resources;
+  factory _Disaster.fromJson(Map<String, dynamic> json) =>
+      _$DisasterFromJson(json);
 
   @override
   final String name;
@@ -209,6 +215,13 @@ class _Disaster implements Disaster {
       __$DisasterCopyWithImpl<_Disaster>(this, _$identity);
 
   @override
+  Map<String, dynamic> toJson() {
+    return _$DisasterToJson(
+      this,
+    );
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -232,6 +245,7 @@ class _Disaster implements Disaster {
                 .equals(other._resources, _resources));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,

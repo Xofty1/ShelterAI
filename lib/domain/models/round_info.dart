@@ -2,6 +2,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'round_info.freezed.dart';
+part 'round_info.g.dart';
 
 @freezed
 abstract class RoundInfo with _$RoundInfo{
@@ -10,6 +11,8 @@ abstract class RoundInfo with _$RoundInfo{
     required int kickedCount,
     required int openCount,
   }) = _RoundInfo;
+
+  factory RoundInfo.fromJson(Map<String, dynamic> json) => _$RoundInfoFromJson(json);
 }
 
 RoundInfo getRoundInfo(int roundNumber, int playersCount) {

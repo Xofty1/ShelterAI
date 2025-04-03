@@ -229,14 +229,15 @@ class GptRepositoryMock implements GptRepository {
         lifeStatus: LifeStatus.alive,
         knownProperties: List.generate(6, (_) => false),
         // Initially all properties unknown
-        notes: [], // No notes initially
+        notes: [],// No notes initially
       ));
     }
 
     return players;
   }
 
-  Future<String> getFinale(GameSettings settings, Disaster disaster, List<Player> alivePlayers, List<Player> kickedPlayers) async {
+  Future<String> getFinale(GameSettings settings, Disaster disaster,
+      List<Player> alivePlayers, List<Player> kickedPlayers) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1000));
 

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'disaster.freezed.dart';
+part 'disaster.g.dart';
 
 @freezed
 abstract class Disaster with _$Disaster{
@@ -14,4 +15,6 @@ abstract class Disaster with _$Disaster{
     required List<String> rooms,
     required List<String> resources,
   }) = _Disaster;
+
+  factory Disaster.fromJson(Map<String, dynamic> json) => _$DisasterFromJson(json);
 }

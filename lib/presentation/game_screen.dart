@@ -12,6 +12,7 @@ import 'package:shelter_ai/presentation/lore_screen.dart';
 import 'package:shelter_ai/presentation/player_card.dart';
 import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/vote_result_screen.dart';
+import 'package:shelter_ai/presentation/waiting_screen.dart';
 
 import '../core/di/game_dep.dart';
 import '../core/di/global_dep.dart';
@@ -222,6 +223,10 @@ class GameScreen extends StatelessWidget {
                         GameStage.preFinalLoading ||
                         GameStage.waiting =>
                           const LoaderScreen(),
+                        GameStage.waitingPlayers => WaitingScreen(
+                            players: gameState.players,
+                            onStartGame: (){},
+                            isHost: true),
                         GameStage.intro =>
                           LoreScreen(disaster: gameState.disaster),
                         GameStage.roundStarted => GameRoundScreen(

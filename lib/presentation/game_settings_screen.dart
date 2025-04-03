@@ -8,10 +8,13 @@ import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
 import 'package:shelter_ai/l10n/l10n.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
+import 'package:shelter_ai/presentation/ui_items/choose_button.dart';
 import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
 import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
@@ -65,8 +68,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
         if (state is DisasterUploadedState) {
-          NavigationManager.instance
-              .openGameReplacement(state.settings, state.disaster, state.players);
+          NavigationManager.instance.openGameReplacement(
+              state.settings, state.disaster, state.players);
         }
       },
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
@@ -94,6 +97,26 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             _buildSettingsContainer(
                               child: Column(
                                 children: [
+                                  _buildSettingHeader("Режим"),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ChooseButton(
+                                          text: "На устройстве",
+                                          isSelected: !state.settings.isOnline,
+                                          onTap: () => BlocProvider.of<
+                                                  GameSettingsCubit>(context)
+                                              .updateIsOnline(false)),
+                                      ChooseButton(
+                                          text: "Мультиплеер",
+                                          isSelected: state.settings.isOnline,
+                                          onTap: () => BlocProvider.of<
+                                                  GameSettingsCubit>(context)
+                                              .updateIsOnline(true)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
                                   // Players count
                                   _buildSettingHeader("Количество игроков"),
                                   Row(
@@ -129,22 +152,25 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      _buildDifficultyButton(
-                                          loc.difficultyClassic,
-                                          state.settings.difficulty == 1,
-                                          () => BlocProvider.of<
+                                      ChooseButton(
+                                          text: loc.difficultyClassic,
+                                          isSelected:
+                                              state.settings.difficulty == 1,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(1)),
-                                      _buildDifficultyButton(
-                                          loc.difficultyHardcore,
-                                          state.settings.difficulty == 2,
-                                          () => BlocProvider.of<
+                                      ChooseButton(
+                                          text: loc.difficultyHardcore,
+                                          isSelected:
+                                              state.settings.difficulty == 2,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(2)),
-                                      _buildDifficultyButton(
-                                          loc.difficultyInsanity,
-                                          state.settings.difficulty == 3,
-                                          () => BlocProvider.of<
+                                      ChooseButton(
+                                          text: loc.difficultyInsanity,
+                                          isSelected:
+                                              state.settings.difficulty == 3,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(3)),
                                     ],
@@ -250,7 +276,23 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             // Continue button
                             CustomButton(
                               text: 'Продолжить',
-                              onPressed: () {
+                              onPressed: () async {
+                                Future<void> addData() async {
+                                  CollectionReference users = FirebaseFirestore
+                                      .instance
+                                      .collection('users');
+                                  return users
+                                      .add({
+                                        'full_name': 'Gemini in Firebase',
+                                        'company': 'Firebase',
+                                        'age': 42
+                                      })
+                                      .then((value) => print("User Added"))
+                                      .catchError((error) =>
+                                          print("Failed to add user: $error"));
+                                }
+                                // await addData();
+
                                 final language =
                                     BlocProvider.of<AppSettingsCubit>(context)
                                         .state
@@ -325,30 +367,30 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     );
   }
 
-  Widget _buildDifficultyButton(
-      String text, bool isSelected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? Colors.white.withOpacity(0.8)
-              : Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(20),
-          border: isSelected
-              ? Border.all(color: const Color(0xFF8B7355), width: 2)
-              : null,
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 14,
-            color: isSelected ? Colors.black87 : Colors.black54,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
+// Widget _buildDifficultyButton(
+//     String text, bool isSelected, VoidCallback onTap) {
+//   return GestureDetector(
+//     onTap: onTap,
+//     child: Container(
+//       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+//       decoration: BoxDecoration(
+//         color: isSelected
+//             ? Colors.white.withOpacity(0.8)
+//             : Colors.white.withOpacity(0.2),
+//         borderRadius: BorderRadius.circular(20),
+//         border: isSelected
+//             ? Border.all(color: const Color(0xFF8B7355), width: 2)
+//             : null,
+//       ),
+//       child: Text(
+//         text,
+//         style: TextStyle(
+//           fontSize: 14,
+//           color: isSelected ? Colors.black87 : Colors.black54,
+//           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+//         ),
+//       ),
+//     ),
+//   );
+// }
 }

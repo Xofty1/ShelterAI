@@ -26,6 +26,9 @@ mixin _$RoundInfo {
   $RoundInfoCopyWith<RoundInfo> get copyWith =>
       _$RoundInfoCopyWithImpl<RoundInfo>(this as RoundInfo, _$identity);
 
+  /// Serializes this RoundInfo to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -39,6 +42,7 @@ mixin _$RoundInfo {
                 other.openCount == openCount));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, roundNumber, kickedCount, openCount);
@@ -91,12 +95,14 @@ class _$RoundInfoCopyWithImpl<$Res> implements $RoundInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _RoundInfo implements RoundInfo {
   const _RoundInfo(
       {required this.roundNumber,
       required this.kickedCount,
       required this.openCount});
+  factory _RoundInfo.fromJson(Map<String, dynamic> json) =>
+      _$RoundInfoFromJson(json);
 
   @override
   final int roundNumber;
@@ -114,6 +120,13 @@ class _RoundInfo implements RoundInfo {
       __$RoundInfoCopyWithImpl<_RoundInfo>(this, _$identity);
 
   @override
+  Map<String, dynamic> toJson() {
+    return _$RoundInfoToJson(
+      this,
+    );
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -126,6 +139,7 @@ class _RoundInfo implements RoundInfo {
                 other.openCount == openCount));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, roundNumber, kickedCount, openCount);

@@ -35,6 +35,9 @@ mixin _$Player {
   $PlayerCopyWith<Player> get copyWith =>
       _$PlayerCopyWithImpl<Player>(this as Player, _$identity);
 
+  /// Serializes this Player to a JSON map.
+  Map<String, dynamic> toJson();
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -57,6 +60,7 @@ mixin _$Player {
             const DeepCollectionEquality().equals(other.notes, notes));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -178,7 +182,7 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _Player implements Player {
   const _Player(
       {required this.id,
@@ -195,6 +199,7 @@ class _Player implements Player {
       required final List<String> notes})
       : _knownProperties = knownProperties,
         _notes = notes;
+  factory _Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
   @override
   final int id;
@@ -241,6 +246,13 @@ class _Player implements Player {
       __$PlayerCopyWithImpl<_Player>(this, _$identity);
 
   @override
+  Map<String, dynamic> toJson() {
+    return _$PlayerToJson(
+      this,
+    );
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
@@ -262,6 +274,7 @@ class _Player implements Player {
             const DeepCollectionEquality().equals(other._notes, _notes));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,

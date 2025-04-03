@@ -61,11 +61,11 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     ));
   }
 
-  void updateEnableTime(bool newEnable) {
+  void updateIsOnline(bool newIsOnline) {
     emit(
       GameSettingsState(
           settings: state.settings.copyWith(
-            isTimerEnable: newEnable,
+            isOnline: newIsOnline,
           )),
     );
   }
@@ -82,7 +82,7 @@ class GameSettingsState {
           safeMode: false,
           language: 'ru',
           time: 30,
-          isTimerEnable: true,
+          isOnline: false,
         );
 
   final GameSettings settings;
