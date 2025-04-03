@@ -7,6 +7,7 @@ import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/disaster.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
+import 'package:shelter_ai/data/entities/json_decoder.dart';
 
 class GptRepositoryImpl implements GptRepository {
 // Returns api key from file hidden_data.txt
@@ -147,26 +148,20 @@ class GptRepositoryImpl implements GptRepository {
   Player createPlayer(
       int number, Map<String, dynamic> playerInfo, playerAmount) {
     // Sets all properties for Player
-    String profession = playerInfo['profession']!;
-    String age = playerInfo['age']!;
-    String health = playerInfo['health']!;
-    String hobbySkills = playerInfo['hobby_skills']!;
-    String phobias = playerInfo['phobias']!;
-    String baggage = playerInfo['baggage']!;
-    String additionalInfo = playerInfo['additional_information']!;
+    final playerInforamtion = PlayerCard.fromJson(playerInfo);
     List<bool> knownProperties = [for (var i = 0; i < 6; ++i) false];
     List<String> notes = [for (var i = 0; i < playerAmount; ++i) ''];
 
     // Actually sets values for Player
     var player = Player(
         name: 'user $number',
-        profession: profession,
-        bio: age,
-        health: health,
-        hobby: hobbySkills,
-        phobia: phobias,
-        luggage: baggage,
-        extra: additionalInfo,
+        profession: playerInforamtion.profession,
+        bio: playerInforamtion.age,
+        health: playerInforamtion.health,
+        hobby: playerInforamtion.hobby_skills,
+        phobia: playerInforamtion.phobias,
+        luggage: playerInforamtion.baggage,
+        extra: playerInforamtion.additional_information,
         lifeStatus: LifeStatus.alive,
         knownProperties: knownProperties,
         notes: notes);
@@ -192,13 +187,13 @@ class GptRepositoryImpl implements GptRepository {
     // playerInfo.keys: "player_cards"(Map<String, String>),
     // player_cards.keys: "profession", "age", "health", "hobby_skills", "phobias",
     // "baggage", "additional_info"
-    Map<String, dynamic> playerInfo = jsonDecode(answer);
+    final playerInfo = PlayersJs.fromJson(jsonDecode(answer));
     List<Player> players = [];
 
     // In loop creates players
     for (int i = 0; i < playersAmount; i++) {
       Player player =
-          createPlayer(i + 1, playerInfo['player_cards'][i], playersAmount);
+          createPlayer(i + 1, playerInfo.player_cards[i], playersAmount);
       players.add(player);
     }
 
@@ -228,40 +223,26 @@ class GptRepositoryImpl implements GptRepository {
     // story["disaster"].keys: "name"(String), "history"(String), "distribution"(String)
     // "world_situation"(String)
     // story["bunker"],keys: "name"(String), "location"(String), "capacity"(String)
-    // "rooms"(List<String>), "resources"(list<resources>)
-    Map<String, dynamic> story = jsonDecode(answer);
+    // "rooms"(List<String>), "resources"(list<String>)
+    final story = Story.fromJson(jsonDecode(answer));
 
     // Sets parameters for Disaster object
-    String disasterName = story['disaster']["name"];
     var disasterDesc = StringBuffer();
-    disasterDesc.writeAll([story['disaster']['history'], '\n', story['disaster']['distribution'], '\n', story['disaster']['world_situation']]);
+    disasterDesc.writeAll([story.disaster.history, '\n', story.disaster.distribution, '\n', story.disaster.world_situation]);
     String disasterDescription = disasterDesc.toString();
-    // String disasterDescription = story['disaster']['history'] +
-    //     '\n' +
-    //     story['disaster']['distribution'] +
-    //     '\n' +
-    //     story['disaster']['world_situation'];
-    String disasterShortDescription = story['short_description'];
-    String shelterName = story['bunker']['name'];
-    String shelterLocation = story['bunker']['location'];
-    String shelterDescription = story['bunker']['capacity'];
     int shelterCapacity = (playerAmount / 2 - 0.1).round();
-    List<String> shelterRooms =
-        (story['bunker']['rooms'] as List).map((e) => e as String).toList();
-    List<String> shelterResources =
-        (story['bunker']['resources'] as List).map((x) => x as String).toList();
 
     // Creates sample of Disaster object
     Disaster disasterSample = Disaster(
-        name: disasterName,
+        name: story.disaster.name,
         disasterDescription: disasterDescription,
-        disasterShortDescription: disasterShortDescription,
-        shelterName: shelterName,
-        location: shelterLocation,
-        description: shelterDescription,
+        disasterShortDescription: story.short_description,
+        shelterName: story.bunker.name,
+        location: story.bunker.location,
+        description: story.bunker.capacity,
         capacity: shelterCapacity,
-        rooms: shelterRooms,
-        resources: shelterResources);
+        rooms: story.bunker.rooms,
+        resources: story.bunker.resources);
 
     // Structs returnData in one variable
     List<Object> returnData = [disasterSample, answer];
