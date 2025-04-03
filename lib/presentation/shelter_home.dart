@@ -73,7 +73,11 @@ class MainMenuScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         CustomButton(text: loc.history, onPressed: () {}),
                         const SizedBox(height: 16),
-                        CustomButton(text: loc.rules, onPressed: () {}),
+                        CustomButton(
+                            text: loc.rules,
+                            onPressed: () {
+                              NavigationManager.instance.openRules();
+                            }),
                       ],
                     ),
                   ),

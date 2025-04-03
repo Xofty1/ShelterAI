@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/core/di/game_settings_dep.dart';
 import 'package:shelter_ai/core/di/global_dep.dart';
-import 'package:shelter_ai/data/repositories/gpt_api.dart';
-import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
 import 'package:shelter_ai/l10n/l10n.dart';
@@ -12,10 +10,8 @@ import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
 import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
-
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
-import '../../l10n/l10n.dart';
 
 class GameSettingsWidget extends StatefulWidget {
   const GameSettingsWidget({super.key});
@@ -31,7 +27,7 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
   void didChangeDependencies() {
     if (!gameSettingsDepHolder.isCreated) {
       final globalDepContainer =
-          RepositoryProvider.of<GlobalDepHolder>(context).container!;
+      RepositoryProvider.of<GlobalDepHolder>(context).container!;
       gameSettingsDepHolder.create(globalDepContainer);
     }
     super.didChangeDependencies();
@@ -68,6 +64,9 @@ class GameSettingsScreen extends StatefulWidget {
 class _GameSettingsScreenState extends State<GameSettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    const headerColor = Color(0xFFB8A876);
+    const headerTextColor = Color(0xFF482020);
+
     final loc = AppLocalizations.of(context);
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
@@ -83,6 +82,11 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
         builder: (context, state) {
           return Scaffold(
+            appBar: AppBar(
+              backgroundColor: const Color(0xFFD3C0AA),
+              title: Text(loc.game_settings),
+              centerTitle: true,
+            ),
             body: state is DisasterLoadingState ||
                     state is DisasterUploadedState
                 ? const LoaderScreen()
@@ -98,15 +102,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 20),
+                            horizontal: 12, vertical: 16),
                         child: Column(
                           children: [
                             // Main settings container
-                            _buildSettingsContainer(
+                            SettingsContainer(
                               child: Column(
                                 children: [
                                   // Players count
-                                  _buildSettingHeader(loc.playerAmount),
+                                  SettingHeader(text: loc.countPlayers),
                                   Row(
                                     children: [
                                       SizedBox(
@@ -122,7 +126,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                               .settings.playersCount
                                               .toDouble(),
                                           min: 4,
-                                          max: 22,
+                                          max: 16,
                                           onChange: (value) => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updatePlayersCount(
@@ -135,27 +139,30 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Difficulty
-                                  _buildSettingHeader(loc.difficultySetting),
+                                  SettingHeader(text: loc.difficultySettings),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      _buildDifficultyButton(
-                                          loc.difficultyClassic,
-                                          state.settings.difficulty == 1,
-                                          () => BlocProvider.of<
+                                      DifficultyButton(
+                                          text: loc.difficultyClassic,
+                                          isSelected:
+                                              state.settings.difficulty == 1,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(1)),
-                                      _buildDifficultyButton(
-                                          loc.difficultyHardcore,
-                                          state.settings.difficulty == 2,
-                                          () => BlocProvider.of<
+                                      DifficultyButton(
+                                          text: loc.difficultyHardcore,
+                                          isSelected:
+                                              state.settings.difficulty == 2,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(2)),
-                                      _buildDifficultyButton(
-                                          loc.difficultyInsanity,
-                                          state.settings.difficulty == 3,
-                                          () => BlocProvider.of<
+                                      DifficultyButton(
+                                          text: loc.difficultyInsanity,
+                                          isSelected:
+                                              state.settings.difficulty == 3,
+                                          onTap: () => BlocProvider.of<
                                                   GameSettingsCubit>(context)
                                               .updateDifficulty(3)),
                                     ],
@@ -163,13 +170,13 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Game tone
-                                  _buildSettingHeader(loc.gameTone),
+                                  SettingHeader(text: loc.gameTone),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       LabelWidget(
-                                        text: loc.familyFriendly,
+                                        text: loc.family,
                                       ),
                                       CustomSwitcher(
                                         initialValue: state.settings.safeMode,
@@ -188,9 +195,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             const SizedBox(height: 16),
 
                             // Plot wishes
-                            _buildSettingsContainer(
+                            SettingsContainer(
                               child: CustomTextField(
                                 text: loc.plotWishes,
+                                initialValue: state.settings.plot,
                                 onChange: (value) {
                                   BlocProvider.of<GameSettingsCubit>(context)
                                       .updatePlot(value);
@@ -201,13 +209,13 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             const SizedBox(height: 16),
 
                             // Time
-                            _buildSettingsContainer(
+                            SettingsContainer(
                               child: Column(
                                 children: [
-                                  _buildSettingHeader(loc.time),
+                                  SettingHeader(text: loc.time),
                                   Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -225,8 +233,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                               min: 30,
                                               max: 120,
                                               onChange: (value) => BlocProvider
-                                                      .of<GameSettingsCubit>(
-                                                          context)
+                                                  .of<GameSettingsCubit>(
+                                                  context)
                                                   .updateTime(value.toInt()),
                                             ),
                                           ),
@@ -240,11 +248,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   // Random mode
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
-                                      _buildToneButton(loc.random, false, () {
-                                        // Random mode can be added to your GameSettings model
-                                      }, width: 160),
+                                      ToneButton(
+                                          text: loc.random,
+                                          isSelected: false,
+                                          onTap: () {
+                                            // Random mode can be added to your GameSettings model
+                                          },
+                                          width: 160),
                                       CustomSwitcher(
                                         initialValue: false,
                                         onToggle: (value) {
@@ -281,8 +293,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       ),
     );
   }
+}
 
-  Widget _buildSettingsContainer({required Widget child}) {
+class SettingsContainer extends StatelessWidget {
+  final Widget child;
+
+  const SettingsContainer({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -293,8 +312,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       child: child,
     );
   }
+}
 
-  Widget _buildSettingHeader(String text) {
+class SettingHeader extends StatelessWidget {
+  final String text;
+
+  const SettingHeader({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
@@ -309,9 +335,24 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       ),
     );
   }
+}
 
-  Widget _buildToneButton(String text, bool isSelected, VoidCallback onTap,
-      {double width = 100}) {
+class ToneButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final double width;
+
+  const ToneButton({
+    super.key,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+    this.width = 100,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -335,9 +376,22 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       ),
     );
   }
+}
 
-  Widget _buildDifficultyButton(
-      String text, bool isSelected, VoidCallback onTap) {
+class DifficultyButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const DifficultyButton({
+    super.key,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

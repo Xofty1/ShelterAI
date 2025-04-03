@@ -3,6 +3,8 @@ import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/info_row.dart';
 import '../../l10n/l10n.dart';
 
+import '../../l10n/l10n.dart';
+
 class SettingsDialog extends StatelessWidget {
   final GameSettings settings;
 

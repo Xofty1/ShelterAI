@@ -6,7 +6,7 @@
     </queries>
 
     <application
-        android:label="shelter_ai"
+        android:label="Бункер AI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
