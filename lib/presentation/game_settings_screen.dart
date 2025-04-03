@@ -14,6 +14,7 @@ import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
+import '../../l10n/l10n.dart';
 
 class GameSettingsWidget extends StatefulWidget {
   const GameSettingsWidget({super.key});
@@ -43,8 +44,14 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final container = gameSettingsDepHolder.container;
+
+    if (container == null) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider.value(
-      value: gameSettingsDepHolder.container!.gameSettingsCubit,
+      value: container.gameSettingsCubit,
       child: const GameSettingsScreen(),
     );
   }
@@ -69,6 +76,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         if (state is DisasterUploadedState) {
           NavigationManager.instance
               .openGameReplacement(state.settings, state.disaster, state.players);
+        } else if(state is ErrorLoadingGameState){
+          final snackBar = SnackBar(content: Text(loc.dataLoadingError));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          NavigationManager.instance.pop();
         }
       },
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
@@ -117,7 +128,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               child: Column(
                                 children: [
                                   // Players count
-                                  _buildSettingHeader("Количество игроков"),
+                                  _buildSettingHeader(loc.playerAmount),
                                   Row(
                                     children: [
                                       SizedBox(
@@ -146,7 +157,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Difficulty
-                                  _buildSettingHeader("Сложность"),
+                                  _buildSettingHeader(loc.difficultySetting),
                                   Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -174,13 +185,13 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Game tone
-                                  _buildSettingHeader("Тон игры"),
+                                  _buildSettingHeader(loc.gameTone),
                                   Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const LabelWidget(
-                                        text: "Семейный",
+                                      LabelWidget(
+                                        text: loc.familyFriendly,
                                       ),
                                       CustomSwitcher(
                                         initialValue: state.settings.safeMode,
@@ -201,7 +212,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             // Plot wishes
                             _buildSettingsContainer(
                               child: CustomTextField(
-                                text: "Введите пожелания по сюжету",
+                                text: loc.plotWishes,
                                 onChange: (value) {
                                   BlocProvider.of<GameSettingsCubit>(context)
                                       .updatePlot(value);
@@ -215,7 +226,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             _buildSettingsContainer(
                               child: Column(
                                 children: [
-                                  _buildSettingHeader("Время"),
+                                  _buildSettingHeader(loc.time),
                                   Column(
                                     crossAxisAlignment:
                                     CrossAxisAlignment.start,
@@ -253,7 +264,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                     children: [
-                                      _buildToneButton("Рандом", false, () {
+                                      _buildToneButton(loc.random, false, () {
                                         // Random mode can be added to your GameSettings model
                                       }, width: 160),
                                       CustomSwitcher(
@@ -271,7 +282,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
 
                             // Continue button
                             CustomButton(
-                              text: 'Продолжить',
+                              text: loc.continueWord,
                               onPressed: () {
                                 final language =
                                     BlocProvider.of<AppSettingsCubit>(context)

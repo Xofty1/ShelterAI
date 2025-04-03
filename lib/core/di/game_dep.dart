@@ -1,5 +1,6 @@
 import 'package:shelter_ai/core/di/global_dep.dart';
 import '../../domain/bloc/game_bloc.dart';
+import '../../domain/services/game_service.dart';
 
 class GameDepHolder{
   GameDepContainer? _container;
@@ -9,7 +10,7 @@ class GameDepHolder{
   bool get isCreated => _isCreated;
 
   void create(GlobalDepContainer globalDepContainer){
-    _container = GameDepContainer(globalDepContainer);
+    _container = GameDepContainer.inject(globalDepContainer);
     _isCreated = true;
   }
 
@@ -23,12 +24,20 @@ class GameDepHolder{
 }
 
 class GameDepContainer {
+  final GameService service;
   final GameBloc gameBloc;
 
   void dispose(){
     gameBloc.close();
   }
 
-  GameDepContainer(GlobalDepContainer container)
-      : gameBloc = GameBloc(container.gptRepository);
+  GameDepContainer._({required this.service, required this.gameBloc});
+
+  factory GameDepContainer.inject(GlobalDepContainer container){
+    GameService service = GameService(container.gptRepository);
+    GameBloc gameBloc = GameBloc(service);
+
+    return GameDepContainer._(service: service, gameBloc: gameBloc);
+  }
+
 }

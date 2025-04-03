@@ -6,6 +6,7 @@ import 'package:shelter_ai/presentation/player_details_screen.dart';
 import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/players_list.dart';
+import '../../l10n/l10n.dart';
 
 class VoteResultScreen extends StatelessWidget {
   final List<Player> kickedPlayers;
@@ -17,6 +18,7 @@ class VoteResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -29,9 +31,9 @@ class VoteResultScreen extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 20),
-          const Text(
-            "Выгнанные игроки",
-            style: TextStyle(
+          Text(
+            loc.kickedPlayers,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Color(0xFFD9D9D9),
@@ -42,7 +44,7 @@ class VoteResultScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16),
             child: CustomButton(
-              text: "Продолжить",
+              text: loc.continueWord,
               onPressed: () {
                 BlocProvider.of<GameBloc>(context).add(ReadyGameEvent());
               },
@@ -64,6 +66,7 @@ class PlayerCardDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -121,22 +124,20 @@ class PlayerCardDetail extends StatelessWidget {
                 )
               ],
             ),
-          ),
-          const SizedBox(height: 24),
-          _buildInfoSection("Возраст", player.bio, player.knownProperties[0]),
-          const SizedBox(height: 16),
-          _buildInfoSection("Здоровье", player.health, player.knownProperties[1]),
-          const SizedBox(height: 16),
-          _buildInfoSection("Хобби/Навыки", player.hobby, player.knownProperties[2]),
-          const SizedBox(height: 16),
-          _buildInfoSection("Фобии", player.phobia, player.knownProperties[3]),
-          const SizedBox(height: 16),
-          _buildInfoSection("Багаж", player.luggage, player.knownProperties[4]),
-          const SizedBox(height: 16),
-          _buildInfoSection(
-              "Дополнительная информация"
-              , player.extra, player.knownProperties[5]),
-        ],
+            const SizedBox(height: 24),
+            _buildInfoSection(loc.age, player.bio, player.knownProperties[0]),
+            const SizedBox(height: 16),
+            _buildInfoSection(loc.health, player.health, player.knownProperties[1]),
+            const SizedBox(height: 16),
+            _buildInfoSection(loc.hobbyAndSkills, player.hobby, player.knownProperties[2]),
+            const SizedBox(height: 16),
+            _buildInfoSection(loc.phobias, player.phobia, player.knownProperties[3]),
+            const SizedBox(height: 16),
+            _buildInfoSection(loc.luggage, player.luggage, player.knownProperties[4]),
+            const SizedBox(height: 16),
+            _buildInfoSection(loc.additionalInfo, player.extra, player.knownProperties[5]),
+          ],
+        ),
       ),
     );
   }
@@ -155,7 +156,7 @@ class PlayerCardDetail extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          isKnown ? content : "Неизвестно",
+          isKnown ? content : 'Неизвестно',
           style: const TextStyle(
             fontSize: 16,
             color: Color(0xFF482020),

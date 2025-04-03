@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/core/di/game_dep.dart';
+import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
 import 'package:shelter_ai/domain/models/player.dart';
@@ -13,8 +15,6 @@ import 'package:shelter_ai/presentation/player_card.dart';
 import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/vote_result_screen.dart';
 
-import '../core/di/game_dep.dart';
-import '../core/di/global_dep.dart';
 import '../core/theme/app_colors.dart';
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/disaster.dart';
@@ -22,6 +22,7 @@ import '../l10n/l10n.dart';
 import 'game_finish_screen.dart';
 import 'game_round_screen.dart';
 import 'game_votting_screen.dart';
+import '../../l10n/l10n.dart';
 
 class GameScreenWidget extends StatefulWidget {
   const GameScreenWidget({super.key});
@@ -42,6 +43,7 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
     if (!gameDepHolder.isCreated) {
       final globalDepContainer =
           RepositoryProvider.of<GlobalDepHolder>(context).container!;
+
       gameDepHolder.create(globalDepContainer);
 
       final args =
@@ -49,7 +51,8 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
       gameSettings = args['settings'] as GameSettings;
       disaster = args['disaster'] as Disaster;
       players = args['players'] as List<Player>;
-      gameDepHolder.container!.gameBloc
+
+      gameDepHolder.container?.gameBloc
           .add(StartedGameEvent(gameSettings, disaster, players));
     }
 
@@ -64,8 +67,14 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final container = gameDepHolder.container;
+
+    if (container == null) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider.value(
-      value: gameDepHolder.container!.gameBloc,
+      value: container.gameBloc,
       child: const GameScreen(),
     );
   }
@@ -177,7 +186,7 @@ class GameScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  "РАУНД ${gameState.roundInfo.roundNumber}",
+                                  "${loc.round} ${gameState.roundInfo.roundNumber}",
                                   style: const TextStyle(
                                     color: headerTextColor,
                                     fontSize: 24,
@@ -193,7 +202,7 @@ class GameScreen extends StatelessWidget {
                                     icon: const Icon(Icons.account_box_sharp),
                                     color: headerTextColor,
                                     iconSize: 28,
-                                    tooltip: 'Все игроки',
+                                    tooltip: loc.allPlayers,
                                   ),
                                   IconButton(
                                     onPressed: () =>
@@ -201,7 +210,7 @@ class GameScreen extends StatelessWidget {
                                     icon: const Icon(Icons.settings),
                                     color: headerTextColor,
                                     iconSize: 28,
-                                    tooltip: 'Настройки',
+                                    tooltip: loc.settings,
                                   ),
                                   IconButton(
                                     onPressed: () =>
@@ -209,7 +218,7 @@ class GameScreen extends StatelessWidget {
                                     icon: const Icon(Icons.info_outline),
                                     color: headerTextColor,
                                     iconSize: 28,
-                                    tooltip: 'Информация',
+                                    tooltip: loc.information,
                                   ),
                                 ],
                               ),

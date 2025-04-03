@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/presentation/ui_items/app_button.dart';
 
 import '../domain/bloc/game_bloc.dart';
+import '../../l10n/l10n.dart';
 
 class GameRoundScreen extends StatelessWidget {
   final String roundNumber;
@@ -21,6 +22,7 @@ class GameRoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     const backgroundColor = Color(0xB65E4E3B);
     const cardColor = Color(0xFFE9E9E9);
     const accentColor = Color(0xFFB57A73);
@@ -50,9 +52,9 @@ class GameRoundScreen extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'РАУНД',
-                      style: TextStyle(
+                    Text(
+                      loc.round,
+                      style: const TextStyle(
                         color: textColor,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -89,13 +91,13 @@ class GameRoundScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           flex: 2,
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Text(
-                              'Выжившие:',
-                              style: TextStyle(
+                              loc.survivors,
+                              style: const TextStyle(
                                 color: textColor,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
@@ -140,13 +142,13 @@ class GameRoundScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           flex: 2,
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Text(
-                              'Выбывшие:',
-                              style: TextStyle(
+                              loc.eliminated,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
@@ -190,10 +192,10 @@ class GameRoundScreen extends StatelessWidget {
                       color: cardColor,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'Требуется открыть характеристик:',
-                        style: TextStyle(
+                        loc.characteristicsToOpen,
+                        style: const TextStyle(
                           color: Colors.black54,
                           fontSize: 16,
                         ),
@@ -238,10 +240,10 @@ class GameRoundScreen extends StatelessWidget {
                       color: cardColor,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        "Сколько человек кикнуть",
-                        style: TextStyle(
+                        loc.howManyToKick,
+                        style: const TextStyle(
                           color: Colors.black54,
                           fontSize: 16,
                         ),
@@ -286,7 +288,7 @@ class GameRoundScreen extends StatelessWidget {
                 onPressed: () {
                   BlocProvider.of<GameBloc>(context).add(ReadyGameEvent());
                 },
-                text: 'Продолжить',
+                text: loc.continueWord,
               ),
             ),
           ],

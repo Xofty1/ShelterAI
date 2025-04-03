@@ -5,6 +5,7 @@ import 'package:shelter_ai/presentation/ui_items/info_row.dart';
 
 import '../ui_items/label.dart';
 import '../ui_items/state_section.dart';
+import '../../l10n/l10n.dart';
 
 class RoundInfoDialog extends StatelessWidget {
   final RoundInfo roundInfo;
@@ -16,6 +17,7 @@ class RoundInfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -40,9 +42,9 @@ class RoundInfoDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Title
-              const Text(
-                "Информация о раунде",
-                style: TextStyle(
+              Text(
+                loc.roundInfo,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF5A503F),
@@ -61,17 +63,17 @@ class RoundInfoDialog extends StatelessWidget {
                 child: Column(
                   children: [
                     InfoRow(
-                      label: "Номер раунда",
+                      label: loc.roundNumber,
                       value: roundInfo.roundNumber.toString(),
                     ),
                     const SizedBox(height: 16),
                     InfoRow(
-                      label: "Способностей открыть",
+                      label: loc.abilitiesToOpen,
                       value: roundInfo.openCount.toString(),
                     ),
                     const SizedBox(height: 16),
                     InfoRow(
-                      label: "Человек исключить",
+                      label: loc.howManyToKick,
                       value: roundInfo.kickedCount.toString(),
                     ),
                   ],
@@ -92,9 +94,9 @@ class RoundInfoDialog extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                child: const Text(
-                  "Закрыть",
-                  style: TextStyle(fontSize: 16),
+                child: Text(
+                  loc.close,
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             ],

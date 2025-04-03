@@ -1,21 +1,21 @@
+import 'dart:convert';
 import 'dart:math';
+import 'dart:io';
 
+import 'package:shelter_ai/data/entities/json_preset.dart';
 import 'package:shelter_ai/domain/models/disaster.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
+import 'package:shelter_ai/data/entities/json_offline.dart';
+
+import '../entities/json_story.dart';
 
 class GptRepositoryMock implements GptRepository {
   final Random _random = Random();
 
   @override
-  Future<Map<String, Object>> createGame(GameSettings settings) async {
-    Disaster disaster = await getDisaster(settings);
-    List<Player> players = await getPlayers(settings);
-    return {'disaster': disaster, 'player_list': players};
-  }
-
-  Future<Disaster> getDisaster(GameSettings settings) async {
+  Future<Disaster> createDisaster(GameSettings settings) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 800));
 
@@ -39,6 +39,7 @@ class GptRepositoryMock implements GptRepository {
           "Технический блок"
         ],
         resources: ["Еда", "Вода", "Медикаменты", "Инструменты", "Генератор"],
+        answer: '',
       ),
       const Disaster(
         name: "Пандемия",
@@ -63,6 +64,7 @@ class GptRepositoryMock implements GptRepository {
           "Еда",
           "Вода"
         ],
+        answer: '',
       ),
       const Disaster(
         name: "Климатическая катастрофа",
@@ -88,6 +90,7 @@ class GptRepositoryMock implements GptRepository {
           "Инструменты",
           "Запасы еды"
         ],
+        answer: '',
       ),
       const Disaster(
         name: "Восстание ИИ",
@@ -111,6 +114,7 @@ class GptRepositoryMock implements GptRepository {
           "Ручные генераторы",
           "Консервы"
         ],
+        answer: '',
       ),
       const Disaster(
         name: "Вторжение пришельцев",
@@ -136,6 +140,7 @@ class GptRepositoryMock implements GptRepository {
           "Провизия",
           "Медикаменты"
         ],
+        answer: '',
       ),
     ];
 
@@ -143,7 +148,9 @@ class GptRepositoryMock implements GptRepository {
     return disasters[_random.nextInt(disasters.length)];
   }
 
-  Future<List<Player>> getPlayers(GameSettings settings) async {
+  @override
+  Future<List<Player>> createPlayers(
+      GameSettings settings, Disaster disaster) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1200));
 
@@ -216,7 +223,7 @@ class GptRepositoryMock implements GptRepository {
           _random.nextBool() ? "Имеет скрытые мотивы" : "Нет особенностей";
 
       players.add(Player(
-        id: i+1,
+        id: i + 1,
         name: "Игрок ${i + 1}",
         profession: profession,
         bio: bio,
@@ -236,7 +243,9 @@ class GptRepositoryMock implements GptRepository {
     return players;
   }
 
-  Future<String> getFinale(GameSettings settings, Disaster disaster, List<Player> alivePlayers, List<Player> kickedPlayers) async {
+  @override
+  Future<String> getFinale(GameSettings settings, Disaster disaster,
+      List<Player> alivePlayers, List<Player> kickedPlayers) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1000));
 

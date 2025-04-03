@@ -7,23 +7,14 @@ import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/disaster.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
+import 'package:shelter_ai/data/entities/json_story.dart';
+import 'package:shelter_ai/data/entities/json_player.dart';
 
 class GptRepositoryImpl implements GptRepository {
-// Returns api key from file hidden_data.txt
+  // Returns api key from file hidden_data.txt
   Future<String> getApiKey() async {
-    // Reads the file and puts api key from it in API_KEY
-    // In txtContent holds jsnoDecoded data.
-
-    String apiKey = '';
-
-    try {
-      apiKey = dotenv.env['API_KEY'] ?? '';
-    } catch (e) {
-      print('Error $e');
-    }
-
     // Returns API_KEY, type String
-    return apiKey;
+    return dotenv.env['API_KEY'] ?? '';
   }
 
 // Sets up request for story-generating procces in GPT 4.o
@@ -43,12 +34,10 @@ class GptRepositoryImpl implements GptRepository {
 
     // Reads file to get all story_requests
     // In txt_cont_difficulty holds request text in String
-    String cont = '';
-
     late Map<String, dynamic> txtCont;
 
     try {
-      cont = await rootBundle.loadString('assets/request_texts.json');
+      String cont = await rootBundle.loadString('assets/request_texts.json');
       txtCont = jsonDecode(cont);
       txtCont['story'] = txtCont['story'] + additionalText;
     } catch (e) {
@@ -119,18 +108,23 @@ class GptRepositoryImpl implements GptRepository {
     // Sets an API key
     OpenAI.apiKey = await getApiKey();
 
-    String message = ''; // message that gonna be sent to gpt
+    late String message; // message that gonna be sent to gpt
 
     // Gets the message
-    if (type == "player") {
-      message = await playerSetup(additioanlInfo);
-    } else if (type == "story") {
-      message = await storySetup(additioanlInfo);
-    } else if (type == "finale") {
-      message = await finaleSetup(additioanlInfo);
-    } else {
-      print('Wrong type!');
-      throw Error();
+    print('gpt_request');
+    switch (type) {
+      case "player":
+        message = await playerSetup(additioanlInfo);
+        break;
+      case "story":
+        message = await storySetup(additioanlInfo);
+        break;
+      case "finale":
+        message = await finaleSetup(additioanlInfo);
+        break;
+      default:
+        print("Wrong type!");
+        throw Error();
     }
 
     // Sets up the message as an OpenAiMessage object and gives role
@@ -142,6 +136,7 @@ class GptRepositoryImpl implements GptRepository {
     );
 
     // Creates request to GPT 4o, asking for JSON answer and giving the request
+
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
       model: "gpt-4o",
@@ -149,25 +144,15 @@ class GptRepositoryImpl implements GptRepository {
       messages: [systemMessage],
     );
 
-    String answer = chatCompletion.choices.first.message.content!.first.text!;
-
-    return answer;
+    print('before return');
+    return chatCompletion.choices.first.message.content!.first.text!;
   }
 
 // Creates Player sample for game
   Player createPlayer(
       int number, Map<String, dynamic> playerInfo, playerAmount) {
-    // Corrects number to surely become natural
-    ++number;
-
     // Sets all properties for Player
-    String profession = playerInfo['profession']!;
-    String age = playerInfo['age']!;
-    String health = playerInfo['health']!;
-    String hobbySkills = playerInfo['hobby_skills']!;
-    String phobias = playerInfo['phobias']!;
-    String baggage = playerInfo['baggage']!;
-    String additionalInfo = playerInfo['additional_information']!;
+    final playerInforamtion = PlayerCard.fromJson(playerInfo);
     List<bool> knownProperties = [for (var i = 0; i < 6; ++i) false];
     List<String> notes = [for (var i = 0; i < playerAmount; ++i) ''];
 
@@ -175,13 +160,13 @@ class GptRepositoryImpl implements GptRepository {
     var player = Player(
         id: number,
         name: 'user $number',
-        profession: profession,
-        bio: age,
-        health: health,
-        hobby: hobbySkills,
-        phobia: phobias,
-        luggage: baggage,
-        extra: additionalInfo,
+        profession: playerInforamtion.profession,
+        bio: playerInforamtion.age,
+        health: playerInforamtion.health,
+        hobby: playerInforamtion.hobbySkills,
+        phobia: playerInforamtion.phobias,
+        luggage: playerInforamtion.baggage,
+        extra: playerInforamtion.additionalInformation,
         lifeStatus: LifeStatus.alive,
         knownProperties: knownProperties,
         notes: notes);
@@ -190,30 +175,32 @@ class GptRepositoryImpl implements GptRepository {
   }
 
 // Creates a players from request
-  Future<List<Player>> createPlayers(String story, String difficulty,
-      Disaster disasterSample, int playersAmount) async {
+  @override
+  Future<List<Player>> createPlayers(
+      GameSettings settings, Disaster disaster) async {
     // additionalInfo - Map object that will go in gptRequest
     // type - choice('player', 'story')
+    final difficulty = ['normal', 'medium', 'crazy'][settings.difficulty - 1];
     Map<String, String> additionalInfo = {
-      "story": story,
+      "story": disaster.answer,
       "difficulty": difficulty
     };
-    String type = 'player';
+    const type = 'player';
 
     // Sends request to Chat GPT 4o
-    String answer = await gptRequest(type, additionalInfo);
+    final answer = await gptRequest(type, additionalInfo);
 
     // Jsonifies response
     // playerInfo.keys: "player_cards"(Map<String, String>),
     // player_cards.keys: "profession", "age", "health", "hobby_skills", "phobias",
     // "baggage", "additional_info"
-    Map<String, dynamic> playerInfo = jsonDecode(answer);
+    final playerInfo = PlayersJs.fromJson(jsonDecode(answer));
     List<Player> players = [];
 
     // In loop creates players
-    for (int i = 0; i < playersAmount; i++) {
+    for (int i = 0; i < settings.playersCount; i++) {
       Player player =
-          createPlayer(i, playerInfo['player_cards'][i], playersAmount);
+          createPlayer(i + 1, playerInfo.playerCards[i], settings.playersCount);
       players.add(player);
     }
 
@@ -222,19 +209,24 @@ class GptRepositoryImpl implements GptRepository {
 
 // Creates story for game
 // needs user wishes, user amount, user language and if they wanna play with family mode on
-  Future<List<Object>> createStory(
-      String wishes, int playerAmount, String language, bool familyMode) async {
+  @override
+  Future<Disaster> createDisaster(GameSettings settings) async {
     // Sets up additional information and type
+    print("we are here");
     Map<String, String> additionalInfo = {
-      "wishes": wishes,
-      "player_amount": playerAmount.toString(),
-      "language": language,
-      "family_mode": familyMode.toString()
+      "wishes": settings.plot,
+      "player_amount": settings.playersCount.toString(),
+      "language": settings.language,
+      "family_mode": settings.safeMode.toString()
     };
     String type = 'story';
 
+    late bool success;
+
     // Sends request to Chat GPT 4o
     String answer = await gptRequest(type, additionalInfo);
+    print('Good request');
+
 
     // Jsonifies response
     // story.keys: "player_amount"(int), "language"(String), "family_mode"(Bool),
@@ -243,74 +235,68 @@ class GptRepositoryImpl implements GptRepository {
     // story["disaster"].keys: "name"(String), "history"(String), "distribution"(String)
     // "world_situation"(String)
     // story["bunker"],keys: "name"(String), "location"(String), "capacity"(String)
-    // "rooms"(List<String>), "resources"(list<resources>)
-    Map<String, dynamic> story = jsonDecode(answer);
+    // "rooms"(List<String>), "resources"(list<String>)
+    final story = Story.fromJson(jsonDecode(answer));
 
     // Sets parameters for Disaster object
-    String disasterName = story['disaster']["name"];
-    String disasterDescription = story['disaster']['history'] +
-        '\n' +
-        story['disaster']['distribution'] +
-        '\n' +
-        story['disaster']['world_situation'];
-    String disasterShortDescription = story['short_description'];
-    String shelterName = story['bunker']['name'];
-    String shelterLocation = story['bunker']['location'];
-    String shelterDescription = story['bunker']['capacity'];
-    int shelterCapacity = (playerAmount / 2 - 0.1).round();
-    List<String> shelterRooms =
-        (story['bunker']['rooms'] as List).map((e) => e as String).toList();
-    List<String> shelterResources =
-        (story['bunker']['resources'] as List).map((x) => x as String).toList();
+    var disasterDesc = StringBuffer();
+    disasterDesc.writeAll([
+      story.disaster.history,
+      '\n',
+      story.disaster.distribution,
+      '\n',
+      story.disaster.worldSituation
+    ]);
+    String disasterDescription = disasterDesc.toString();
+    int shelterCapacity = (settings.playersCount / 2 - 0.1).round();
 
     // Creates sample of Disaster object
     Disaster disasterSample = Disaster(
-        name: disasterName,
+        name: story.disaster.name,
         disasterDescription: disasterDescription,
-        disasterShortDescription: disasterShortDescription,
-        shelterName: shelterName,
-        location: shelterLocation,
-        description: shelterDescription,
+        disasterShortDescription: story.shortDescription,
+        shelterName: story.bunker.name,
+        location: story.bunker.location,
+        description: story.bunker.capacity,
         capacity: shelterCapacity,
-        rooms: shelterRooms,
-        resources: shelterResources);
+        rooms: story.bunker.rooms,
+        resources: story.bunker.resources,
+        answer: answer);
 
-    // Structs returnData in one variable
-    List<Object> returnData = [disasterSample, answer];
-
-    return returnData;
+    return disasterSample;
   }
 
 // Player amount(int), Language(String), family_mode(bool), wishes(String), difficulty(String)
 // Difficulty - choice('crazy', 'medium', 'normal')
 // Returns {'disaster': Disaster, 'players': List<Player>}
-  @override
+/*  @override
   Future<Map<String, Object>> createGame(GameSettings settings) async {
     // Gets answer from first request (Creating game story) and Gets Disaster object
     // response = [Disaster, String]
-    List<Object> response = await createStory(settings.plot,
-        settings.playersCount, settings.language, settings.safeMode);
+    // List<Object> response = await createStory(settings.plot,
+    //    settings.playersCount, settings.language, settings.safeMode);
 
     // Unpacks response into disasterSample and story
-    String? story = response[1] as String?;
-    Disaster? disasterSample = response[0] as Disaster?;
+    */ /*String? story = response[1] as String?;
+    Disaster? disasterSample = response[0] as Disaster?;*/ /*
 
     // Gets answer from second request (Creating players for game)
     // response = [Player, Player, Player, ...] in general playerAmount
-    List<Player> playerList = await createPlayers(
+    */ /*List<Player> playerList = await createPlayers(
         story!,
         ['normal', 'medium', 'crazy'][settings.difficulty - 1],
         disasterSample!,
-        settings.playersCount);
+        settings.playersCount);*/ /*
 
-    Map<String, Object> answer = {
-      'disaster': disasterSample,
-      'player_list': playerList
-    };
-    return answer;
-  }
+    // Map<String, Object> answer = {
+    //   'disaster': disasterSample,
+    //   'player_list': playerList
+    // };
+    // return answer;
+  }*/
 
 // Gets final from GPT
+  @override
   Future<String> getFinale(GameSettings settings, Disaster disaster,
       List<Player> alivePlayers, List<Player> kickedPlayer) async {
     // Sets up type and additional info for request

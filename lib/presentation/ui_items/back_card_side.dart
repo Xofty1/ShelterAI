@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/l10n.dart';
 import 'asset_image_item.dart';
 
 class PlayerCardBack extends StatelessWidget {
@@ -13,7 +14,9 @@ class PlayerCardBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
       Padding(
         padding: const EdgeInsets.all(12.0),
@@ -52,11 +55,11 @@ class PlayerCardBack extends StatelessWidget {
           width: 200,
           height: 200,
         ),
-        const SizedBox(height: 24),
-        const Text(
-          "Нажмите, чтобы увидеть карту игрока",
+        const SizedBox(height: 20),
+        Text(
+          loc.pressToSeeCard,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFFD9D9D9),
             fontSize: 18,
             fontWeight: FontWeight.bold,

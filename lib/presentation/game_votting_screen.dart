@@ -4,6 +4,7 @@ import 'package:shelter_ai/presentation/ui_items/player_tap_card.dart';
 
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/player.dart';
+import '../../l10n/l10n.dart';
 
 class GameVotingScreen extends StatefulWidget {
   final String roundNumber;
@@ -38,6 +39,7 @@ class _VotingScreenState extends State<GameVotingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     const headerColor = Color(0xFFB8A876);
     const headerTextColor = Color(0xFF482020);
     const votingPlayerHeaderColor = Color(0xFF604D4D);
@@ -47,14 +49,14 @@ class _VotingScreenState extends State<GameVotingScreen> {
 
     return Column(
         children: [
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           Container(
             width: double.infinity,
             color: voteHeaderColor,
-            child: const Center(
+            child: Center(
               child: Text(
-                'Голосование',
-                style: TextStyle(
+                loc.voting,
+                style: const TextStyle(
                     color: headerTextColor,
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
@@ -67,7 +69,7 @@ class _VotingScreenState extends State<GameVotingScreen> {
             color: votingPlayerHeaderColor,
             child: Center(
               child: Text(
-                "Голосует игрок ${widget.player.name}",
+                loc.playerVoting(widget.player.name),
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
@@ -153,9 +155,9 @@ class _VotingScreenState extends State<GameVotingScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
-                  'ПОДТВЕРДИТЬ ГОЛОС',
-                  style: TextStyle(
+                child: Text(
+                  loc.confirmVote,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
