@@ -27,5 +27,5 @@ class GameSettingsDepContainer {
   }
 
   GameSettingsDepContainer(GlobalDepContainer container)
-      : gameSettingsCubit = GameSettingsCubit(container.gptRepository);
+      : gameSettingsCubit = GameSettingsCubit(container.gptRepository, container.firebaseRepository);
 }

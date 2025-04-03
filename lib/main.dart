@@ -19,7 +19,7 @@ void main() async {
 
   await AppSharedPreference().init();
   await dotenv.load(fileName: '.env');
-  Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());

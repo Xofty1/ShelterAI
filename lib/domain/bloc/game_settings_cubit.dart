@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/data/repositories/firebase_repository.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
 import '../models/disaster.dart';
@@ -6,9 +7,10 @@ import '../models/game_settings.dart';
 import '../models/player.dart';
 
 class GameSettingsCubit extends Cubit<GameSettingsState> {
-  GptRepository repository;
+  GptRepository gptRepository;
+  FirebaseRepository firebaseRepository;
 
-  GameSettingsCubit(this.repository) : super(const GameSettingsState.initial());
+  GameSettingsCubit(this.gptRepository, this.firebaseRepository) : super(const GameSettingsState.initial());
 
   void updatePlayersCount(int newCount) {
     emit(
@@ -50,7 +52,7 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
       settings: state.settings.copyWith(language: language),
     ));
 
-    final map = await repository.createGame(state.settings);
+    final map = await gptRepository.createGame(state.settings);
     final Disaster disaster = map['disaster'] as Disaster;
     final players = map['player_list'] as List<Player>;
 
