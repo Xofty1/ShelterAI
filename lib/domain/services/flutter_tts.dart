@@ -16,7 +16,7 @@ class Tts {
   final rate = 0.9;
   bool isCurrentLanguageInstalled = false;
 
-  String? _VoiceText;
+  String? _voiceText;
 
   TtsState ttsState = TtsState.stopped;
 
@@ -29,12 +29,10 @@ class Tts {
   // Gets platform
   bool get isIOS => !kIsWeb && Platform.isIOS;
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
-  bool get isWindows => !kIsWeb && Platform.isWindows;
-  bool get isWeb => kIsWeb;
 
 
   // Itit function
-  dynamic initTts() {
+  void initTts() {
     // Creates player
     flutterTts = FlutterTts();
 
@@ -85,15 +83,14 @@ class Tts {
   }
 
   // Updates settings
-  Future<void> _updateSettings(volume) async {
+  Future<void> setVolume(volume) async {
     await flutterTts.setVolume(volume);
   }
 
   // Function that plays _VoiceText
-  Future<void> _speak() async {
-    Future.delayed(const Duration(seconds: 1, milliseconds: 500));
-    if (_VoiceText != null && _VoiceText!.isNotEmpty) {
-      await flutterTts.speak(_VoiceText!);
+  Future<void> speak() async {
+    if (_voiceText != null && _voiceText!.isNotEmpty) {
+      await flutterTts.speak(_voiceText!);
     }
   }
 
@@ -102,19 +99,19 @@ class Tts {
   }
 
   // Stops audio
-  Future<void> _stop() async {
+  Future<void> stop() async {
     var result = await flutterTts.stop();
     if (result == 1) () => ttsState = TtsState.stopped;
   }
 
   // Pauses audio
-  Future<void> _pause() async {
+  Future<void> pause() async {
     var result = await flutterTts.pause();
     if (result == 1) () => ttsState = TtsState.paused;
   }
 
   // Updates language
-  void _updateLanguage(String? lang) {
+  void updateLanguage(String? lang) {
     // Reforms it
     switch (lang) {
       case "en": lang = "en-US"; break;
@@ -130,8 +127,7 @@ class Tts {
     }
   }
 
-  // Updates text
-  void _updateText(String text){
-    this._VoiceText = text;
+  void setText(String text){
+    _voiceText = text;
   }
 }

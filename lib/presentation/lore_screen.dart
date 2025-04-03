@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
 
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/disaster.dart';
@@ -68,7 +69,9 @@ class LoreScreen extends StatelessWidget {
                     children: [
                       AppButton(text: loc.pause, onPressed: (){}),
                       IconButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          context.read<SoundCubit>().pauseText();
+                        },
                         icon: const Icon(Icons.circle_notifications, size: 48),
                         color: const Color(0xFFA8906B),
                       )
@@ -81,7 +84,6 @@ class LoreScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           AppButton(text: loc.startGame, onPressed: (){
-            // Navigator.pushNamed(context, '/game_round');
             BlocProvider.of<GameBloc>(context).add(ReadyGameEvent());
           })
         ],

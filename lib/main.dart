@@ -22,7 +22,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final globalDepHolder = GlobalDepHolder()..create(isMock: true);
+  final globalDepHolder = GlobalDepHolder()..create(isMock: false);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     }
 
     return RepositoryProvider<GlobalDepHolder>(
-      create: (context) => globalDepHolder..create(isMock: true),
+      create: (context) => globalDepHolder,
       child: Builder(builder: (context) {
         return MultiBlocProvider(
           providers: [

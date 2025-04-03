@@ -5,6 +5,8 @@ import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
+import '../../domain/services/flutter_tts.dart';
+
 class GlobalDepHolder {
   GlobalDepContainer? _container;
   bool _isCreated = false;
@@ -38,17 +40,17 @@ class GlobalDepContainer {
   });
 
   factory GlobalDepContainer.mock() {
-    var gptRepository = GptRepositoryMock();
-    var appSettingsCubit = AppSettingsCubit();
+    final gptRepository = GptRepositoryMock();
+    final appSettingsCubit = AppSettingsCubit();
 
-    var musicPlayer = AudioPlayer();
-    var effectsPlayer = AudioPlayer();
+    final musicPlayer = AudioPlayer();
+    final effectsPlayer = AudioPlayer();
+    final tts = Tts();
 
     var soundCubit = SoundCubit(
       musicPlayer: musicPlayer,
       effectsPlayer: effectsPlayer,
-      initialMusicVolume: appSettingsCubit.state.settings.music,
-      initialEffectsVolume: appSettingsCubit.state.settings.effects,
+      tts: tts,
     );
 
     return GlobalDepContainer._(
@@ -59,17 +61,17 @@ class GlobalDepContainer {
   }
 
   factory GlobalDepContainer.real() {
-    var gptRepository = GptRepositoryImpl();
-    var appSettingsCubit = AppSettingsCubit();
+    final gptRepository = GptRepositoryMock();
+    final appSettingsCubit = AppSettingsCubit();
 
-    var musicPlayer = AudioPlayer();
-    var effectsPlayer = AudioPlayer();
+    final musicPlayer = AudioPlayer();
+    final effectsPlayer = AudioPlayer();
+    final tts = Tts();
 
     var soundCubit = SoundCubit(
       musicPlayer: musicPlayer,
       effectsPlayer: effectsPlayer,
-      initialMusicVolume: appSettingsCubit.state.settings.music,
-      initialEffectsVolume: appSettingsCubit.state.settings.effects,
+      tts: tts,
     );
 
     return GlobalDepContainer._(
