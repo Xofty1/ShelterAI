@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/core/di/game_dep.dart';
+import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
 import 'package:shelter_ai/domain/models/player.dart';
@@ -42,6 +44,7 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
     if (!gameDepHolder.isCreated) {
       final globalDepContainer =
           RepositoryProvider.of<GlobalDepHolder>(context).container!;
+
       gameDepHolder.create(globalDepContainer);
 
       final args =
@@ -49,7 +52,8 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
       gameSettings = args['settings'] as GameSettings;
       disaster = args['disaster'] as Disaster;
       players = args['players'] as List<Player>;
-      gameDepHolder.container!.gameBloc
+
+      gameDepHolder.container?.gameBloc
           .add(StartedGameEvent(gameSettings, disaster, players));
     }
 

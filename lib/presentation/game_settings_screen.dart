@@ -67,6 +67,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         if (state is DisasterUploadedState) {
           NavigationManager.instance
               .openGameReplacement(state.settings, state.disaster, state.players);
+        } else if(state is ErrorLoadingGameState){
+          const snackBar = SnackBar(content: Text('Ошибка загрузки данных'));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          NavigationManager.instance.pop();
         }
       },
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
