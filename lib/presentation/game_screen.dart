@@ -4,6 +4,7 @@ import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/dialogs/lore_dialog.dart';
+import 'package:shelter_ai/presentation/dialogs/round_info_dialog.dart';
 import 'package:shelter_ai/presentation/dialogs/settings_dialog.dart';
 import 'package:shelter_ai/presentation/discussion_screen.dart';
 import 'package:shelter_ai/presentation/loader_screen.dart';
@@ -50,7 +51,6 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
       gameDepHolder.container!.gameBloc
           .add(StartedGameEvent(gameSettings, disaster, players));
     }
-
 
     super.didChangeDependencies();
   }
@@ -115,7 +115,17 @@ class GameScreen extends StatelessWidget {
   void _showPlayersScreen(BuildContext context, RunningGameState state) {
     showDialog(
       context: context,
-      builder: (BuildContext context) => PlayersListScreen(players: state.players),
+      builder: (BuildContext context) =>
+          PlayersListScreen(players: state.players),
+    );
+  }
+
+  void _showRoundInfoDialog(BuildContext context, RunningGameState state) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => RoundInfoDialog(
+        roundInfo: state.roundInfo,
+      ),
     );
   }
 
@@ -155,49 +165,52 @@ class GameScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "РАУНД ${gameState.roundInfo.roundNumber}",
-                              style: const TextStyle(
-                                color: headerTextColor,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                      child: GestureDetector(
+                        onTap: () => _showRoundInfoDialog(context, gameState),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "РАУНД ${gameState.roundInfo.roundNumber}",
+                                style: const TextStyle(
+                                  color: headerTextColor,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () => _showPlayersScreen(
-                                    context, gameState),
-                                icon: const Icon(Icons.account_box_sharp),
-                                color: headerTextColor,
-                                iconSize: 28,
-                                tooltip: 'Все игроки',
-                              ),
-                              IconButton(
-                                onPressed: () =>
-                                    _showSettingsDialog(context, gameState),
-                                icon: const Icon(Icons.settings),
-                                color: headerTextColor,
-                                iconSize: 28,
-                                tooltip: 'Настройки',
-                              ),
-                              const SizedBox(width: 8),
-                              IconButton(
-                                onPressed: () =>
-                                    _showLoreDialog(context, gameState),
-                                icon: const Icon(Icons.info_outline),
-                                color: headerTextColor,
-                                iconSize: 28,
-                                tooltip: 'Информация',
-                              ),
-                            ],
-                          ),
-                        ],
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () =>
+                                      _showPlayersScreen(context, gameState),
+                                  icon: const Icon(Icons.account_box_sharp),
+                                  color: headerTextColor,
+                                  iconSize: 28,
+                                  tooltip: 'Все игроки',
+                                ),
+                                IconButton(
+                                  onPressed: () =>
+                                      _showSettingsDialog(context, gameState),
+                                  icon: const Icon(Icons.settings),
+                                  color: headerTextColor,
+                                  iconSize: 28,
+                                  tooltip: 'Настройки',
+                                ),
+                                const SizedBox(width: 8),
+                                IconButton(
+                                  onPressed: () =>
+                                      _showLoreDialog(context, gameState),
+                                  icon: const Icon(Icons.info_outline),
+                                  color: headerTextColor,
+                                  iconSize: 28,
+                                  tooltip: 'Информация',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   Expanded(
@@ -224,7 +237,7 @@ class GameScreen extends StatelessWidget {
                       GameStage.speaking => DiscussionScreen(
                           roundNumber: gameState.roundInfo.roundNumber,
                           seconds: gameState.settings.time,
-                        players: gameState.players,
+                          players: gameState.players,
                         ),
                       GameStage.voting => GameVotingScreen(
                           players: gameState.players,
