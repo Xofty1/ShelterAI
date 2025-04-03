@@ -52,7 +52,7 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
 
     try{
       print('we are in try');
-      final Disaster disaster = await repository.createGame(state.settings);
+      final Disaster disaster = await repository.createDisaster(state.settings);
       final List<Player> players = await repository.createPlayers(state.settings, disaster);
 
       emit(DisasterUploadedState(

@@ -210,7 +210,7 @@ class GptRepositoryImpl implements GptRepository {
 // Creates story for game
 // needs user wishes, user amount, user language and if they wanna play with family mode on
   @override
-  Future<Disaster> createGame(GameSettings settings) async {
+  Future<Disaster> createDisaster(GameSettings settings) async {
     // Sets up additional information and type
     print("we are here");
     Map<String, String> additionalInfo = {

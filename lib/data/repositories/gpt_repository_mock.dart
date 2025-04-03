@@ -15,118 +15,227 @@ class GptRepositoryMock implements GptRepository {
   final Random _random = Random();
 
   @override
-  Future<Disaster> createGame(GameSettings settings) async {
+  Future<Disaster> createDisaster(GameSettings settings) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 800));
 
-    print('mock');
-
-    final file = File('assets/offline/games.txt');
-
-    late String fileContent;
-
-    fileContent = await file.readAsString();
-
-    print('file_read');
-
-    final currentStory = DataReader.fromJson(jsonDecode(fileContent));
-
-    print('currentStory got');
-
-    late Story story;
-
-    switch ([settings.language, settings.safeMode]) {
-      case ['ru', false]:
-        story = currentStory.ru.no[_random.nextInt(2)];
-        break;
-      case ['ru', true]:
-        story = currentStory.ru.yes[_random.nextInt(2)];
-        break;
-      case ['en', false]:
-        story = currentStory.en.no[_random.nextInt(2)];
-        break;
-      case ['en', true]:
-        story = currentStory.en.yes[_random.nextInt(2)];
-        break;
-      default:
-        throw Error();
-    }
-
-    var disasterDesc = StringBuffer();
-    disasterDesc.writeAll([
-      story.disaster.history,
-      '\n',
-      story.disaster.distribution,
-      '\n',
-      story.disaster.worldSituation
-    ]);
-
     // List of random disasters
-    final disaster = Disaster(
-        name: story.disaster.name,
-        disasterDescription: disasterDesc.toString(),
-        disasterShortDescription: story.shortDescription,
-        shelterName: story.bunker.name,
-        location: story.bunker.location,
-        description: story.bunker.capacity,
-        capacity: (settings.playersCount / 2 - 0.1).round(),
-        rooms: story.bunker.rooms,
-        resources: story.bunker.resources,
-        answer: 'Offline mode',
-      );
+    final disasters = [
+      const Disaster(
+        name: "Ядерная война",
+        disasterDescription:
+            "Мир погрузился в хаос после ядерной войны. Радиация и разрушения повсюду.",
+        disasterShortDescription: "Ядерная война уничтожила цивилизацию",
+        shelterName: "Противоатомный бункер",
+        location: "Глубоко под землей",
+        description:
+            "Противоатомное убежище с запасами на 1 год и системой фильтрации воздуха.",
+        capacity: 5,
+        rooms: [
+          "Жилой отсек",
+          "Склад",
+          "Медицинский отсек",
+          "Комната отдыха",
+          "Технический блок"
+        ],
+        resources: ["Еда", "Вода", "Медикаменты", "Инструменты", "Генератор"],
+        answer: '',
+      ),
+      const Disaster(
+        name: "Пандемия",
+        disasterDescription:
+            "Смертельный вирус уничтожил большую часть населения Земли.",
+        disasterShortDescription: "Глобальная пандемия смертельного вируса",
+        shelterName: "Медицинский бункер",
+        location: "Под заброшенной больницей",
+        description: "Медицинский бункер с лабораторией и карантинными зонами.",
+        capacity: 6,
+        rooms: [
+          "Лаборатория",
+          "Карантинная зона",
+          "Жилой отсек",
+          "Склад медикаментов",
+          "Столовая"
+        ],
+        resources: [
+          "Вакцины",
+          "Антибиотики",
+          "Защитные костюмы",
+          "Еда",
+          "Вода"
+        ],
+        answer: '',
+      ),
+      const Disaster(
+        name: "Климатическая катастрофа",
+        disasterDescription:
+            "Глобальное потепление привело к катастрофическим изменениям климата.",
+        disasterShortDescription: "Глобальная климатическая катастрофа",
+        shelterName: "Экокомплекс",
+        location: "В горах",
+        description:
+            "Подземный экокомплекс с гидропонной фермой и системой терморегуляции.",
+        capacity: 7,
+        rooms: [
+          "Гидропонная ферма",
+          "Солнечная электростанция",
+          "Жилые помещения",
+          "Лаборатория",
+          "Водоочистная"
+        ],
+        resources: [
+          "Семена",
+          "Солнечные батареи",
+          "Системы фильтрации",
+          "Инструменты",
+          "Запасы еды"
+        ],
+        answer: '',
+      ),
+      const Disaster(
+        name: "Восстание ИИ",
+        disasterDescription:
+            "Искусственный интеллект вышел из-под контроля и начал уничтожать человечество.",
+        disasterShortDescription: "Машины восстали против людей",
+        shelterName: "Аналоговый бункер",
+        location: "В отдаленной местности",
+        description:
+            "Бункер без электронных систем, защищенный от любого внешнего доступа.",
+        capacity: 4,
+        rooms: [
+          "Механическая мастерская",
+          "Архив знаний",
+          "Жилой отсек",
+          "Хранилище энергии"
+        ],
+        resources: [
+          "Механические инструменты",
+          "Книги",
+          "Ручные генераторы",
+          "Консервы"
+        ],
+        answer: '',
+      ),
+      const Disaster(
+        name: "Вторжение пришельцев",
+        disasterDescription:
+            "Инопланетная цивилизация атаковала Землю и захватила большую часть планеты.",
+        disasterShortDescription: "Земля захвачена инопланетянами",
+        shelterName: "Военный бункер",
+        location: "Под бывшей военной базой",
+        description:
+            "Военный бункер с экспериментальными системами защиты от внеземных угроз.",
+        capacity: 5,
+        rooms: [
+          "Оружейная",
+          "Командный центр",
+          "Спальные отсеки",
+          "Медицинский отсек",
+          "Склад"
+        ],
+        resources: [
+          "Экспериментальное оружие",
+          "Системы маскировки",
+          "Боеприпасы",
+          "Провизия",
+          "Медикаменты"
+        ],
+        answer: '',
+      ),
+    ];
+
     // Return a random disaster
-    return disaster;
+    return disasters[_random.nextInt(disasters.length)];
   }
 
   @override
-  Future<List<Player>> createPlayers(GameSettings settings, Disaster disaster) async {
+  Future<List<Player>> createPlayers(
+      GameSettings settings, Disaster disaster) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1200));
 
-    print('mock');
+    // Define possible traits for randomization
+    final List<String> professions = [
+      "Врач",
+      "Инженер",
+      "Ученый",
+      "Строитель",
+      "Фермер",
+      "Солдат",
+      "Учитель",
+      "Программист",
+      "Художник",
+      "Повар"
+    ];
 
-    final file = File('assets/offline/players.txt');
+    final List<String> hobbies = [
+      "Рисование",
+      "Музыка",
+      "Чтение",
+      "Спорт",
+      "Садоводство",
+      "Шахматы",
+      "Коллекционирование",
+      "Охота",
+      "Рыбалка",
+      "Кулинария"
+    ];
 
-    print('file');
+    final List<String> phobias = [
+      "Клаустрофобия",
+      "Акрофобия",
+      "Арахнофобия",
+      "Социофобия",
+      "Никтофобия",
+      "Гермофобия",
+      "Танатофобия",
+      "Агорафобия",
+      "Гемофобия",
+      "Трипофобия"
+    ];
 
-    final fileContent = await file.readAsString();
-
-    final characteristics = Preset.fromJson(jsonDecode(fileContent));
-
-    print('decoded');
-
-    late Characteristics workSpace;
-
-    print(settings.language);
-    switch (settings.language){
-      case 'ru':
-        workSpace = characteristics.ru;
-        break;
-      case 'en':
-        workSpace = characteristics.en;
-        break;
-      default:
-        throw Error();
-    }
-
-    print('got');
+    final List<String> luggageOptions = [
+      "Аптечка",
+      "Оружие",
+      "Запас еды",
+      "Инструменты",
+      "Книги",
+      "Фотографии близких",
+      "Рация",
+      "Компас",
+      "Спальный мешок",
+      "Нож"
+    ];
 
     // Generate random players
     List<Player> players = [];
+    int playerCount = settings.playersCount;
 
-    for (int i = 0; i < settings.playersCount; i++) {
+    for (int i = 0; i < playerCount; i++) {
+      String profession = professions[_random.nextInt(professions.length)];
+      String hobby = hobbies[_random.nextInt(hobbies.length)];
+      String phobia = phobias[_random.nextInt(phobias.length)];
+      String luggage = luggageOptions[_random.nextInt(luggageOptions.length)];
+
+      String bio =
+          "Персонаж возрастом ${20 + _random.nextInt(50)} лет, профессия: $profession.";
+      String extra =
+          _random.nextBool() ? "Имеет скрытые мотивы" : "Нет особенностей";
+
       players.add(Player(
-        id: i+1,
+        id: i + 1,
         name: "Игрок ${i + 1}",
-        profession: workSpace.profession[_random.nextInt(40)],
-        bio: workSpace.age[_random.nextInt(40)],
-        health: workSpace.health[_random.nextInt(40)],
-        hobby: workSpace.hobbySkills[_random.nextInt(40)],
-        phobia: workSpace.phobias[_random.nextInt(40)],
-        luggage: workSpace.baggage[_random.nextInt(40)],
-        extra: workSpace.additionalInformation[_random.nextInt(40)],
+        profession: profession,
+        bio: bio,
+        health: "${50 + _random.nextInt(51)}%",
+        // Health between 50% and 100%
+        hobby: hobby,
+        phobia: phobia,
+        luggage: luggage,
+        extra: extra,
         lifeStatus: LifeStatus.alive,
         knownProperties: List.generate(6, (_) => false),
+        // Initially all properties unknown
         notes: [], // No notes initially
       ));
     }
@@ -135,7 +244,8 @@ class GptRepositoryMock implements GptRepository {
   }
 
   @override
-  Future<String> getFinale(GameSettings settings, Disaster disaster, List<Player> alivePlayers, List<Player> kickedPlayers) async {
+  Future<String> getFinale(GameSettings settings, Disaster disaster,
+      List<Player> alivePlayers, List<Player> kickedPlayers) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1000));
 

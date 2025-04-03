@@ -4,6 +4,8 @@ import 'package:shelter_ai/presentation/ui_items/button.dart';
 
 import 'package:shelter_ai/presentation/ui_items/state_card_row.dart';
 
+import '../../l10n/l10n.dart';
+
 
 class PlayerCardFront extends StatelessWidget {
   final Player player;
@@ -23,6 +25,7 @@ class PlayerCardFront extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -55,7 +58,7 @@ class PlayerCardFront extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           StateCardRow(
-              label: "Возраст",
+              label: loc.age,
               assetsPath: "assets/images/age.svg",
               initialActive: player.knownProperties[0],
               isWorked: selectedIndexes.length < openCount,
@@ -65,7 +68,7 @@ class PlayerCardFront extends StatelessWidget {
               }),
           const SizedBox(height: 12),
           StateCardRow(
-            label: "Здоровье",
+            label: loc.health,
             assetsPath: "assets/images/health.svg",
             initialActive: player.knownProperties[1],
             isWorked: selectedIndexes.length < openCount,
@@ -76,7 +79,7 @@ class PlayerCardFront extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           StateCardRow(
-            label: "Хобби/Навыки",
+            label: loc.hobbyAndSkills,
             assetsPath: "assets/images/hobby.svg",
             initialActive: player.knownProperties[2],
             isWorked: selectedIndexes.length < openCount,
@@ -87,7 +90,7 @@ class PlayerCardFront extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           StateCardRow(
-            label: "Фобии",
+            label: loc.phobias,
             assetsPath: "assets/images/phobia.svg",
             initialActive: player.knownProperties[3],
             isWorked: selectedIndexes.length < openCount,
@@ -98,7 +101,7 @@ class PlayerCardFront extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           StateCardRow(
-            label: "Багаж",
+            label: loc.luggage,
             assetsPath: "assets/images/luggage.svg",
             initialActive: player.knownProperties[4],
             isWorked: selectedIndexes.length < openCount,
@@ -109,7 +112,7 @@ class PlayerCardFront extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           StateCardRow(
-            label: "Дополнительная информация",
+            label: loc.additionalInfo,
             assetsPath: "assets/images/extra.svg",
             initialActive: player.knownProperties[5],
             isWorked: selectedIndexes.length < openCount,
@@ -125,7 +128,7 @@ class PlayerCardFront extends StatelessWidget {
               child: IgnorePointer(
                 ignoring: selectedIndexes.length != openCount,
                 child: CustomButton(
-                  text: "Подтверить",
+                  text: loc.confirm,
                   onPressed: onConfirm,
                 ),
               ),

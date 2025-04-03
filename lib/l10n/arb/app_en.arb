@@ -56,7 +56,7 @@
   "confirmVote": "Confirm vote",
   "rooms": "Rooms",
   "discussion": "Discussion",
-  "resources": "resources",
+  "resources": "Resources",
   "information": "Information",
   "difficultyClassic": "Classic",
   "difficultyHardcore": "Hardcore",
@@ -72,11 +72,12 @@
   "pause": "Pause",
   "lore": "Lore",
   "loading": "Loading...",
-  "age": "age",
+  "age": "Age",
   "confirm": "Confirm",
-  "health": "health",
+  "health": "Health",
   "hobbyAndSkills": "Hobby/Skills",
   "phobias": "Phobias",
   "luggage": "Luggage",
-  "additionalInfo": "Additional info."
+  "additionalInfo": "Additional info.",
+  "playerInfo": "Player info"
 }

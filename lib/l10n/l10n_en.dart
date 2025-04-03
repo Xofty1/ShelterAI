@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -176,7 +174,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discussion => 'Discussion';
 
   @override
-  String get resources => 'resources';
+  String get resources => 'Resources';
 
   @override
   String get information => 'Information';
@@ -235,13 +233,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loading => 'Loading...';
 
   @override
-  String get age => 'age';
+  String get age => 'Age';
 
   @override
   String get confirm => 'Confirm';
 
   @override
-  String get health => 'health';
+  String get health => 'Health';
 
   @override
   String get hobbyAndSkills => 'Hobby/Skills';
@@ -257,4 +255,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get additionalInfo => 'Additional info.';
+
+  @override
+  String get playerInfo => 'Player info';
 }
