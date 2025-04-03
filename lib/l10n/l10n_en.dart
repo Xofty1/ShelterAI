@@ -16,19 +16,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get history => 'History';
 
   @override
-  String get roundNumber => 'Round number';
-
-  @override
   String get rules => 'Rules';
 
   @override
   String get volume => 'Volume';
-
-  @override
-  String get playerList => 'PLAYER LIST';
-
-  @override
-  String get abilitiesToOpen => 'Abilities to open';
 
   @override
   String get music => 'Music';
@@ -38,9 +29,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get effects => 'Effects';
-
-  @override
-  String get returnWord => 'Return';
 
   @override
   String get language => 'Language';
@@ -88,7 +76,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timer => 'Timer';
 
   @override
-  String get wishes => 'Wishes';
+  String get time => 'Time';
 
   @override
   String get plotWishes => 'Enter plot wishes';
@@ -105,6 +93,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get round => 'ROUND';
 
   @override
+  String get abilitiesToOpen => 'Abilities to open';
+
+  @override
+  String get wishes => 'Wishes';
+
+  @override
+  String get roundNumber => 'Round number';
+
+  @override
+  String get roundInfo => 'Round information';
+
+  @override
   String get survivors => 'Survivors:';
 
   @override
@@ -114,7 +114,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eliminated => 'Eliminated:';
 
   @override
+  String get players => 'Players';
+
+  @override
   String get finale => 'FINAL';
+
+  @override
+  String get allPlayers => 'All players';
+
+  @override
+  String get timeLabel => 'Time';
+
+  @override
+  String get playerList => 'PLAYER LIST';
+
+  @override
+  String get returnWord => 'Return';
+
+  @override
+  String get dataLoadingError => 'Data loading error';
 
   @override
   String get inBunker => 'Players in shelter';
@@ -123,22 +141,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notInBunker => 'Players outside';
 
   @override
+  String get finish => 'Finish';
+
+  @override
   String get howManyToKick => 'Players to be kicked out:';
-
-  @override
-  String get players => 'Players';
-
-  @override
-  String get allPlayers => 'All players';
-
-  @override
-  String get unKnown => 'Неизвестно';
 
   @override
   String get kickedPlayers => 'Kicked players';
 
   @override
-  String get dataLoadingError => 'Data loading error';
+  String get unKnown => 'Unknown';
 
   @override
   String get characteristicsToOpen => 'Characteristics to be opened:';
@@ -147,19 +159,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disasterDescription => 'Disaster Description';
 
   @override
-  String get shelter => 'Shelter';
-
-  @override
-  String get finish => 'Finish';
-
-  @override
   String get humans => 'people';
 
   @override
-  String get discussionTime => 'Discussion time';
+  String get shelter => 'Shelter';
 
   @override
   String get shelterDescription => 'Shelter description';
+
+  @override
+  String get discussionTime => 'Discussion time';
 
   @override
   String get capacity => 'Shelter capacity';
@@ -180,9 +189,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get information => 'Information';
 
   @override
-  String difficulty(Object level) {
-    return 'Difficulty: $level';
-  }
+  String get difficulty => 'Difficulty';
 
   @override
   String get difficultyClassic => 'Classic';
@@ -194,15 +201,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get difficultyInsanity => 'Insanity';
 
   @override
+  String get familyModeText => 'Family mode';
+
+  @override
   String count(Object count) {
     return 'Count: $count';
   }
 
   @override
-  String get countPlayers => 'Number of players';
+  String get vkl => 'on';
 
   @override
-  String get familyModeText => 'Family mode';
+  String get vikl => 'off';
+
+  @override
+  String difficultyLevel(Object level) {
+    return 'Difficulty: $level';
+  }
 
   @override
   String familyMode(Object familyMode) {
@@ -210,12 +225,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get time => 'Time';
-
-  @override
   String timerSettings(Object timer) {
     return 'Timer: $timer';
   }
+
+  @override
+  String get countPlayers => 'Number of players';
 
   @override
   String get startGame => 'Start Game';
@@ -257,22 +272,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profession => 'Profession (doctor, engineer, military, teacher, etc.)';
 
   @override
-  String get age => 'Age';
+  String get age => 'Age (may affect physical abilities)';
 
   @override
-  String get health => 'Health';
+  String get health => 'Health (chronic diseases, disability, excellent condition)';
 
   @override
   String get hobbies => 'Hobbies/skills (can be useful or useless in a bunker)';
 
   @override
-  String get phobias => 'Phobias';
+  String get phobias => 'Phobias (fears that may interfere with survival)';
 
   @override
-  String get luggage => 'Luggage';
+  String get luggage => 'Luggage (an item that the player took with them, such as weapons, first aid kit, books)';
 
   @override
-  String get additionalInfo => 'Additional info.';
+  String get additionalInfo => 'Additional information (e.g., pregnancy, criminal past)';
 
   @override
   String get discussionDebate => 'Discussion and Debate';
@@ -317,19 +332,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get requiredToOpenProperties => 'Required to open characteristics';
 
   @override
-  String get vkl => 'on';
-
-  @override
-  String get vikl => 'off';
-
-  @override
   String get confirm => 'Confirm';
 
   @override
   String get hobbyAndSkills => 'Hobby/Skills';
-
-  @override
-  String get roundInfo => 'Round information';
 
   @override
   String get difficultySettings => 'Difficulty';
