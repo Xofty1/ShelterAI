@@ -16,11 +16,10 @@ import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/vote_result_screen.dart';
 import 'package:shelter_ai/presentation/waiting_screen.dart';
 
-import '../core/di/game_dep.dart';
-import '../core/di/global_dep.dart';
 import '../core/theme/app_colors.dart';
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/disaster.dart';
+import '../domain/models/firebase_room/firebase_room.dart';
 import '../l10n/l10n.dart';
 import 'game_finish_screen.dart';
 import 'game_round_screen.dart';
@@ -36,10 +35,6 @@ class GameScreenWidget extends StatefulWidget {
 class _GameScreenWidgetState extends State<GameScreenWidget> {
   final GameDepHolder gameDepHolder = GameDepHolder();
 
-  late final GameSettings gameSettings;
-  late final Disaster disaster;
-  late final List<Player> players;
-
   @override
   void didChangeDependencies() {
     if (!gameDepHolder.isCreated) {
@@ -50,12 +45,26 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
 
       final args =
           ModalRoute.of(context)!.settings.arguments! as Map<String, Object>;
-      gameSettings = args['settings'] as GameSettings;
-      disaster = args['disaster'] as Disaster;
-      players = args['players'] as List<Player>;
 
-      gameDepHolder.container?.gameBloc
-          .add(StartedGameEvent(gameSettings, disaster, players));
+      if (args['isOnline'] as bool) {
+        final gameState = args['state'] as RunningGameState;
+        final room = args['room'] as FirebaseRoom;
+
+        gameDepHolder.container?.gameBloc.add(
+          EnteredOnlineRoomEvent(
+            gameState: gameState,
+            room: room,
+          ),
+        );
+        return;
+      } else {
+        final gameSettings = args['settings'] as GameSettings;
+        final disaster = args['disaster'] as Disaster;
+        final players = args['players'] as List<Player>;
+
+        gameDepHolder.container?.gameBloc
+            .add(StartedGameEvent(gameSettings, disaster, players));
+      }
     }
 
     super.didChangeDependencies();
@@ -158,6 +167,7 @@ class GameScreen extends StatelessWidget {
                 return Column(
                   children: [
                     if (gameState.stage != GameStage.waiting &&
+                        gameState.stage != GameStage.waitingPlayers &&
                         gameState.stage != GameStage.intro &&
                         gameState.stage != GameStage.roundStarted &&
                         gameState.stage != GameStage.finals &&
@@ -229,7 +239,7 @@ class GameScreen extends StatelessWidget {
                           const LoaderScreen(),
                         GameStage.waitingPlayers => WaitingScreen(
                             players: gameState.players,
-                            onStartGame: (){},
+                            onStartGame: () {},
                             isHost: true),
                         GameStage.intro =>
                           LoreScreen(disaster: gameState.disaster),
@@ -272,7 +282,6 @@ class GameScreen extends StatelessWidget {
                   ],
                 );
               }
-
               return const LoaderScreen();
             }),
           ),

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/data/repositories/firebase_repository.dart';
+import 'package:shelter_ai/domain/models/firebase_room/firebase_room.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
 import '../models/disaster.dart';
@@ -73,13 +74,12 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
       final players = map['player_list'] as List<Player>;
 
       if (state.settings.isOnline) {
-        print("123");
         // Create initial game state
         final gameState = RunningGameState.initial(
           settings: state.settings,
           disaster: disaster,
           players: players,
-        );
+        ).copyWith(stage: GameStage.waitingPlayers);
 
         // Generate room password
         final password = _generateRandomString(4);
@@ -91,21 +91,29 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
             currentPlayerCounter: 1,
             currentPlayerIndex: 0,
             password: password,
+            isBusy:
+                List.generate(state.settings.playersCount, (index) => false),
           ),
         );
 
-        print("RoomId $roomId");
-
         // Join room with first player
-        await firebaseRepository.joinRoom(roomId, players[0]);
+        final playerId = await firebaseRepository
+            .joinRoom(roomId); // это id игрока под которым играет пользователь
+
+        // Обновляем игрока с полученным ID
+        final updatedPlayer = players[0].copyWith(id: playerId);
+        final updatedPlayers = [...players];
+        updatedPlayers[0] = updatedPlayer;
 
         // Include roomId in the emitted state
-        emit(DisasterUploadedState(
+        emit(OnlineDisasterUploadedState(
           settings: state.settings,
-          disaster: disaster,
-          players: players,
-          roomId: roomId,
-          roomPassword: password,
+          gameState: gameState.copyWith(players: updatedPlayers),
+          room: FirebaseRoom(
+            isHost: true,
+            playerId: playerId,
+            roomId: roomId,
+          ),
         ));
       } else {
         // For offline mode
@@ -116,7 +124,7 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
         ));
       }
     } catch (e) {
-      print(e);
+      print("startGame $e");
       emit(ErrorLoadingGameState(settings: state.settings));
     }
   }
@@ -128,70 +136,6 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
         isOnline: newIsOnline,
       )),
     );
-  }
-
-  // Method to join an existing room
-  Future<void> joinRoom(String roomId, String password) async {
-    emit(JoiningRoomState(settings: state.settings));
-
-    try {
-      // Get room data
-      final room = await firebaseRepository.getRoom(roomId);
-
-      // Check if room exists and password is correct
-      if (room == null) {
-        emit(RoomNotFoundState(settings: state.settings));
-        return;
-      }
-
-      if (room.password != password) {
-        emit(InvalidPasswordState(settings: state.settings));
-        return;
-      }
-
-      // Get current players
-      final players = await firebaseRepository.getPlayers(roomId);
-
-      // Check if room is full
-      if (players.length >= room.gameState.settings.playersCount) {
-        emit(RoomFullState(settings: state.settings));
-        return;
-      }
-
-      // Create new player
-      final newPlayer = Player(
-        id: room.currentPlayerCounter,
-        name: "Player ${room.currentPlayerCounter}",
-        profession: "Undefined",
-        bio: "New player joined from another device",
-        health: "Healthy",
-        hobby: "Undefined",
-        phobia: "Undefined",
-        luggage: "Undefined",
-        extra: "Joined from another device",
-        lifeStatus: LifeStatus.alive,
-        knownProperties: List.filled(6, false),
-        notes: [],
-      );
-
-      // Join room
-      await firebaseRepository.joinRoom(roomId, newPlayer);
-
-      // Update player counter in room
-      await firebaseRepository.updateRoomPlayerCounter(
-          roomId, room.currentPlayerCounter + 1);
-
-      // Emit success state
-      emit(JoinedRoomState(
-        settings: room.gameState.settings,
-        disaster: room.gameState.disaster,
-        players: [...players, newPlayer],
-        roomId: roomId,
-        currentPlayer: newPlayer,
-      ));
-    } catch (e) {
-      emit(ErrorJoiningRoomState(settings: state.settings));
-    }
   }
 }
 
@@ -232,6 +176,17 @@ class DisasterUploadedState extends GameSettingsState {
     required this.players,
     this.roomId,
     this.roomPassword,
+  });
+}
+
+class OnlineDisasterUploadedState extends GameSettingsState {
+  final FirebaseRoom room;
+  final RunningGameState gameState;
+
+  OnlineDisasterUploadedState({
+    required super.settings,
+    required this.gameState,
+    required this.room,
   });
 }
 

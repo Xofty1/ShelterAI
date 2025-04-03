@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shelter_ai/core/navigation/routes.dart';
+import 'package:shelter_ai/domain/models/firebase_room/firebase_room.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 
 import '../../domain/models/disaster.dart';
+import '../../domain/models/game_state.dart';
 import '../../domain/models/player.dart';
 
 class NavigationManager {
@@ -34,21 +36,31 @@ class NavigationManager {
     _navigator.pushNamed(RouteNames.joinGame);
   }
 
-  void openGame(
+  void openOfflineGame(
       GameSettings settings, Disaster disaster, List<Player> players) {
     _navigator.pushNamed(RouteNames.game, arguments: {
+      'isOnline': false,
       'settings': settings,
       'disaster': disaster,
       'players': players,
     });
   }
 
-  void openGameReplacement(
+  void openOfflineGameReplacement(
       GameSettings settings, Disaster disaster, List<Player> players) {
     _navigator.pushReplacementNamed(RouteNames.game, arguments: {
+      'isOnline': false,
       'settings': settings,
       'disaster': disaster,
       'players': players,
+    });
+  }
+
+  void openOnlineGameReplacement(RunningGameState state, FirebaseRoom room){
+    _navigator.pushReplacementNamed(RouteNames.game, arguments: {
+      'isOnline': true,
+      'state': state,
+      'room': room,
     });
   }
 

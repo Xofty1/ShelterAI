@@ -70,8 +70,11 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
         if (state is DisasterUploadedState) {
-          NavigationManager.instance.openGameReplacement(
+          NavigationManager.instance.openOfflineGameReplacement(
               state.settings, state.disaster, state.players);
+        } else if (state is OnlineDisasterUploadedState) {
+          NavigationManager.instance
+              .openOnlineGameReplacement(state.gameState, state.room);
         } else if (state is ErrorLoadingGameState) {
           const snackBar = SnackBar(content: Text('Ошибка загрузки данных'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);

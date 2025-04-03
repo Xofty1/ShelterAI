@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pair/pair.dart';
 import 'package:shelter_ai/domain/models/disaster.dart';
+import 'package:shelter_ai/domain/models/firebase_room/firebase_room.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/domain/models/round_info.dart';
 import 'package:shelter_ai/domain/models/vote_info.dart';
@@ -14,47 +15,41 @@ import '../models/game_state.dart';
 class GameBloc extends Bloc<GameEvent, GameState> {
   final GameService service;
   final FirebaseRepository? firebaseRepository;
-  final String? roomId;
-  final Player? currentPlayer;
-  bool isHost;
+  FirebaseRoom? room;
 
-  GameBloc(this.service,
-      {this.firebaseRepository,
-      this.roomId,
-      this.currentPlayer,
-      this.isHost = false})
+  GameBloc(this.service, {this.firebaseRepository})
       : super(const GameState(stage: GameStage.waiting)) {
     on<StartedGameEvent>(_onStarted);
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
     on<VotedGameEvent>(_onVoted);
-    on<WaitingGameEvent>(_onWaiting);
+    on<EnteredOnlineRoomEvent>(_onEntered);
 
     // If online mode, listen to room changes
-    if (firebaseRepository != null && roomId != null) {
-      _listenToRoomChanges();
-    }
+    // if (firebaseRepository != null && room != null) {
+    //   _listenToRoomChanges();
+    // }
   }
 
   // Listen to changes in the room
-  void _listenToRoomChanges() {
-    firebaseRepository!.watchRoom(roomId!).listen((room) {
-      if (room != null && state is RunningGameState) {
-        // Only update state if we're not the host or if we're not the current player
-        if (!isHost ||
-            (room.gameState.currentPlayerIndex != currentPlayer?.id)) {
-          emit(room.gameState);
-        }
-      }
-    });
-  }
+  // void _listenToRoomChanges() {
+  //   firebaseRepository!.watchRoom(roomId!).listen((room) {
+  //     if (room != null && state is RunningGameState) {
+  //       // Only update state if we're not the host or if we're not the current player
+  //       if (!isHost ||
+  //           (room.gameState.currentPlayerIndex != currentPlayer?.id)) {
+  //         emit(room.gameState);
+  //       }
+  //     }
+  //   });
+  // }
 
   // Sync state with Firebase
-  Future<void> _syncState(RunningGameState newState) async {
-    if (firebaseRepository != null && roomId != null && isHost) {
-      await firebaseRepository!.updateGameState(roomId!, newState);
-    }
-  }
+  // Future<void> _syncState(RunningGameState newState) async {
+  //   if (firebaseRepository != null && roomId != null && isHost) {
+  //     await firebaseRepository!.updateGameState(roomId!, newState);
+  //   }
+  // }
 
   void _onStarted(StartedGameEvent event, Emitter emit) {
     final newState = RunningGameState.initial(
@@ -65,9 +60,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     emit(newState);
 
     // Sync with Firebase if online
-    if (firebaseRepository != null && roomId != null && isHost) {
-      _syncState(newState);
-    }
+    // if (firebaseRepository != null && roomId != null && isHost) {
+    //   _syncState(newState);
+    // }
   }
 
   Future<void> _onReady(ReadyGameEvent event, Emitter emit) async {
@@ -98,12 +93,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     // Sync with Firebase if online
-    if (newState is RunningGameState &&
-        firebaseRepository != null &&
-        roomId != null &&
-        isHost) {
-      _syncState(newState as RunningGameState);
-    }
+    // if (newState is RunningGameState &&
+    //     firebaseRepository != null &&
+    //     roomId != null &&
+    //     isHost) {
+    //   _syncState(newState as RunningGameState);
+    // }
   }
 
   void _onOpenedProperty(OpenedPropertyGameEvent event, Emitter emit) {
@@ -126,24 +121,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     // Sync with Firebase if online
-    if (firebaseRepository != null && roomId != null && isHost) {
-      _syncState(newState);
-    }
+    // if (firebaseRepository != null && roomId != null && isHost) {
+    //   _syncState(newState);
+    // }
   }
 
-  void _onWaiting(WaitingGameEvent event, Emitter emit) {
-    // Update host status
-    isHost = event.isHost;
-
-    if (state is RunningGameState) {
-      final prevState = state as RunningGameState;
-
-      // Host can start the game when enough players have joined
-      if (isHost && prevState.stage == GameStage.waiting) {
-        // Logic to check if enough players have joined
-        // and start the game if appropriate
-      }
-    }
+  void _onEntered(EnteredOnlineRoomEvent event, Emitter emit) {
+    room = event.room;
+    emit(event.gameState);
   }
 
   void _onVoted(VotedGameEvent event, Emitter emit) {
@@ -166,9 +151,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     // Sync with Firebase if online
-    if (firebaseRepository != null && roomId != null && isHost) {
-      _syncState(newState);
-    }
+    // if (firebaseRepository != null && roomId != null && isHost) {
+    //   _syncState(newState);
+    // }
   }
 }
 
@@ -204,8 +189,13 @@ class VotedGameEvent extends GameEvent {
   final int voteIndex;
 }
 
-class WaitingGameEvent extends GameEvent {
-  WaitingGameEvent(this.isHost);
+class EnteredOnlineRoomEvent extends GameEvent {
+  EnteredOnlineRoomEvent({
+    required this.room,
+    required this.gameState,
+  });
 
-  final bool isHost;
+  final FirebaseRoom room;
+
+  final RunningGameState gameState;
 }

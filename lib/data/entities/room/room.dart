@@ -16,6 +16,7 @@ abstract class Room with _$Room {
     required String password,
     required int currentPlayerIndex,
     required int currentPlayerCounter,
+    required List<bool> isBusy,
   }) = _Room;
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

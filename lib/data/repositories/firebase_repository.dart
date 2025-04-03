@@ -42,6 +42,7 @@ class FirebaseRepository {
       'password': room.password,
       'currentPlayerIndex': room.currentPlayerIndex,
       'currentPlayerCounter': room.currentPlayerCounter,
+      'isBusy': room.isBusy,
     };
   }
 
@@ -53,13 +54,37 @@ class FirebaseRepository {
   }
 
   // Join a room
-  Future<void> joinRoom(String roomId, Player player) async {
-    await _firestore // поменять логику присоединения в комнату
+  Future<int> joinRoom(String roomId) async {
+    // Получаем комнату, чтобы проверить свободные слоты
+    final roomDoc =
+        await _firestore.collection(_roomsCollection).doc(roomId).get();
+    final room = Room.fromJson(roomDoc.data()!);
+
+    // Ищем свободный слот (где isBusy = false)
+    int freeSlotIndex = -1;
+    for (int i = 0; i < room.isBusy.length; i++) {
+      if (!room.isBusy[i]) {
+        freeSlotIndex = i;
+        break;
+      }
+    }
+
+    if (freeSlotIndex == -1) {
+      throw Exception('No free slots available in this room');
+    }
+
+    // Обновляем isBusy для этого слота
+    List<bool> updatedIsBusy = List.from(room.isBusy);
+    updatedIsBusy[freeSlotIndex] = true;
+
+    // Обновляем комнату, устанавливая новое значение isBusy
+    await _firestore
         .collection(_roomsCollection)
         .doc(roomId)
-        .collection(_playersCollection)
-        .doc(player.id.toString())
-        .set(player.toJson());
+        .update({'isBusy': updatedIsBusy});
+
+    // Возвращаем индекс слота (ID игрока)
+    return freeSlotIndex;
   }
 
   // Update game state
@@ -111,12 +136,31 @@ class FirebaseRepository {
 
   // Leave room
   Future<void> leaveRoom(String roomId, String playerId) async {
+    // Удаляем игрока из коллекции игроков
     await _firestore
         .collection(_roomsCollection)
         .doc(roomId)
         .collection(_playersCollection)
         .doc(playerId)
         .delete();
+
+    // Получаем комнату, чтобы обновить isBusy
+    final roomDoc =
+        await _firestore.collection(_roomsCollection).doc(roomId).get();
+    final room = Room.fromJson(roomDoc.data()!);
+
+    // Обновляем isBusy для слота игрока
+    int playerIdInt = int.parse(playerId);
+    if (playerIdInt >= 0 && playerIdInt < room.isBusy.length) {
+      List<bool> updatedIsBusy = List.from(room.isBusy);
+      updatedIsBusy[playerIdInt] = false;
+
+      // Обновляем комнату
+      await _firestore
+          .collection(_roomsCollection)
+          .doc(roomId)
+          .update({'isBusy': updatedIsBusy});
+    }
   }
 
   // Delete room
@@ -144,5 +188,15 @@ class FirebaseRepository {
         .collection(_roomsCollection)
         .doc(roomId)
         .update({'currentPlayerCounter': newCount});
+  }
+
+  // Add player to a room
+  Future<void> addPlayerToRoom(String roomId, Player player) async {
+    await _firestore
+        .collection(_roomsCollection)
+        .doc(roomId)
+        .collection(_playersCollection)
+        .doc(player.id.toString())
+        .set(player.toJson());
   }
 }

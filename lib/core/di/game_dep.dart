@@ -72,9 +72,6 @@ class GameDepContainer {
       GameBloc gameBloc = GameBloc(
         service,
         firebaseRepository: container.firebaseRepository,
-        roomId: roomId,
-        currentPlayer: currentPlayer,
-        isHost: isHost,
       );
 
       return GameDepContainer._(

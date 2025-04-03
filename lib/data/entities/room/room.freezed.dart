@@ -19,6 +19,7 @@ mixin _$Room {
   String get password;
   int get currentPlayerIndex;
   int get currentPlayerCounter;
+  List<bool> get isBusy;
 
   /// Create a copy of Room
   /// with the given fields replaced by the non-null parameter values.
@@ -42,17 +43,23 @@ mixin _$Room {
             (identical(other.currentPlayerIndex, currentPlayerIndex) ||
                 other.currentPlayerIndex == currentPlayerIndex) &&
             (identical(other.currentPlayerCounter, currentPlayerCounter) ||
-                other.currentPlayerCounter == currentPlayerCounter));
+                other.currentPlayerCounter == currentPlayerCounter) &&
+            const DeepCollectionEquality().equals(other.isBusy, isBusy));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, gameState, password,
-      currentPlayerIndex, currentPlayerCounter);
+  int get hashCode => Object.hash(
+      runtimeType,
+      gameState,
+      password,
+      currentPlayerIndex,
+      currentPlayerCounter,
+      const DeepCollectionEquality().hash(isBusy));
 
   @override
   String toString() {
-    return 'Room(gameState: $gameState, password: $password, currentPlayerIndex: $currentPlayerIndex, currentPlayerCounter: $currentPlayerCounter)';
+    return 'Room(gameState: $gameState, password: $password, currentPlayerIndex: $currentPlayerIndex, currentPlayerCounter: $currentPlayerCounter, isBusy: $isBusy)';
   }
 }
 
@@ -65,7 +72,8 @@ abstract mixin class $RoomCopyWith<$Res> {
       {RunningGameState gameState,
       String password,
       int currentPlayerIndex,
-      int currentPlayerCounter});
+      int currentPlayerCounter,
+      List<bool> isBusy});
 
   $RunningGameStateCopyWith<$Res> get gameState;
 }
@@ -86,6 +94,7 @@ class _$RoomCopyWithImpl<$Res> implements $RoomCopyWith<$Res> {
     Object? password = null,
     Object? currentPlayerIndex = null,
     Object? currentPlayerCounter = null,
+    Object? isBusy = null,
   }) {
     return _then(_self.copyWith(
       gameState: null == gameState
@@ -104,6 +113,10 @@ class _$RoomCopyWithImpl<$Res> implements $RoomCopyWith<$Res> {
           ? _self.currentPlayerCounter
           : currentPlayerCounter // ignore: cast_nullable_to_non_nullable
               as int,
+      isBusy: null == isBusy
+          ? _self.isBusy
+          : isBusy // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
     ));
   }
 
@@ -125,7 +138,9 @@ class _Room implements Room {
       {required this.gameState,
       required this.password,
       required this.currentPlayerIndex,
-      required this.currentPlayerCounter});
+      required this.currentPlayerCounter,
+      required final List<bool> isBusy})
+      : _isBusy = isBusy;
   factory _Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 
   @override
@@ -136,6 +151,13 @@ class _Room implements Room {
   final int currentPlayerIndex;
   @override
   final int currentPlayerCounter;
+  final List<bool> _isBusy;
+  @override
+  List<bool> get isBusy {
+    if (_isBusy is EqualUnmodifiableListView) return _isBusy;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_isBusy);
+  }
 
   /// Create a copy of Room
   /// with the given fields replaced by the non-null parameter values.
@@ -164,17 +186,23 @@ class _Room implements Room {
             (identical(other.currentPlayerIndex, currentPlayerIndex) ||
                 other.currentPlayerIndex == currentPlayerIndex) &&
             (identical(other.currentPlayerCounter, currentPlayerCounter) ||
-                other.currentPlayerCounter == currentPlayerCounter));
+                other.currentPlayerCounter == currentPlayerCounter) &&
+            const DeepCollectionEquality().equals(other._isBusy, _isBusy));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, gameState, password,
-      currentPlayerIndex, currentPlayerCounter);
+  int get hashCode => Object.hash(
+      runtimeType,
+      gameState,
+      password,
+      currentPlayerIndex,
+      currentPlayerCounter,
+      const DeepCollectionEquality().hash(_isBusy));
 
   @override
   String toString() {
-    return 'Room(gameState: $gameState, password: $password, currentPlayerIndex: $currentPlayerIndex, currentPlayerCounter: $currentPlayerCounter)';
+    return 'Room(gameState: $gameState, password: $password, currentPlayerIndex: $currentPlayerIndex, currentPlayerCounter: $currentPlayerCounter, isBusy: $isBusy)';
   }
 }
 
@@ -188,7 +216,8 @@ abstract mixin class _$RoomCopyWith<$Res> implements $RoomCopyWith<$Res> {
       {RunningGameState gameState,
       String password,
       int currentPlayerIndex,
-      int currentPlayerCounter});
+      int currentPlayerCounter,
+      List<bool> isBusy});
 
   @override
   $RunningGameStateCopyWith<$Res> get gameState;
@@ -210,6 +239,7 @@ class __$RoomCopyWithImpl<$Res> implements _$RoomCopyWith<$Res> {
     Object? password = null,
     Object? currentPlayerIndex = null,
     Object? currentPlayerCounter = null,
+    Object? isBusy = null,
   }) {
     return _then(_Room(
       gameState: null == gameState
@@ -228,6 +258,10 @@ class __$RoomCopyWithImpl<$Res> implements _$RoomCopyWith<$Res> {
           ? _self.currentPlayerCounter
           : currentPlayerCounter // ignore: cast_nullable_to_non_nullable
               as int,
+      isBusy: null == isBusy
+          ? _self._isBusy
+          : isBusy // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
     ));
   }
 
