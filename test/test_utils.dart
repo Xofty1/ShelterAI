@@ -37,6 +37,7 @@ Disaster createTestDisaster() {
     capacity: 5,
     rooms: ['Room 1', 'Room 2', 'Room 3'],
     resources: ['Resource 1', 'Resource 2', 'Resource 3'],
+    answer: 'answer',
   );
 }
 
