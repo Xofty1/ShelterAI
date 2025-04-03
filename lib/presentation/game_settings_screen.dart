@@ -44,8 +44,14 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final container = gameSettingsDepHolder.container;
+
+    if (container == null) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider.value(
-      value: gameSettingsDepHolder.container!.gameSettingsCubit,
+      value: container.gameSettingsCubit,
       child: const GameSettingsScreen(),
     );
   }
@@ -65,9 +71,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
         if (state is DisasterUploadedState) {
-          NavigationManager.instance
-              .openGameReplacement(state.settings, state.disaster, state.players);
-        } else if(state is ErrorLoadingGameState){
+          NavigationManager.instance.openGameReplacement(
+              state.settings, state.disaster, state.players);
+        } else if (state is ErrorLoadingGameState) {
           const snackBar = SnackBar(content: Text('Ошибка загрузки данных'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           NavigationManager.instance.pop();

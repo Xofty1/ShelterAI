@@ -15,8 +15,6 @@ import 'package:shelter_ai/presentation/player_card.dart';
 import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/vote_result_screen.dart';
 
-import '../core/di/game_dep.dart';
-import '../core/di/global_dep.dart';
 import '../core/theme/app_colors.dart';
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/disaster.dart';
@@ -68,8 +66,14 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final container = gameDepHolder.container;
+
+    if (container == null) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider.value(
-      value: gameDepHolder.container!.gameBloc,
+      value: container.gameBloc,
       child: const GameScreen(),
     );
   }
