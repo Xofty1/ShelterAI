@@ -75,7 +75,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
             body: state is DisasterLoadingState ||
                     state is DisasterUploadedState
                 ? const LoaderScreen()
-                : Container(
+                : DecoratedBox(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -110,7 +110,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                           defaultValue: state
                                               .settings.playersCount
                                               .toDouble(),
-                                          min: 2,
+                                          min: 4,
                                           max: 22,
                                           onChange: (value) => BlocProvider.of<
                                                   GameSettingsCubit>(context)

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/domain/models/player.dart';
-import 'package:shelter_ai/presentation/ui_items/player_votting_card.dart';
+import 'package:shelter_ai/presentation/ui_items/player_tap_card.dart';
 
 class FinishScreen extends StatelessWidget {
   final List<Player> alivePlayers;
@@ -110,10 +110,8 @@ class FinishScreen extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: PlayerCardVoting(
-                            number: (index + 1).toString(),
-                            name: alivePlayers[index].name,
-                            profession: alivePlayers[index].profession,
+                          child: PlayerTapCard(
+                            player: alivePlayers[index],
                           ),
                         ),
                       ],
@@ -148,10 +146,8 @@ class FinishScreen extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: PlayerCardVoting(
-                            number: (index + 1).toString(),
-                            name: deadPlayers[index].name,
-                            profession: deadPlayers[index].profession,
+                          child: PlayerTapCard(
+                            player: deadPlayers[index],
                           ),
                         ),
                       ],

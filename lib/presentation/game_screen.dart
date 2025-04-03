@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shelter_ai/core/di/game_dep.dart';
-import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/domain/models/game_state.dart';
 import 'package:shelter_ai/domain/models/player.dart';
@@ -11,8 +9,11 @@ import 'package:shelter_ai/presentation/discussion_screen.dart';
 import 'package:shelter_ai/presentation/loader_screen.dart';
 import 'package:shelter_ai/presentation/lore_screen.dart';
 import 'package:shelter_ai/presentation/player_card.dart';
+import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/vote_result_screen.dart';
 
+import '../core/di/game_dep.dart';
+import '../core/di/global_dep.dart';
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/disaster.dart';
 import '../l10n/l10n.dart';
@@ -46,7 +47,11 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
       gameSettings = args['settings'] as GameSettings;
       disaster = args['disaster'] as Disaster;
       players = args['players'] as List<Player>;
+      gameDepHolder.container!.gameBloc
+          .add(StartedGameEvent(gameSettings, disaster, players));
     }
+
+
     super.didChangeDependencies();
   }
 
@@ -59,8 +64,7 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: gameDepHolder.container!.gameBloc
-        ..add(StartedGameEvent(gameSettings, disaster, players)),
+      value: gameDepHolder.container!.gameBloc,
       child: const GameScreen(),
     );
   }
@@ -105,6 +109,13 @@ class GameScreen extends StatelessWidget {
       builder: (BuildContext context) => SettingsDialog(
         settings: state.settings,
       ),
+    );
+  }
+
+  void _showPlayersScreen(BuildContext context, RunningGameState state) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => PlayersListScreen(players: state.players),
     );
   }
 
@@ -160,6 +171,14 @@ class GameScreen extends StatelessWidget {
                           Row(
                             children: [
                               IconButton(
+                                onPressed: () => _showPlayersScreen(
+                                    context, gameState),
+                                icon: const Icon(Icons.account_box_sharp),
+                                color: headerTextColor,
+                                iconSize: 28,
+                                tooltip: 'Все игроки',
+                              ),
+                              IconButton(
                                 onPressed: () =>
                                     _showSettingsDialog(context, gameState),
                                 icon: const Icon(Icons.settings),
@@ -205,6 +224,7 @@ class GameScreen extends StatelessWidget {
                       GameStage.speaking => DiscussionScreen(
                           roundNumber: gameState.roundInfo.roundNumber,
                           seconds: gameState.settings.time,
+                        players: gameState.players,
                         ),
                       GameStage.voting => GameVotingScreen(
                           players: gameState.players,

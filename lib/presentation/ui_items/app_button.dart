@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shelter_ai/core/theme/app_colors.dart';
 
 class AppButton extends StatelessWidget {
   final String text;
@@ -16,7 +17,7 @@ class AppButton extends StatelessWidget {
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Color(0xFF8B6F55), // Тень под кнопкой
+            color: AppColors.shadow,
             offset: Offset(3, 3),
             blurRadius: 4,
           ),
@@ -24,19 +25,20 @@ class AppButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFA8906B),
+          backgroundColor: AppColors.buttonBackground,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
         ),
         onPressed: onPressed,
-        child:  Padding(
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
           child: Text(
             text,
             style: const TextStyle(
-                color: Colors.black,
-                fontSize: 24),
+              color: AppColors.buttonText,
+              fontSize: 24,
+            ),
           ),
         ),
       ),

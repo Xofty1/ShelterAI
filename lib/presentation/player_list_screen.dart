@@ -1,63 +1,64 @@
 import 'package:flutter/material.dart';
-import 'ui_items/player_card.dart';
+import 'package:shelter_ai/core/theme/app_colors.dart';
+import 'package:shelter_ai/presentation/ui_items/app_button.dart';
+import 'package:shelter_ai/presentation/ui_items/button.dart';
+import 'package:shelter_ai/presentation/ui_items/players_list.dart';
+import '../domain/models/player.dart';
 
 class PlayersListScreen extends StatelessWidget {
-  const PlayersListScreen({super.key});
+  final List<Player> players;
+
+  const PlayersListScreen({super.key, required this.players});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF7C6854),
-      body: SafeArea(
+    return SafeArea(
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: AppColors.mainGradient,
+        ),
         child: Column(
           children: [
-            _buildHeader(),
+            const SizedBox(
+              height: 8,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                color: AppColors.accent,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Text(
+                "СПИСОК ИГРОКОВ",
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: _buildPlayerCards(),
+              child: PlayerList(players: players),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CustomButton(
+                text: 'Вернуться',
+                onPressed: () => Navigator.pop(context),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-          color: const Color(0xFFE5E5E5),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Center(
-          child: Text(
-            'Cписок игроков',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPlayerCards() {
-    return GridView.count(
-      crossAxisCount: 2,
-      mainAxisSpacing: 12.0,
-      crossAxisSpacing: 12.0,
-      childAspectRatio: 0.65,
-      children: const [
-        PlayerCard(number: '11', name: 'Олег', profession: 'Рабочий',),
-        PlayerCard(number: '12', name: 'Игнат', profession: 'Мурлок',),
-        PlayerCard(number: '23', name: 'Всевол', profession: 'Агент по недвижимости',),
-        PlayerCard(number: '4', name: 'Гена', profession: 'Садовник',)
-      ],
     );
   }
 }

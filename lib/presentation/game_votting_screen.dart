@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shelter_ai/presentation/ui_items/player_votting_card.dart';
+import 'package:shelter_ai/presentation/ui_items/player_tap_card.dart';
 
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/player.dart';
@@ -113,10 +113,8 @@ class _VotingScreenState extends State<GameVotingScreen> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: PlayerCardVoting(
-                                number: (originalIndex + 1).toString(),
-                                name: widget.players[originalIndex].name,
-                                profession: widget.players[originalIndex].profession,
+                              child: PlayerTapCard(
+                                player: widget.players[originalIndex],
                               ),
                             ),
                             if (isSelected)
