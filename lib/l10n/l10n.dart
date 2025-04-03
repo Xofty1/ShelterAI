@@ -113,6 +113,12 @@ abstract class AppLocalizations {
   /// **'История'**
   String get history;
 
+  /// No description provided for @roundNumber.
+  ///
+  /// In ru, this message translates to:
+  /// **'Номер раунда'**
+  String get roundNumber;
+
   /// No description provided for @rules.
   ///
   /// In ru, this message translates to:
@@ -124,6 +130,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Громкость'**
   String get volume;
+
+  /// No description provided for @playerList.
+  ///
+  /// In ru, this message translates to:
+  /// **'СПИСОК ИГРОКОВ'**
+  String get playerList;
+
+  /// No description provided for @abilitiesToOpen.
+  ///
+  /// In ru, this message translates to:
+  /// **'Способностей открыть'**
+  String get abilitiesToOpen;
 
   /// No description provided for @music.
   ///
@@ -142,6 +160,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Эффекты'**
   String get effects;
+
+  /// No description provided for @returnWord.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вернуться'**
+  String get returnWord;
 
   /// No description provided for @language.
   ///
@@ -233,6 +257,12 @@ abstract class AppLocalizations {
   /// **'Таймер'**
   String get timer;
 
+  /// No description provided for @wishes.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожелания'**
+  String get wishes;
+
   /// No description provided for @plotWishes.
   ///
   /// In ru, this message translates to:
@@ -296,14 +326,38 @@ abstract class AppLocalizations {
   /// No description provided for @howManyToKick.
   ///
   /// In ru, this message translates to:
-  /// **'Сколько человек выгнать:'**
+  /// **'Человек выгнать:'**
   String get howManyToKick;
+
+  /// No description provided for @players.
+  ///
+  /// In ru, this message translates to:
+  /// **'Игроки'**
+  String get players;
+
+  /// No description provided for @allPlayers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все игроки'**
+  String get allPlayers;
+
+  /// No description provided for @unKnown.
+  ///
+  /// In ru, this message translates to:
+  /// **'Неизвестно'**
+  String get unKnown;
 
   /// No description provided for @kickedPlayers.
   ///
   /// In ru, this message translates to:
   /// **'Выгнанные игроки'**
   String get kickedPlayers;
+
+  /// No description provided for @dataLoadingError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки данных'**
+  String get dataLoadingError;
 
   /// No description provided for @characteristicsToOpen.
   ///
@@ -328,6 +382,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Завершить'**
   String get finish;
+
+  /// No description provided for @humans.
+  ///
+  /// In ru, this message translates to:
+  /// **'человек'**
+  String get humans;
+
+  /// No description provided for @discussionTime.
+  ///
+  /// In ru, this message translates to:
+  /// **'Время на обсуждение'**
+  String get discussionTime;
 
   /// No description provided for @shelterDescription.
   ///
@@ -401,11 +467,23 @@ abstract class AppLocalizations {
   /// **'Сложность: {level}'**
   String difficulty(Object level);
 
+  /// No description provided for @familyModeText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Семейный режим'**
+  String get familyModeText;
+
   /// No description provided for @familyMode.
   ///
   /// In ru, this message translates to:
   /// **'Семейный режим: {familyMode}'**
   String familyMode(Object familyMode);
+
+  /// No description provided for @time.
+  ///
+  /// In ru, this message translates to:
+  /// **'Время'**
+  String get time;
 
   /// No description provided for @timerSettings.
   ///
@@ -430,6 +508,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'История'**
   String get lore;
+
+  /// No description provided for @vkl.
+  ///
+  /// In ru, this message translates to:
+  /// **'вкл'**
+  String get vkl;
+
+  /// No description provided for @vikl.
+  ///
+  /// In ru, this message translates to:
+  /// **'выкл'**
+  String get vikl;
 
   /// No description provided for @loading.
   ///
@@ -472,6 +562,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Багаж'**
   String get luggage;
+
+  /// No description provided for @roundInfo.
+  ///
+  /// In ru, this message translates to:
+  /// **'Информация о райнде'**
+  String get roundInfo;
 
   /// No description provided for @additionalInfo.
   ///

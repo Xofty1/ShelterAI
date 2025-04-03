@@ -111,6 +111,7 @@ class GptRepositoryImpl implements GptRepository {
     late String message; // message that gonna be sent to gpt
 
     // Gets the message
+    print('gpt_request');
     switch (type) {
       case "player":
         message = await playerSetup(additioanlInfo);
@@ -143,6 +144,7 @@ class GptRepositoryImpl implements GptRepository {
       messages: [systemMessage],
     );
 
+    print('before return');
     return chatCompletion.choices.first.message.content!.first.text!;
   }
 
@@ -210,6 +212,7 @@ class GptRepositoryImpl implements GptRepository {
   @override
   Future<Disaster> createGame(GameSettings settings) async {
     // Sets up additional information and type
+    print("we are here");
     Map<String, String> additionalInfo = {
       "wishes": settings.plot,
       "player_amount": settings.playersCount.toString(),
@@ -218,8 +221,12 @@ class GptRepositoryImpl implements GptRepository {
     };
     String type = 'story';
 
+    late bool success;
+
     // Sends request to Chat GPT 4o
     String answer = await gptRequest(type, additionalInfo);
+    print('Good request');
+
 
     // Jsonifies response
     // story.keys: "player_amount"(int), "language"(String), "family_mode"(Bool),

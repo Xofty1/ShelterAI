@@ -24,6 +24,7 @@ import '../l10n/l10n.dart';
 import 'game_finish_screen.dart';
 import 'game_round_screen.dart';
 import 'game_votting_screen.dart';
+import '../../l10n/l10n.dart';
 
 class GameScreenWidget extends StatefulWidget {
   const GameScreenWidget({super.key});
@@ -181,7 +182,7 @@ class GameScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  "РАУНД ${gameState.roundInfo.roundNumber}",
+                                  "${loc.round} ${gameState.roundInfo.roundNumber}",
                                   style: const TextStyle(
                                     color: headerTextColor,
                                     fontSize: 24,
@@ -197,7 +198,7 @@ class GameScreen extends StatelessWidget {
                                     icon: const Icon(Icons.account_box_sharp),
                                     color: headerTextColor,
                                     iconSize: 28,
-                                    tooltip: 'Все игроки',
+                                    tooltip: loc.allPlayers,
                                   ),
                                   IconButton(
                                     onPressed: () =>
@@ -205,7 +206,7 @@ class GameScreen extends StatelessWidget {
                                     icon: const Icon(Icons.settings),
                                     color: headerTextColor,
                                     iconSize: 28,
-                                    tooltip: 'Настройки',
+                                    tooltip: loc.settings,
                                   ),
                                   IconButton(
                                     onPressed: () =>
@@ -213,7 +214,7 @@ class GameScreen extends StatelessWidget {
                                     icon: const Icon(Icons.info_outline),
                                     color: headerTextColor,
                                     iconSize: 28,
-                                    tooltip: 'Информация',
+                                    tooltip: loc.information,
                                   ),
                                 ],
                               ),

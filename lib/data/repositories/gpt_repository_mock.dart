@@ -17,13 +17,21 @@ class GptRepositoryMock implements GptRepository {
   @override
   Future<Disaster> createGame(GameSettings settings) async {
     // Simulate network delay
-    await Future.delayed(const Duration(seconds: 4, milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 800));
+
+    print('mock');
 
     final file = File('assets/offline/games.txt');
 
-    final fileContent = await file.readAsString();
+    late String fileContent;
+
+    fileContent = await file.readAsString();
+
+    print('file_read');
 
     final currentStory = DataReader.fromJson(jsonDecode(fileContent));
+
+    print('currentStory got');
 
     late Story story;
 
@@ -75,14 +83,21 @@ class GptRepositoryMock implements GptRepository {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1200));
 
+    print('mock');
+
     final file = File('assets/offline/players.txt');
+
+    print('file');
 
     final fileContent = await file.readAsString();
 
     final characteristics = Preset.fromJson(jsonDecode(fileContent));
 
+    print('decoded');
+
     late Characteristics workSpace;
 
+    print(settings.language);
     switch (settings.language){
       case 'ru':
         workSpace = characteristics.ru;
@@ -93,6 +108,8 @@ class GptRepositoryMock implements GptRepository {
       default:
         throw Error();
     }
+
+    print('got');
 
     // Generate random players
     List<Player> players = [];

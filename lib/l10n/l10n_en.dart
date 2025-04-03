@@ -18,10 +18,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get history => 'History';
 
   @override
+  String get roundNumber => 'Round number';
+
+  @override
   String get rules => 'Rules';
 
   @override
   String get volume => 'Volume';
+
+  @override
+  String get playerList => 'PLAYER LIST';
+
+  @override
+  String get abilitiesToOpen => 'Abilities to open';
 
   @override
   String get music => 'Music';
@@ -31,6 +40,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get effects => 'Effects';
+
+  @override
+  String get returnWord => 'Return';
 
   @override
   String get language => 'Language';
@@ -69,13 +81,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get random => 'Random';
 
   @override
-  String get difficultySetting => 'Сложность';
+  String get difficultySetting => 'Difficulty';
 
   @override
   String get familyFriendly => 'Family Friendly';
 
   @override
   String get timer => 'Timer';
+
+  @override
+  String get wishes => 'Wishes';
 
   @override
   String get plotWishes => 'Enter plot wishes';
@@ -113,7 +128,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howManyToKick => 'Players to be kicked out:';
 
   @override
+  String get players => 'Players';
+
+  @override
+  String get allPlayers => 'All players';
+
+  @override
+  String get unKnown => 'Неизвестно';
+
+  @override
   String get kickedPlayers => 'Kicked players';
+
+  @override
+  String get dataLoadingError => 'Data loading error';
 
   @override
   String get characteristicsToOpen => 'Characteristics to be opened:';
@@ -126,6 +153,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get finish => 'Finish';
+
+  @override
+  String get humans => 'people';
+
+  @override
+  String get discussionTime => 'Discussion time';
 
   @override
   String get shelterDescription => 'Shelter description';
@@ -168,9 +201,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get familyModeText => 'Family mode';
+
+  @override
   String familyMode(Object familyMode) {
     return 'Family mode: $familyMode';
   }
+
+  @override
+  String get time => 'Time';
 
   @override
   String timerSettings(Object timer) {
@@ -185,6 +224,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lore => 'Lore';
+
+  @override
+  String get vkl => 'on';
+
+  @override
+  String get vikl => 'off';
 
   @override
   String get loading => 'Loading...';
@@ -206,6 +251,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get luggage => 'Luggage';
+
+  @override
+  String get roundInfo => 'Round information';
 
   @override
   String get additionalInfo => 'Additional info.';

@@ -18,10 +18,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get history => 'История';
 
   @override
+  String get roundNumber => 'Номер раунда';
+
+  @override
   String get rules => 'Правила';
 
   @override
   String get volume => 'Громкость';
+
+  @override
+  String get playerList => 'СПИСОК ИГРОКОВ';
+
+  @override
+  String get abilitiesToOpen => 'Способностей открыть';
 
   @override
   String get music => 'Музыка';
@@ -31,6 +40,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get effects => 'Эффекты';
+
+  @override
+  String get returnWord => 'Вернуться';
 
   @override
   String get language => 'Язык';
@@ -78,6 +90,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get timer => 'Таймер';
 
   @override
+  String get wishes => 'Пожелания';
+
+  @override
   String get plotWishes => 'Введите пожелания по сюжету';
 
   @override
@@ -110,10 +125,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get notInBunker => 'Не попали:';
 
   @override
-  String get howManyToKick => 'Сколько человек выгнать:';
+  String get howManyToKick => 'Человек выгнать:';
+
+  @override
+  String get players => 'Игроки';
+
+  @override
+  String get allPlayers => 'Все игроки';
+
+  @override
+  String get unKnown => 'Неизвестно';
 
   @override
   String get kickedPlayers => 'Выгнанные игроки';
+
+  @override
+  String get dataLoadingError => 'Ошибка загрузки данных';
 
   @override
   String get characteristicsToOpen => 'Требуется открыть характеристик:';
@@ -126,6 +153,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get finish => 'Завершить';
+
+  @override
+  String get humans => 'человек';
+
+  @override
+  String get discussionTime => 'Время на обсуждение';
 
   @override
   String get shelterDescription => 'Описание бункера';
@@ -168,9 +201,15 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get familyModeText => 'Семейный режим';
+
+  @override
   String familyMode(Object familyMode) {
     return 'Семейный режим: $familyMode';
   }
+
+  @override
+  String get time => 'Время';
 
   @override
   String timerSettings(Object timer) {
@@ -185,6 +224,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get lore => 'История';
+
+  @override
+  String get vkl => 'вкл';
+
+  @override
+  String get vikl => 'выкл';
 
   @override
   String get loading => 'Загрузка...';
@@ -206,6 +251,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get luggage => 'Багаж';
+
+  @override
+  String get roundInfo => 'Информация о райнде';
 
   @override
   String get additionalInfo => 'Дополнительная информация';
