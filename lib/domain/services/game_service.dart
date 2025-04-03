@@ -1,3 +1,4 @@
+import 'package:pair/pair.dart';
 import 'package:shelter_ai/domain/models/round_info.dart';
 import 'package:shelter_ai/domain/models/vote_info.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
@@ -74,9 +75,13 @@ class GameService {
     final disaster = preFinalState.disaster;
     final alive = preFinalState.alive;
     final kicked = preFinalState.kicked;
+    String finals = '';
 
-    final finals =
-        await repository.getFinale(settings, disaster, alive, kicked);
+    try {
+      finals = await repository.getFinale(settings, disaster, alive, kicked);
+    } catch (e) {
+      finals = 'Сам бог не ведает судьбу человечества после произошедшего...';
+    }
 
     return preFinalState.copyWith(stage: GameStage.finals, finals: finals);
   }
@@ -140,5 +145,83 @@ class GameService {
       stage: GameStage.speaking,
       voteInfo: voteInfo,
     );
+  }
+
+  RunningGameState updateVotes(
+      VotedGameEvent event, RunningGameState prevState) {
+    final votes = List.of(prevState.voteInfo.votes);
+    votes[event.voteIndex]++;
+
+    return prevState.copyWith(
+        voteInfo: prevState.voteInfo.copyWith(votes: votes));
+  }
+
+  bool isVoteSuccess(RunningGameState prevState) {
+    final sortedVotes = _getSortedVotes(prevState.voteInfo.votes);
+    final lastKicking = prevState.roundInfo.kickedCount - 1;
+
+    return sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value;
+  }
+
+  // Кикает игроков, меняет стадию игры
+  RunningGameState finishVote(RunningGameState prevState) {
+    final sortedVotes = _getSortedVotes(prevState.voteInfo.votes);
+    final lastKicking = prevState.roundInfo.kickedCount - 1;
+
+    // Получаем кикнутых игроков
+    final selectedIndexes = sortedVotes
+        .getRange(0, lastKicking + 1)
+        .map((element) => element.key)
+        .toList();
+
+    final players = List.of(prevState.players);
+
+    // Меняем статус жизни персонажей: last -> killed,
+    // У выбранных персонажей alive -> last
+    for (int i = 0; i < players.length; i++) {
+      if (players[i].lifeStatus == LifeStatus.last) {
+        players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
+      } else if (selectedIndexes.contains(i)) {
+        players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
+      }
+    }
+
+    return prevState.copyWith(
+      players: players,
+      stage: GameStage.voteResult,
+      voteInfo: prevState.voteInfo.copyWith(
+        selectedIndexes: selectedIndexes,
+        voteStatus: VoteStatus.successful,
+      ),
+      currentPlayerIndex: nextAlive(players, 0),
+    );
+  }
+
+  RunningGameState reVote(RunningGameState prevState) {
+    final votes = prevState.voteInfo.votes;
+    final sortedVotes = _getSortedVotes(votes);
+
+    final lastKicking = prevState.roundInfo.kickedCount - 1;
+    int votesBorder = sortedVotes[lastKicking].value;
+
+    final canBeSelected = votes.map((vote) => vote >= votesBorder).toList();
+
+    return prevState.copyWith(
+      stage: GameStage.voteResult,
+      voteInfo: prevState.voteInfo.copyWith(
+        voteStatus: VoteStatus.reRunning,
+        votes: List.filled(prevState.settings.playersCount, 0),
+        canBeSelected: canBeSelected,
+        selectedIndexes: [],
+      ),
+      currentPlayerIndex: nextVoting(prevState.players, 0),
+    );
+  }
+
+  // Получение отсортированных голосов
+  // Ключ - индекс игрока, значение - количество голосов
+  List<Pair<int, int>> _getSortedVotes(List<int> votes) {
+    return List.generate(votes.length, (index) => Pair(index, votes[index]))
+      ..sort((a, b) => b.value.compareTo(a.value));
   }
 }

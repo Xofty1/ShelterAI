@@ -13,8 +13,7 @@ import '../models/game_state.dart';
 class GameBloc extends Bloc<GameEvent, GameState> {
   final GameService service;
 
-  GameBloc(this.service)
-      : super(const GameState(stage: GameStage.waiting)) {
+  GameBloc(this.service) : super(const GameState(stage: GameStage.waiting)) {
     on<StartedGameEvent>(_onStarted);
     on<ReadyGameEvent>(_onReady);
     on<OpenedPropertyGameEvent>(_onOpenedProperty);
@@ -63,14 +62,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     // Ищем следущего живого игрока для хода
     int playerIndex =
         service.nextAlive(newState.players, newState.currentPlayerIndex + 1);
-    print(newState.players.first.knownProperties.first);
+
     if (playerIndex != -1) {
       emit(newState.copyWith(currentPlayerIndex: playerIndex));
     } else if (newState.roundInfo.kickedCount == 0) {
       newState = service.nextRound(newState);
       emit(newState);
-    }
-    else {
+    } else {
       newState = service.startVoting(newState);
       emit(newState);
     }
@@ -79,84 +77,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onVoted(VotedGameEvent event, Emitter emit) {
     final prevState = state as RunningGameState;
 
-    final votes = List.of(prevState.voteInfo.votes);
-    votes[event.voteIndex]++;
+    RunningGameState newState = service.updateVotes(event, prevState);
 
-    var playerIndex = prevState.players.indexWhere(
-        (player) => player.lifeStatus != LifeStatus.killed,
-        prevState.currentPlayerIndex + 1);
+    var playerIndex =
+        service.nextVoting(newState.players, newState.currentPlayerIndex + 1);
 
-    // Голосует следующий игрок
     if (playerIndex != -1) {
-      emit(prevState.copyWith(
-        voteInfo: prevState.voteInfo.copyWith(votes: votes),
-        currentPlayerIndex: playerIndex,
-      ));
+      emit(newState.copyWith(currentPlayerIndex: playerIndex));
+    } else if (service.isVoteSuccess(newState)) {
+      newState = service.finishVote(newState);
+      emit(newState);
+    } else {
+      newState = service.reVote(newState);
+      emit(newState);
     }
-    // Переголосование/результаты голосования
-    else {
-      final sortedVotes = _getSortedVotes(votes);
-      final lastKicking = prevState.roundInfo.kickedCount - 1;
-
-      // В отсортированном массиве последний кикаемый игрок должен
-      // иметь большее количество голосов, чем следующий после него.
-
-      // Успешный результат голосования
-      if (sortedVotes[lastKicking].value > sortedVotes[lastKicking + 1].value) {
-        // Получаем кикнутых игроков
-        final selectedIndexes = sortedVotes
-            .getRange(0, lastKicking + 1)
-            .map((element) => element.key)
-            .toList();
-
-        final players = List.of(prevState.players);
-
-        // Меняем статус жизни персонажей: last -> killed,
-        // У выбранных персонажей alive -> last
-        for (int i = 0; i < players.length; i++) {
-          if (players[i].lifeStatus == LifeStatus.last) {
-            players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
-          } else if (selectedIndexes.contains(i)) {
-            players[i] = players[i].copyWith(lifeStatus: LifeStatus.last);
-          }
-        }
-
-        emit(prevState.copyWith(
-          players: players,
-          stage: GameStage.voteResult,
-          voteInfo: prevState.voteInfo.copyWith(
-            selectedIndexes: selectedIndexes,
-            voteStatus: VoteStatus.successful,
-          ),
-          currentPlayerIndex: players
-              .indexWhere((player) => player.lifeStatus == LifeStatus.alive),
-        ));
-      }
-      // Переголосование
-      else {
-        int votesBorder = sortedVotes[lastKicking].value;
-        final canBeSelected = votes.map((vote) => vote >= votesBorder).toList();
-
-        emit(prevState.copyWith(
-          stage: GameStage.voteResult,
-          voteInfo: prevState.voteInfo.copyWith(
-            voteStatus: VoteStatus.reRunning,
-            votes: List.filled(prevState.settings.playersCount, 0),
-            canBeSelected: canBeSelected,
-            selectedIndexes: [],
-          ),
-          currentPlayerIndex: prevState.players
-              .indexWhere((player) => player.lifeStatus != LifeStatus.killed),
-        ));
-      }
-    }
-  }
-
-  // Получение отсортированных голосов
-  // Ключ - индекс игрока, значение - количество голосов
-  List<Pair<int, int>> _getSortedVotes(List<int> votes) {
-    return List.generate(votes.length, (index) => Pair(index, votes[index]))
-      ..sort((a, b) => b.value.compareTo(a.value));
   }
 }
 
