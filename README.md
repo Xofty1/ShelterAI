@@ -1,16 +1,60 @@
-# shelter_ai
+# 🏕 Shelter AI (Бункер AI)
 
-A new Flutter project.
+Shelter AI — это усовершенствованная версия популярной настольной игры «Бункер», в которой ключевую
+роль играет искусственный интеллект. Теперь каждый игровой сценарий становится уникальным и
+полностью динамическим!
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🎮 **Что делает игру особенной?**
+✅ **Неограниченные сценарии** – выбирайте или создавайте собственные катастрофы.  
+✅ **Живой мир** – AI генерирует персонажей, их характеристики и поведение в реальном времени.  
+✅ **Интерактивность** – настройте параметры бункера, запасы и внешнюю среду.  
+✅ **Максимальная реиграбельность** – каждая партия уникальна благодаря AI-генерации.
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🚀 **Возможности**
+- 🧠 **Генерация игр с помощью ИИ** – каждая партия создается в реальном времени.
+- 🎭 **Настройки сюжета** – регулируйте уровень хаоса, включайте семейный режим.
+- 🌍 **Мультиплеер** – играйте с друзьями онлайн.
+- 📴 **Офлайн-режим** – игра без интернета и VPN.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 📸 **Скриншоты**
+<img src="img.png" width="400"> <img src="img_1.png" width="400">  
+<img src="img_2.png" width="400"> <img src="img_3.png" width="400">  
+
+---
+
+## 🔧 **Установка и запуск**
+### 1️⃣ **Клонирование репозитория**
+```sh
+git clone https://github.com/Xofty1/ShelterAI.git
+cd ShelterAI
+
+2️⃣ Установка зависимостей
+sh
+flutter pub get
+
+3️⃣ Запуск приложения
+sh
+flutter run
+
+📦 Зависимости
+Этот проект использует следующие пакеты:
+
+  🔹   [cupertino_icons](https://pub.dev/packages/cupertino_icons)
+  🔹   [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+  🔹   [freezed_annotation](https://pub.dev/packages/freezed_annotation)
+  🔹   [freezed](https://pub.dev/packages/freezed)
+  🔹   [json_annotation](https://pub.dev/packages/json_annotation)
+  🔹   [dart_openai](https://pub.dev/packages/dart_openai)
+  🔹   [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)
+  🔹   [flutter_tts](https://pub.dev/packages/flutter_tts)
+
+
+
+📜 Лицензия
+Этот проект распространяется под лицензией MIT. Подробнее см. LICENSE.
