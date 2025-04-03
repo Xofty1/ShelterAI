@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/domain/bloc/game_bloc.dart';
+import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/ui_items/back_card_side.dart';
 import 'dart:math';
 
 import 'package:shelter_ai/presentation/ui_items/front_card_side.dart';
+
+import 'package:shelter_ai/presentation/ui_items/state_card_row.dart';
 
 class PlayerCardScreen extends StatefulWidget {
   final int openCount;

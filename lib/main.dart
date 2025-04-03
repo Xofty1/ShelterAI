@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/core/navigation/navigation_manager.dart';
+import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
 import 'package:shelter_ai/presentation/theme/theme.dart';
 import 'core/navigation/routes.dart';
 import 'domain/bloc/app_settings_cubit.dart';
@@ -25,18 +26,37 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider<GlobalDepHolder>(
       create: (context) => GlobalDepHolder()..create(isMock: true),
-      child: Builder(
-        builder: (context) {
-          return BlocProvider.value(
-            value:
-                RepositoryProvider.of<GlobalDepHolder>(context).container!.appSettingsCubit,
-            child: Builder(
-              builder: (context) {
-                final Brightness platformBrightness =
-                    MediaQuery.platformBrightnessOf(context);
-                final bool isSystemDark = platformBrightness == Brightness.dark;
+      child: Builder(builder: (context) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: RepositoryProvider.of<GlobalDepHolder>(context)
+                  .container!
+                  .appSettingsCubit,
+            ),
+            BlocProvider.value(
+              value: RepositoryProvider.of<GlobalDepHolder>(context)
+                  .container!
+                  .soundCubit,
+            ),
+          ],
+          child: Builder(
+            builder: (context) {
+              final Brightness platformBrightness =
+                  MediaQuery.platformBrightnessOf(context);
+              final bool isSystemDark = platformBrightness == Brightness.dark;
 
-                return BlocSelector<AppSettingsCubit, AppSettingsState, String>(
+              return BlocListener<AppSettingsCubit, AppSettingsState>(
+                listenWhen: (prevState, newState) =>
+                    prevState.settings.effects != newState.settings.effects ||
+                    prevState.settings.music != newState.settings.music,
+                listener: (context, state) {
+                  BlocProvider.of<SoundCubit>(context)
+                      .setMusicVolume(state.settings.music);
+                  BlocProvider.of<SoundCubit>(context)
+                      .setEffectsVolume(state.settings.effects);
+                },
+                child: BlocSelector<AppSettingsCubit, AppSettingsState, String>(
                   selector: (state) => state.settings.loc,
                   builder: (context, languageCode) {
                     return MaterialApp(
@@ -58,12 +78,12 @@ class MyApp extends StatelessWidget {
                       navigatorKey: NavigationManager.instance.key,
                     );
                   },
-                );
-              },
-            ),
-          );
-        }
-      ),
+                ),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 }
