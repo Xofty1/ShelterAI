@@ -34,7 +34,7 @@ class VoteResultScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF482020),
+              color: Color(0xFFD9D9D9),
             ),
           ),
           const SizedBox(height: 20),

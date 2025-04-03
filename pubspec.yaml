@@ -25,10 +25,13 @@ dependencies:
   dio: ^5.8.0+1
   dart_openai: ^5.1.0
   flutter_dotenv: ^5.2.1
+  mockito: ^5.4.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  golden_toolkit: 0.15.0
 
   flutter_lints: ^2.0.0
   build_runner: ^2.4.9
