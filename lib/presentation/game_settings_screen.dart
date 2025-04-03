@@ -12,7 +12,6 @@ import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
 import 'package:shelter_ai/presentation/ui_items/label.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
-
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart' as generated;
@@ -31,7 +30,7 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
   void didChangeDependencies() {
     if (!gameSettingsDepHolder.isCreated) {
       final globalDepContainer =
-          RepositoryProvider.of<GlobalDepHolder>(context).container!;
+      RepositoryProvider.of<GlobalDepHolder>(context).container!;
       gameSettingsDepHolder.create(globalDepContainer);
     }
     super.didChangeDependencies();
@@ -45,8 +44,14 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final container = gameSettingsDepHolder.container;
+
+    if (container == null) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider.value(
-      value: gameSettingsDepHolder.container!.gameSettingsCubit,
+      value: container.gameSettingsCubit,
       child: const GameSettingsScreen(),
     );
   }
@@ -62,14 +67,17 @@ class GameSettingsScreen extends StatefulWidget {
 class _GameSettingsScreenState extends State<GameSettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    const headerColor = Color(0xFFB8A876);
+    const headerTextColor = Color(0xFF482020);
+
     final loc = AppLocalizations.of(context);
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
         if (state is DisasterUploadedState) {
-          NavigationManager.instance.openGameReplacement(
-              state.settings, state.disaster, state.players);
-        } else if (state is ErrorLoadingGameState) {
-          const snackBar = SnackBar(content: Text('Ошибка загрузки данных'));
+          NavigationManager.instance
+              .openGameReplacement(state.settings, state.disaster, state.players);
+        } else if(state is ErrorLoadingGameState){
+          final snackBar = SnackBar(content: Text(loc.dataLoadingError));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           NavigationManager.instance.pop();
         }
@@ -134,7 +142,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Difficulty
-                                  SettingHeader(text: loc.difficulty),
+                                  SettingHeader(text: loc.difficultySettings),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -210,7 +218,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   SettingHeader(text: loc.time),
                                   Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -228,8 +236,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                               min: 30,
                                               max: 120,
                                               onChange: (value) => BlocProvider
-                                                      .of<GameSettingsCubit>(
-                                                          context)
+                                                  .of<GameSettingsCubit>(
+                                                  context)
                                                   .updateTime(value.toInt()),
                                             ),
                                           ),
@@ -243,10 +251,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   // Random mode
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       ToneButton(
-                                          text: "Рандом",
+                                          text: loc.random,
                                           isSelected: false,
                                           onTap: () {
                                             // Random mode can be added to your GameSettings model
@@ -267,7 +275,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
 
                             // Continue button
                             CustomButton(
-                              text: loc.cnt,
+                              text: loc.continueWord,
                               onPressed: () {
                                 final language =
                                     BlocProvider.of<AppSettingsCubit>(context)

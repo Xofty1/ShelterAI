@@ -6,6 +6,7 @@ import 'package:shelter_ai/presentation/ui_items/custom_timer.dart';
 import '../domain/bloc/game_bloc.dart';
 import '../domain/models/game_state.dart';
 import '../domain/models/player.dart';
+import '../../l10n/l10n.dart';
 
 class DiscussionScreen extends StatelessWidget {
   final int roundNumber;
@@ -27,6 +28,7 @@ class DiscussionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     const headerColor = Color(0xFFB8A876);
     const headerTextColor = Color(0xFF482020);
     const votingPlayerHeaderColor = Color(0xFF604D4D);
@@ -50,10 +52,10 @@ class DiscussionScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 color: const Color(0xFFD7CCC8), // Светло-бежевый
-                child: const Text(
-                  'Обсуждение',
+                child: Text(
+                  loc.discussion,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: Color(0xFF3E2723), // Темно-коричневый
@@ -77,12 +79,12 @@ class DiscussionScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    _buildButton('Игроки', onPressed: () {
+                    _buildButton(loc.players, onPressed: () {
                       _showPlayersScreen(context, players);
                     }),
                     const SizedBox(height: 12),
                     _buildButton(
-                      'Голосование',
+                      loc.voting,
                       onPressed: () => BlocProvider.of<GameBloc>(context)
                           .add(ReadyGameEvent()),
                       color: buttonColor,

@@ -20,9 +20,9 @@ class PlayerCardScreen extends StatefulWidget {
 
   const PlayerCardScreen(
       {super.key,
-        required this.players,
-        required this.currentPlayerIndex,
-        required this.openCount});
+      required this.players,
+      required this.currentPlayerIndex,
+      required this.openCount});
 
   @override
   State<PlayerCardScreen> createState() => _PlayerCardScreenState();
@@ -165,7 +165,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
                         alignment: Alignment.center,
                         child: _buildCardContainer(
                           isBackSide: true,
-                          child: const PlayerCardBack(),
+                          child: PlayerCardBack(currentIndex: (widget.currentPlayerIndex + 1)),
                         ),
                       );
                     }
@@ -180,7 +180,10 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   }
 
   Widget _buildCardContainer(
-      {required bool isBackSide, required Widget child}) {
+      {
+        required bool isBackSide,
+        required Widget child
+      }) {
     return Container(
       width: cardWidth,
       height: cardHeight,

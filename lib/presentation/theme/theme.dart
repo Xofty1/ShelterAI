@@ -25,11 +25,9 @@ ThemeData get lightTheme => ThemeData(
   colorScheme: const ColorScheme.light(
     primary: lightPrimaryColor,
     secondary: lightSecondaryColor,
-    background: lightBackgroundColor,
     surface: lightSurfaceColor,
     onPrimary: lightOnPrimaryColor,
     onSecondary: lightOnSecondaryColor,
-    onBackground: lightOnBackgroundColor,
     onSurface: lightOnSurfaceColor,
   ),
   appBarTheme: const AppBarTheme(
@@ -47,11 +45,9 @@ ThemeData get darkTheme => ThemeData(
   colorScheme: const ColorScheme.dark(
     primary: darkPrimaryColor,
     secondary: darkSecondaryColor,
-    background: darkBackgroundColor,
     surface: darkSurfaceColor,
     onPrimary: darkOnPrimaryColor,
     onSecondary: darkOnSecondaryColor,
-    onBackground: darkOnBackgroundColor,
     onSurface: darkOnSurfaceColor,
   ),
   appBarTheme: const AppBarTheme(
