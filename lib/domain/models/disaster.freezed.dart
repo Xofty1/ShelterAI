@@ -24,6 +24,7 @@ mixin _$Disaster {
   int get capacity;
   List<String> get rooms;
   List<String> get resources;
+  String get answer;
 
   /// Create a copy of Disaster
   /// with the given fields replaced by the non-null parameter values.
@@ -52,7 +53,8 @@ mixin _$Disaster {
             (identical(other.capacity, capacity) ||
                 other.capacity == capacity) &&
             const DeepCollectionEquality().equals(other.rooms, rooms) &&
-            const DeepCollectionEquality().equals(other.resources, resources));
+            const DeepCollectionEquality().equals(other.resources, resources) &&
+            (identical(other.answer, answer) || other.answer == answer));
   }
 
   @override
@@ -66,11 +68,12 @@ mixin _$Disaster {
       description,
       capacity,
       const DeepCollectionEquality().hash(rooms),
-      const DeepCollectionEquality().hash(resources));
+      const DeepCollectionEquality().hash(resources),
+      answer);
 
   @override
   String toString() {
-    return 'Disaster(name: $name, disasterDescription: $disasterDescription, disasterShortDescription: $disasterShortDescription, shelterName: $shelterName, location: $location, description: $description, capacity: $capacity, rooms: $rooms, resources: $resources)';
+    return 'Disaster(name: $name, disasterDescription: $disasterDescription, disasterShortDescription: $disasterShortDescription, shelterName: $shelterName, location: $location, description: $description, capacity: $capacity, rooms: $rooms, resources: $resources, answer: $answer)';
   }
 }
 
@@ -88,7 +91,8 @@ abstract mixin class $DisasterCopyWith<$Res> {
       String description,
       int capacity,
       List<String> rooms,
-      List<String> resources});
+      List<String> resources,
+      String answer});
 }
 
 /// @nodoc
@@ -112,6 +116,7 @@ class _$DisasterCopyWithImpl<$Res> implements $DisasterCopyWith<$Res> {
     Object? capacity = null,
     Object? rooms = null,
     Object? resources = null,
+    Object? answer = null,
   }) {
     return _then(_self.copyWith(
       name: null == name
@@ -150,6 +155,10 @@ class _$DisasterCopyWithImpl<$Res> implements $DisasterCopyWith<$Res> {
           ? _self.resources
           : resources // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      answer: null == answer
+          ? _self.answer
+          : answer // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -166,7 +175,8 @@ class _Disaster implements Disaster {
       required this.description,
       required this.capacity,
       required final List<String> rooms,
-      required final List<String> resources})
+      required final List<String> resources,
+      required this.answer})
       : _rooms = rooms,
         _resources = resources;
 
@@ -200,6 +210,9 @@ class _Disaster implements Disaster {
     return EqualUnmodifiableListView(_resources);
   }
 
+  @override
+  final String answer;
+
   /// Create a copy of Disaster
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -229,7 +242,8 @@ class _Disaster implements Disaster {
                 other.capacity == capacity) &&
             const DeepCollectionEquality().equals(other._rooms, _rooms) &&
             const DeepCollectionEquality()
-                .equals(other._resources, _resources));
+                .equals(other._resources, _resources) &&
+            (identical(other.answer, answer) || other.answer == answer));
   }
 
   @override
@@ -243,11 +257,12 @@ class _Disaster implements Disaster {
       description,
       capacity,
       const DeepCollectionEquality().hash(_rooms),
-      const DeepCollectionEquality().hash(_resources));
+      const DeepCollectionEquality().hash(_resources),
+      answer);
 
   @override
   String toString() {
-    return 'Disaster(name: $name, disasterDescription: $disasterDescription, disasterShortDescription: $disasterShortDescription, shelterName: $shelterName, location: $location, description: $description, capacity: $capacity, rooms: $rooms, resources: $resources)';
+    return 'Disaster(name: $name, disasterDescription: $disasterDescription, disasterShortDescription: $disasterShortDescription, shelterName: $shelterName, location: $location, description: $description, capacity: $capacity, rooms: $rooms, resources: $resources, answer: $answer)';
   }
 }
 
@@ -267,7 +282,8 @@ abstract mixin class _$DisasterCopyWith<$Res>
       String description,
       int capacity,
       List<String> rooms,
-      List<String> resources});
+      List<String> resources,
+      String answer});
 }
 
 /// @nodoc
@@ -291,6 +307,7 @@ class __$DisasterCopyWithImpl<$Res> implements _$DisasterCopyWith<$Res> {
     Object? capacity = null,
     Object? rooms = null,
     Object? resources = null,
+    Object? answer = null,
   }) {
     return _then(_Disaster(
       name: null == name
@@ -329,6 +346,10 @@ class __$DisasterCopyWithImpl<$Res> implements _$DisasterCopyWith<$Res> {
           ? _self._resources
           : resources // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      answer: null == answer
+          ? _self.answer
+          : answer // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }

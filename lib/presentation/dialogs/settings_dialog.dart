@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_ai/domain/models/game_settings.dart';
 import 'package:shelter_ai/presentation/ui_items/info_row.dart';
+import '../../l10n/l10n.dart';
 
 class SettingsDialog extends StatelessWidget {
   final GameSettings settings;
@@ -12,6 +13,7 @@ class SettingsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -36,9 +38,9 @@ class SettingsDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Title
-              const Text(
-                "Настройки игры",
-                style: TextStyle(
+              Text(
+                loc.game_settings,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF5A503F),
@@ -57,28 +59,28 @@ class SettingsDialog extends StatelessWidget {
                 child: Column(
                   children: [
                     InfoRow(
-                      label: "Количество игроков",
+                      label: loc.playerAmount,
                       value: settings.playersCount.toString(),
                     ),
                     const SizedBox(height: 16),
                     InfoRow(
-                      label: "Сложность",
+                      label: loc.difficultySetting,
                       value: settings.difficulty.toString(),
                     ),
                     const SizedBox(height: 16),
                     InfoRow(
-                      label: "Время на обсуждение",
+                      label: loc.discussionTime,
                       value: "${settings.time} с.",
                     ),
                     const SizedBox(height: 16),
                     InfoRow(
-                      label: "Семейный режим",
-                      value: settings.safeMode ? "Вкл" : "Выкл",
+                      label: loc.familyModeText,
+                      value: settings.safeMode ? loc.vkl : loc.vikl,
                     ),
                     if (settings.plot.isNotEmpty) ...[
                       const SizedBox(height: 16),
                       InfoRow(
-                        label: "Пожелания",
+                        label: loc.wishes,
                         value: settings.plot,
                       ),
                     ],
@@ -100,9 +102,9 @@ class SettingsDialog extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                child: const Text(
-                  "Закрыть",
-                  style: TextStyle(fontSize: 16),
+                child: Text(
+                  loc.close,
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             ],

@@ -22,10 +22,10 @@ dependencies:
   pair: ^0.1.2
   audioplayers: ^6.4.0
   flutter_svg: ^2.0.17
-  dio: ^5.8.0+1
   dart_openai: ^5.1.0
   flutter_dotenv: ^5.2.1
   mocktail: ^1.0.4
+  flutter_tts: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +52,8 @@ flutter:
     - assets/images/luggage.svg
     - assets/audio/button_tap.mp3
     - assets/request_texts.json
+    - assets/offline/games.txt
+    - assets/offline/players.txt
     - .env
   #   - images/a_dot_ham.jpeg
 
