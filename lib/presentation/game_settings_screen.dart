@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:shelter_ai/core/di/game_dependencies_container.dart';
+import 'package:shelter_ai/core/di/game_settings_dep.dart';
+import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/data/repositories/gpt_api.dart';
-
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/game_settings_cubit.dart';
@@ -17,14 +16,36 @@ import 'package:shelter_ai/presentation/ui_items/text_field_custom.dart';
 import '../core/navigation/navigation_manager.dart';
 import 'loader_screen.dart';
 
-class GameSettingsWidget extends StatelessWidget {
+class GameSettingsWidget extends StatefulWidget {
   const GameSettingsWidget({super.key});
 
   @override
+  State<GameSettingsWidget> createState() => _GameSettingsWidgetState();
+}
+
+class _GameSettingsWidgetState extends State<GameSettingsWidget> {
+  final GameSettingsDepHolder gameSettingsDepHolder = GameSettingsDepHolder();
+
+  @override
+  void didChangeDependencies() {
+    if (!gameSettingsDepHolder.isCreated) {
+      final globalDepContainer =
+          RepositoryProvider.of<GlobalDepHolder>(context).container!;
+      gameSettingsDepHolder.create(globalDepContainer);
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    gameSettingsDepHolder.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final container = RepositoryProvider.of<GameDependenciesContainer>(context);
-    return BlocProvider(
-      create: (context) => GameSettingsCubit(container.gptRepository),
+    return BlocProvider.value(
+      value: gameSettingsDepHolder.container!.gameSettingsCubit,
       child: const GameSettingsScreen(),
     );
   }
@@ -45,15 +66,20 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       listener: (context, state) {
         if (state is DisasterUploadedState) {
           NavigationManager.instance
-              .openGame(state.settings, state.disaster, state.players);
+              .openGameReplacement(state.settings, state.disaster, state.players);
+        } else if(state is ErrorLoadingGameState){
+          const snackBar = SnackBar(content: Text('Ошибка загрузки данных'));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          NavigationManager.instance.pop();
         }
       },
       child: BlocBuilder<GameSettingsCubit, GameSettingsState>(
         builder: (context, state) {
           return Scaffold(
-            body: state is DisasterLoadingState
+            body: state is DisasterLoadingState ||
+                    state is DisasterUploadedState
                 ? const LoaderScreen()
-                : Container(
+                : DecoratedBox(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -88,7 +114,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                           defaultValue: state
                                               .settings.playersCount
                                               .toDouble(),
-                                          min: 2,
+                                          min: 4,
                                           max: 22,
                                           onChange: (value) => BlocProvider.of<
                                                   GameSettingsCubit>(context)

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 
@@ -20,7 +21,7 @@ class MainMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     return Scaffold(
-      body: Container(
+      body: DecoratedBox(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF6B5642), Color(0xFFD1A881)], // Цвета градиента
@@ -34,8 +35,8 @@ class MainMenuScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/images/door.png",
+                  SvgPicture.asset(
+                    'assets/images/door.svg',
                     width: 250,
                   ),
                   const SizedBox(

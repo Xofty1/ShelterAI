@@ -154,6 +154,7 @@ class GptRepositoryImpl implements GptRepository {
 
     // Actually sets values for Player
     var player = Player(
+        id: number,
         name: 'user $number',
         profession: playerInforamtion.profession,
         bio: playerInforamtion.age,

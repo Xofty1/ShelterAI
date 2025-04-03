@@ -50,15 +50,19 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
       settings: state.settings.copyWith(language: language),
     ));
 
-    final map = await repository.createGame(state.settings);
-    final Disaster disaster = map['disaster'] as Disaster;
-    final players = map['player_list'] as List<Player>;
+    try{
+      final map = await repository.createGame(state.settings);
+      final Disaster disaster = map['disaster'] as Disaster;
+      final players = map['player_list'] as List<Player>;
 
-    emit(DisasterUploadedState(
-      settings: state.settings,
-      disaster: disaster,
-      players: players,
-    ));
+      emit(DisasterUploadedState(
+        settings: state.settings,
+        disaster: disaster,
+        players: players,
+      ));
+    } catch(e){
+      emit(ErrorLoadingGameState(settings: state.settings));
+    }
   }
 
   void updateEnableTime(bool newEnable) {
@@ -80,7 +84,7 @@ class GameSettingsState {
           difficulty: 2,
           plot: '',
           safeMode: false,
-          language: '',
+          language: 'ru',
           time: 30,
           isTimerEnable: true,
         );
@@ -90,6 +94,10 @@ class GameSettingsState {
 
 class DisasterLoadingState extends GameSettingsState {
   DisasterLoadingState({required super.settings});
+}
+
+class ErrorLoadingGameState extends GameSettingsState{
+  ErrorLoadingGameState({required super.settings});
 }
 
 class DisasterUploadedState extends GameSettingsState {

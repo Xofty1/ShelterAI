@@ -34,9 +34,7 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
 
   Future<void> updateLocale(String language) async {
     await AppSharedPreference().saveLanguage(language);
-    print("52 $language");
     emit(AppSettingsState(settings: state.settings.copyWith(loc: language)));
-    print("53 ${state.settings.loc}");
   }
 }
 
