@@ -26,6 +26,25 @@ void main() {
     baseState = createBaseGameState();
   });
 
+  test('getStateAfterVoteResult handles successful vote correctly', () {
+    final voteInfo = VoteInfo(
+      votes: [3, 2, 0, 0, 0],
+      canBeSelected: List.filled(5, true),
+      selectedIndexes: [0],
+      voteStatus: VoteStatus.successful,
+    );
+
+    final voteResultState = baseState.copyWith(
+      stage: GameStage.voteResult,
+      voteInfo: voteInfo,
+    );
+    
+    final result = gameService.getStateAfterVoteResult(voteResultState);
+    
+    expect(result.stage, equals(GameStage.roundStarted));
+    expect((result as RunningGameState).roundInfo.roundNumber, equals(2));
+  });
+
   group('GameService.getStateAfterVoteResult', () {
     late RunningGameState voteResultState;
 
