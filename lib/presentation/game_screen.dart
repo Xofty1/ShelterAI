@@ -23,7 +23,6 @@ import '../l10n/l10n.dart';
 import 'game_finish_screen.dart';
 import 'game_round_screen.dart';
 import 'game_votting_screen.dart';
-import '../../l10n/l10n.dart';
 
 class GameScreenWidget extends StatefulWidget {
   const GameScreenWidget({super.key});
@@ -42,6 +41,7 @@ class _GameScreenWidgetState extends State<GameScreenWidget> {
   @override
   void didChangeDependencies() {
     if (!gameDepHolder.isCreated) {
+      context.read<SoundCubit>().pauseMusic();
       final globalDepContainer =
           RepositoryProvider.of<GlobalDepHolder>(context).container;
 
@@ -87,7 +87,7 @@ class GameScreen extends StatelessWidget {
   const GameScreen({super.key});
 
   Future<bool> _onWillPop(BuildContext context) async {
-    return await showDialog(
+    bool result = await showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(AppLocalizations.of(context).exitGameTitle),
@@ -105,6 +105,12 @@ class GameScreen extends StatelessWidget {
           ),
         ) ??
         false;
+
+    if(result && context.mounted){
+      context.read<SoundCubit>().pauseText();
+      context.read<SoundCubit>().resumeMusic();
+    }
+    return result;
   }
 
   void _showLoreDialog(BuildContext context, RunningGameState state) {
@@ -161,10 +167,16 @@ class GameScreen extends StatelessWidget {
           child: SafeArea(
             child: BlocListener<GameBloc, GameState>(
               listenWhen: (context, state) => state is RunningGameState,
-              listener: (context, state){
+              listener: (context, state) {
                 state as RunningGameState;
-                if(state.stage == GameStage.intro){
-                  context.read<SoundCubit>().playText(state.disaster.description);
+                if (state.stage == GameStage.intro) {
+                  context
+                      .read<SoundCubit>()
+                      .playText(state.disaster.disasterDescription);
+                } else if (state.stage == GameStage.finals) {
+                  context.read<SoundCubit>().playText(state.finals);
+                } else {
+                  context.read<SoundCubit>().pauseText();
                 }
               },
               child: BlocBuilder<GameBloc, GameState>(
@@ -194,7 +206,8 @@ class GameScreen extends StatelessWidget {
                               onTap: () =>
                                   _showRoundInfoDialog(context, gameState),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Text(
@@ -211,7 +224,8 @@ class GameScreen extends StatelessWidget {
                                       IconButton(
                                         onPressed: () => _showPlayersScreen(
                                             context, gameState),
-                                        icon: const Icon(Icons.account_box_sharp),
+                                        icon:
+                                            const Icon(Icons.account_box_sharp),
                                         color: headerTextColor,
                                         iconSize: 28,
                                         tooltip: loc.allPlayers,
@@ -258,7 +272,8 @@ class GameScreen extends StatelessWidget {
                                     gameState.roundInfo.openCount.toString()),
                             GameStage.openCards => PlayerCardScreen(
                                 players: gameState.players,
-                                currentPlayerIndex: gameState.currentPlayerIndex,
+                                currentPlayerIndex:
+                                    gameState.currentPlayerIndex,
                                 openCount: gameState.roundInfo.openCount,
                               ),
                             GameStage.speaking => DiscussionScreen(
@@ -269,7 +284,8 @@ class GameScreen extends StatelessWidget {
                             GameStage.voting => GameVotingScreen(
                                 players: gameState.players,
                                 canBeSelected: gameState.voteInfo.canBeSelected,
-                                currentPlayerIndex: gameState.currentPlayerIndex,
+                                currentPlayerIndex:
+                                    gameState.currentPlayerIndex,
                                 roundNumber:
                                     gameState.roundInfo.roundNumber.toString(),
                               ),

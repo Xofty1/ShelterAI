@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shelter_ai/data/repositories/gpt_api.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
@@ -22,6 +23,7 @@ class GlobalDepHolder {
 
   void dispose() {
     if (_container != null) {
+      _container!.dispose();
       _container = null;
     }
     _isCreated = false;
@@ -33,10 +35,13 @@ class GlobalDepContainer {
   final AppSettingsCubit appSettingsCubit;
   final SoundCubit soundCubit;
 
+  final AppLifecycleListener appLifecycleListener;
+
   GlobalDepContainer._({
     required this.gptRepository,
     required this.appSettingsCubit,
     required this.soundCubit,
+    required this.appLifecycleListener,
   });
 
   factory GlobalDepContainer.mock() {
@@ -47,21 +52,37 @@ class GlobalDepContainer {
     final effectsPlayer = AudioPlayer();
     final tts = Tts();
 
-    var soundCubit = SoundCubit(
+    final soundCubit = SoundCubit(
       musicPlayer: musicPlayer,
       effectsPlayer: effectsPlayer,
       tts: tts,
+    );
+
+    final appLifecycleListener = AppLifecycleListener(
+        onHide: (){
+          soundCubit.saveCurrentStatus();
+          soundCubit.pauseText();
+          soundCubit.pauseMusic();
+        },
+        onResume: (){
+          final isMusicPlaying = soundCubit.state.musicIsPlaying;
+          final isDubbingPlaying = soundCubit.state.dubbingIsPlaying;
+
+          if(isDubbingPlaying) soundCubit.resumeText();
+          if(isMusicPlaying) soundCubit.resumeMusic();
+       }
     );
 
     return GlobalDepContainer._(
       gptRepository: gptRepository,
       appSettingsCubit: appSettingsCubit,
       soundCubit: soundCubit,
+      appLifecycleListener: appLifecycleListener,
     );
   }
 
   factory GlobalDepContainer.real() {
-    final gptRepository = GptRepositoryMock();
+    final gptRepository = GptRepositoryImpl();
     final appSettingsCubit = AppSettingsCubit();
 
     final musicPlayer = AudioPlayer();
@@ -74,10 +95,30 @@ class GlobalDepContainer {
       tts: tts,
     );
 
+    final appLifecycleListener = AppLifecycleListener(
+        onHide: (){
+          soundCubit.saveCurrentStatus();
+          soundCubit.pauseText();
+          soundCubit.pauseMusic();
+        },
+        onResume: (){
+          final isMusicPlaying = soundCubit.state.musicIsPlaying;
+          final isDubbingPlaying = soundCubit.state.dubbingIsPlaying;
+
+          if(isDubbingPlaying) soundCubit.resumeText();
+          if(isMusicPlaying) soundCubit.resumeMusic();
+        }
+    );
+
     return GlobalDepContainer._(
       gptRepository: gptRepository,
       appSettingsCubit: appSettingsCubit,
       soundCubit: soundCubit,
+      appLifecycleListener: appLifecycleListener,
     );
+  }
+
+  void dispose(){
+    appLifecycleListener.dispose();
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shelter_ai/core/constants/sound_paths.dart';
 import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
@@ -22,7 +23,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final globalDepHolder = GlobalDepHolder()..create(isMock: false);
+  final globalDepHolder = GlobalDepHolder()..create(isMock: true);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
               value: container.appSettingsCubit,
             ),
             BlocProvider.value(
-              value: container.soundCubit,
+              value: container.soundCubit..playCustomMusic(SoundPaths.music),
             ),
           ],
           child: Builder(
@@ -53,12 +54,15 @@ class MyApp extends StatelessWidget {
               return BlocListener<AppSettingsCubit, AppSettingsState>(
                 listenWhen: (prevState, newState) =>
                     prevState.settings.effects != newState.settings.effects ||
-                    prevState.settings.music != newState.settings.music,
+                    prevState.settings.music != newState.settings.music ||
+                    prevState.settings.dubbing != newState.settings.dubbing,
                 listener: (context, state) {
                   BlocProvider.of<SoundCubit>(context)
                       .setMusicVolume(state.settings.music);
                   BlocProvider.of<SoundCubit>(context)
                       .setEffectsVolume(state.settings.effects);
+                  BlocProvider.of<SoundCubit>(context)
+                      .setDubbingVolume(state.settings.dubbing);
                 },
                 child: BlocSelector<AppSettingsCubit, AppSettingsState, String>(
                   selector: (state) => state.settings.loc,

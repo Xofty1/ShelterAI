@@ -83,7 +83,7 @@ class Tts {
   }
 
   // Updates settings
-  Future<void> setVolume(volume) async {
+  Future<void> setVolume(double volume) async {
     await flutterTts.setVolume(volume);
   }
 

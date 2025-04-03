@@ -13,7 +13,7 @@ class SoundCubit extends Cubit<SoundState> {
     required this.musicPlayer,
     required this.effectsPlayer,
     required this.tts,
-  }) : super(SoundState()) {
+  }) : super(SoundState(musicIsPlaying: false, dubbingIsPlaying: false)) {
     _setup();
   }
 
@@ -36,6 +36,17 @@ class SoundCubit extends Cubit<SoundState> {
       iOS:
           AudioContextIOS(options: const {AVAudioSessionOptions.mixWithOthers}),
     ));
+
+    //await effectsPlayer.setPlayerMode(PlayerMode.lowLatency);
+    await musicPlayer.setReleaseMode(ReleaseMode.loop);
+  }
+
+  void saveCurrentStatus() {
+    emit(SoundState(
+      musicIsPlaying: musicPlayer.state == PlayerState.playing,
+      dubbingIsPlaying: tts.ttsState == TtsState.playing ||
+          tts.ttsState == TtsState.continued,
+    ));
   }
 
   Future<void> setEffectsVolume(int volume) async {
@@ -55,13 +66,17 @@ class SoundCubit extends Cubit<SoundState> {
     await tts.speak();
   }
 
+  Future<void> resumeText() async {
+    await tts.speak();
+  }
+
   Future<void> stopText() async {
     await tts.stop();
   }
 
   Future<void> pauseText() async {
     await tts.pause();
-}
+  }
 
   Future<void> playButtonClickEffect() async {
     await effectsPlayer.setSourceAsset(SoundPaths.buttonTap);
@@ -78,9 +93,18 @@ class SoundCubit extends Cubit<SoundState> {
     await musicPlayer.resume();
   }
 
+  Future<void> resumeMusic() async {
+    await musicPlayer.resume();
+  }
+
   Future<void> pauseMusic() async {
     await musicPlayer.pause();
   }
 }
 
-class SoundState {}
+class SoundState {
+  final bool musicIsPlaying;
+  final bool dubbingIsPlaying;
+
+  SoundState({required this.musicIsPlaying, required this.dubbingIsPlaying});
+}
