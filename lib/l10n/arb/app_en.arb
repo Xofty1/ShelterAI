@@ -32,6 +32,7 @@
   "difficultyHardcore": "Hardcore",
   "difficultyInsanity": "Insanity",
   "count": "Count: {count}",
+  "countPlayers": "Number of players",
   "startGame": "Start Game",
   "pause": "Pause",
   "lore": "Lore",
@@ -59,5 +60,13 @@
   "votingDesc": "Choosing survivors:",
   "votingPoint1": "After the discussion, participants vote on who to kick out of the bunker",
   "votingPoint2": "In some versions, you can vote for multiple players",
-  "votingPoint3": "The process is repeated until the required number of survivors remains"
+  "votingPoint3": "The process is repeated until the required number of survivors remains",
+  "kickedOutPlayers": "Kicked out players",
+  "noKickedOutPlayers": "No kicked out players",
+  "cnt": "Continue",
+  "gameTone": "Game Tone",
+  "family": "Family",
+  "time": "Time",
+  "requiredToOpenProperties": "Required to open characteristics"
+
 }

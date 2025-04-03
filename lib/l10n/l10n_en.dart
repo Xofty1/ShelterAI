@@ -107,6 +107,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get countPlayers => 'Number of players';
+
+  @override
   String get startGame => 'Start Game';
 
   @override
@@ -189,4 +192,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get votingPoint3 => 'The process is repeated until the required number of survivors remains';
+
+  @override
+  String get kickedOutPlayers => 'Kicked out players';
+
+  @override
+  String get noKickedOutPlayers => 'No kicked out players';
+
+  @override
+  String get cnt => 'Continue';
+
+  @override
+  String get family => 'Family';
+
+  @override
+  String get time => 'Time';
+
+  @override
+  String get requiredToOpenProperties => 'Required to open characteristics';
 }

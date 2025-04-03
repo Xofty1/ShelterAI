@@ -7,6 +7,8 @@ import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 import 'package:shelter_ai/presentation/ui_items/players_list.dart';
 
+import '../l10n/l10n.dart';
+
 class VoteResultScreen extends StatelessWidget {
   final List<Player> kickedPlayers;
 
@@ -17,6 +19,7 @@ class VoteResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -29,19 +32,19 @@ class VoteResultScreen extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 20),
-          const Text(
-            "Выгнанные игроки",
-            style: TextStyle(
+          Text(
+            loc.kickedOutPlayers,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Color(0xFF482020),
             ),
           ),
           const SizedBox(height: 20),
-          Expanded(child: kickedPlayers.length != 0 ? PlayerList(players: kickedPlayers) : const Center(
+          Expanded(child: kickedPlayers.isNotEmpty ? PlayerList(players: kickedPlayers) : Center(
             child: Text(
-              "Нет выгнанных игроков",
-              style: TextStyle(
+              loc.noKickedOutPlayers,
+              style: const TextStyle(
                 fontSize: 18,
                 color: Color(0xFF482020),
               ),
@@ -50,7 +53,7 @@ class VoteResultScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16),
             child: CustomButton(
-              text: "Продолжить",
+              text: loc.cnt,
               onPressed: () {
                 BlocProvider.of<GameBloc>(context).add(ReadyGameEvent());
               },

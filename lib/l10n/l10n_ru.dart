@@ -107,6 +107,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get countPlayers => 'Количество игроков';
+
+  @override
   String get startGame => 'Начать игру';
 
   @override
@@ -189,4 +192,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get votingPoint3 => 'Процесс повторяется, пока не останется нужное количество выживших';
+
+  @override
+  String get kickedOutPlayers => 'Выгнанные игроки';
+
+  @override
+  String get noKickedOutPlayers => 'Нет выгнанных игроков';
+
+  @override
+  String get cnt => 'Продолжить';
+
+  @override
+  String get family => 'Семейный';
+
+  @override
+  String get time => 'Время';
+
+  @override
+  String get requiredToOpenProperties => 'Требуется открыть характеристик';
 }

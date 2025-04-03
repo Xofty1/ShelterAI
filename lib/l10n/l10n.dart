@@ -287,6 +287,12 @@ abstract class AppLocalizations {
   /// **'Количество: {count}'**
   String count(Object count);
 
+  /// No description provided for @countPlayers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество игроков'**
+  String get countPlayers;
+
   /// No description provided for @startGame.
   ///
   /// In ru, this message translates to:
@@ -454,6 +460,42 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Процесс повторяется, пока не останется нужное количество выживших'**
   String get votingPoint3;
+
+  /// No description provided for @kickedOutPlayers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выгнанные игроки'**
+  String get kickedOutPlayers;
+
+  /// No description provided for @noKickedOutPlayers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет выгнанных игроков'**
+  String get noKickedOutPlayers;
+
+  /// No description provided for @cnt.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить'**
+  String get cnt;
+
+  /// No description provided for @family.
+  ///
+  /// In ru, this message translates to:
+  /// **'Семейный'**
+  String get family;
+
+  /// No description provided for @time.
+  ///
+  /// In ru, this message translates to:
+  /// **'Время'**
+  String get time;
+
+  /// No description provided for @requiredToOpenProperties.
+  ///
+  /// In ru, this message translates to:
+  /// **'Требуется открыть характеристик'**
+  String get requiredToOpenProperties;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

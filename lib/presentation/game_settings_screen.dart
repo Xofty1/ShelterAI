@@ -105,7 +105,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               child: Column(
                                 children: [
                                   // Players count
-                                  SettingHeader(text: "Количество игроков"),
+                                  SettingHeader(text: loc.countPlayers),
                                   Row(
                                     children: [
                                       SizedBox(
@@ -165,13 +165,13 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                   const SizedBox(height: 10),
 
                                   // Game tone
-                                  SettingHeader(text: "Тон игры"),
+                                  SettingHeader(text: loc.gameTone),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const LabelWidget(
-                                        text: "Семейный",
+                                      LabelWidget(
+                                        text: loc.family,
                                       ),
                                       CustomSwitcher(
                                         initialValue: state.settings.safeMode,
@@ -192,7 +192,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             // Plot wishes
                             SettingsContainer(
                               child: CustomTextField(
-                                text: "Введите пожелания по сюжету",
+                                text: loc.plotWishes,
                                 initialValue: state.settings.plot,
                                 onChange: (value) {
                                   BlocProvider.of<GameSettingsCubit>(context)
@@ -207,7 +207,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             SettingsContainer(
                               child: Column(
                                 children: [
-                                  SettingHeader(text: "Время"),
+                                  SettingHeader(text: loc.time),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -267,7 +267,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
 
                             // Continue button
                             CustomButton(
-                              text: 'Продолжить',
+                              text: loc.cnt,
                               onPressed: () {
                                 final language =
                                     BlocProvider.of<AppSettingsCubit>(context)
