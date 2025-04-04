@@ -25,10 +25,13 @@ Shelter AI — это усовершенствованная версия поп
 
 ## 📸 **Скриншоты**
 <p align="center">
-  <img src="material/img.png" width="400" alt="Screenshot 1">
-  <img src="material/img_1.png" width="400" alt="Screenshot 2">
-  <img src="material/img_2.png" width="400" alt="Screenshot 3">
-  <img src="material/img_3.png" width="400" alt="Screenshot 4">
+  <img src="material/img1_pixel.png" width="400" alt="Screenshot 1">
+  <img src="material/img2_pixel.png" width="400" alt="Screenshot 2">
+  <img src="material/img3_pixel.png" width="400" alt="Screenshot 3">
+  <img src="material/img4_pixel.png" width="400" alt="Screenshot 4">
+  <img src="material/img5_pixel.png" width="400" alt="Screenshot 5">
+  <img src="material/img6_pixel.png" width="400" alt="Screenshot 6">
+
 </p>
 
 ---
