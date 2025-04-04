@@ -98,193 +98,191 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                         colors: [Color(0xFF8B7355), Color(0xFFD1A881)],
                       ),
                     ),
-                    child: SafeArea(
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 16),
-                        child: Column(
-                          children: [
-                            // Main settings container
-                            SettingsContainer(
-                              child: Column(
-                                children: [
-                                  // Players count
-                                  SettingHeader(text: loc.countPlayers),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 70,
-                                        child: LabelWidget(
-                                          text: state.settings.playersCount
-                                              .toString(),
-                                        ),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 24),
+                      child: Column(
+                        children: [
+                          // Main settings container
+                          SettingsContainer(
+                            child: Column(
+                              children: [
+                                // Players count
+                                SettingHeader(text: loc.countPlayers),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 70,
+                                      child: LabelWidget(
+                                        text: state.settings.playersCount
+                                            .toString(),
                                       ),
-                                      Expanded(
-                                        child: SliderSettings(
-                                          defaultValue: state
-                                              .settings.playersCount
-                                              .toDouble(),
-                                          min: 4,
-                                          max: 16,
-                                          onChange: (value) => BlocProvider.of<
-                                                  GameSettingsCubit>(context)
-                                              .updatePlayersCount(
-                                                  value.toInt()),
-                                        ),
+                                    ),
+                                    Expanded(
+                                      child: SliderSettings(
+                                        defaultValue: state
+                                            .settings.playersCount
+                                            .toDouble(),
+                                        min: 4,
+                                        max: 16,
+                                        onChange: (value) => BlocProvider.of<
+                                                GameSettingsCubit>(context)
+                                            .updatePlayersCount(
+                                                value.toInt()),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
+                                ),
 
-                                  const SizedBox(height: 10),
+                                const SizedBox(height: 10),
 
-                                  // Difficulty
-                                  SettingHeader(text: loc.difficultySettings),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      DifficultyButton(
-                                          text: loc.difficultyClassic,
-                                          isSelected:
-                                              state.settings.difficulty == 1,
-                                          onTap: () => BlocProvider.of<
-                                                  GameSettingsCubit>(context)
-                                              .updateDifficulty(1)),
-                                      DifficultyButton(
-                                          text: loc.difficultyHardcore,
-                                          isSelected:
-                                              state.settings.difficulty == 2,
-                                          onTap: () => BlocProvider.of<
-                                                  GameSettingsCubit>(context)
-                                              .updateDifficulty(2)),
-                                      DifficultyButton(
-                                          text: loc.difficultyInsanity,
-                                          isSelected:
-                                              state.settings.difficulty == 3,
-                                          onTap: () => BlocProvider.of<
-                                                  GameSettingsCubit>(context)
-                                              .updateDifficulty(3)),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
+                                // Difficulty
+                                SettingHeader(text: loc.difficultySettings),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    DifficultyButton(
+                                        text: loc.difficultyClassic,
+                                        isSelected:
+                                            state.settings.difficulty == 1,
+                                        onTap: () => BlocProvider.of<
+                                                GameSettingsCubit>(context)
+                                            .updateDifficulty(1)),
+                                    DifficultyButton(
+                                        text: loc.difficultyHardcore,
+                                        isSelected:
+                                            state.settings.difficulty == 2,
+                                        onTap: () => BlocProvider.of<
+                                                GameSettingsCubit>(context)
+                                            .updateDifficulty(2)),
+                                    DifficultyButton(
+                                        text: loc.difficultyInsanity,
+                                        isSelected:
+                                            state.settings.difficulty == 3,
+                                        onTap: () => BlocProvider.of<
+                                                GameSettingsCubit>(context)
+                                            .updateDifficulty(3)),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
 
-                                  // Game tone
-                                  SettingHeader(text: loc.gameTone),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      LabelWidget(
-                                        text: loc.family,
-                                      ),
-                                      CustomSwitcher(
-                                        initialValue: state.settings.safeMode,
-                                        onToggle: (value) {
-                                          BlocProvider.of<GameSettingsCubit>(
-                                                  context)
-                                              .updateSafeMode(value);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                // Game tone
+                                SettingHeader(text: loc.gameTone),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    LabelWidget(
+                                      text: loc.family,
+                                    ),
+                                    CustomSwitcher(
+                                      initialValue: state.settings.safeMode,
+                                      onToggle: (value) {
+                                        BlocProvider.of<GameSettingsCubit>(
+                                                context)
+                                            .updateSafeMode(value);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
+                          ),
 
-                            const SizedBox(height: 16),
+                          const SizedBox(height: 16),
 
-                            // Plot wishes
-                            SettingsContainer(
-                              child: CustomTextField(
-                                text: loc.plotWishes,
-                                initialValue: state.settings.plot,
-                                onChange: (value) {
-                                  BlocProvider.of<GameSettingsCubit>(context)
-                                      .updatePlot(value);
-                                },
-                              ),
-                            ),
-
-                            const SizedBox(height: 16),
-
-                            // Time
-                            SettingsContainer(
-                              child: Column(
-                                children: [
-                                  SettingHeader(text: loc.time),
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 70,
-                                            child: LabelWidget(
-                                              text: state.settings.time
-                                                  .toString(),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: SliderSettings(
-                                              defaultValue: state.settings.time
-                                                  .toDouble(),
-                                              min: 30,
-                                              max: 120,
-                                              onChange: (value) => BlocProvider
-                                                  .of<GameSettingsCubit>(
-                                                  context)
-                                                  .updateTime(value.toInt()),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-
-                                  const SizedBox(height: 16),
-
-                                  // Random mode
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ToneButton(
-                                          text: loc.random,
-                                          isSelected: false,
-                                          onTap: () {
-                                            // Random mode can be added to your GameSettings model
-                                          },
-                                          width: 160),
-                                      CustomSwitcher(
-                                        initialValue: false,
-                                        onToggle: (value) {
-                                          // Random mode toggle can be added to your GameSettings model
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Continue button
-                            CustomButton(
-                              text: loc.continueWord,
-                              onPressed: () {
-                                final language =
-                                    BlocProvider.of<AppSettingsCubit>(context)
-                                        .state
-                                        .settings
-                                        .loc;
+                          // Plot wishes
+                          SettingsContainer(
+                            child: CustomTextField(
+                              text: loc.plotWishes,
+                              initialValue: state.settings.plot,
+                              onChange: (value) {
                                 BlocProvider.of<GameSettingsCubit>(context)
-                                    .startGame(language);
+                                    .updatePlot(value);
                               },
                             ),
-                          ],
-                        ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Time
+                          SettingsContainer(
+                            child: Column(
+                              children: [
+                                SettingHeader(text: loc.time),
+                                Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 70,
+                                          child: LabelWidget(
+                                            text: state.settings.time
+                                                .toString(),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: SliderSettings(
+                                            defaultValue: state.settings.time
+                                                .toDouble(),
+                                            min: 30,
+                                            max: 120,
+                                            onChange: (value) => BlocProvider
+                                                .of<GameSettingsCubit>(
+                                                context)
+                                                .updateTime(value.toInt()),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 16),
+
+                                // Random mode
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ToneButton(
+                                        text: loc.random,
+                                        isSelected: false,
+                                        onTap: () {
+                                          // Random mode can be added to your GameSettings model
+                                        },
+                                        width: 160),
+                                    CustomSwitcher(
+                                      initialValue: false,
+                                      onToggle: (value) {
+                                        // Random mode toggle can be added to your GameSettings model
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Continue button
+                          CustomButton(
+                            text: loc.continueWord,
+                            onPressed: () {
+                              final language =
+                                  BlocProvider.of<AppSettingsCubit>(context)
+                                      .state
+                                      .settings
+                                      .loc;
+                              BlocProvider.of<GameSettingsCubit>(context)
+                                  .startGame(language);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),

@@ -746,7 +746,7 @@ abstract class AppLocalizations {
   /// No description provided for @playerInfo.
   ///
   /// In ru, this message translates to:
-  /// **'ИНФОРМАЦИЯ ОБ ИГРОКЕ'**
+  /// **'ОБ ИГРОКЕ'**
   String get playerInfo;
 }
 
