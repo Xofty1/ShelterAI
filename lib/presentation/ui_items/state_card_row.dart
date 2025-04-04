@@ -17,7 +17,9 @@ class StateCardRow extends StatefulWidget {
     required this.label,
     required this.assetsPath,
     required this.initialActive,
-    required this.onToggle, required this.content, required this.isWorked,
+    required this.onToggle,
+    required this.content,
+    required this.isWorked,
   });
 
   @override
@@ -44,7 +46,9 @@ class _StateCardRowState extends State<StateCardRow> {
           widget.label,
           style: TextStyle(
             fontSize: 18,
-            color: !isMutable ? const Color(0xFF6B5642).withOpacity(0.6) : const Color(0xFF6B5642),
+            color: !isMutable
+                ? const Color(0xFF6B5642).withOpacity(0.6)
+                : const Color(0xFF6B5642),
           ),
         ),
         Container(
@@ -73,7 +77,8 @@ class _StateCardRowState extends State<StateCardRow> {
                 borderRadius: 4.0,
               ),
               LabelWidget(
-                color: const Color(0xFFD9D9D9).withOpacity(!isMutable ? 0.6 : 1.0),
+                color:
+                    const Color(0xFFD9D9D9).withOpacity(!isMutable ? 0.6 : 1.0),
                 text: widget.content,
               ),
               Opacity(

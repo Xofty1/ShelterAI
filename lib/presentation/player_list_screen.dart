@@ -89,5 +89,4 @@ class PlayersListScreen extends StatelessWidget {
       ),
     );
   }
-
 }

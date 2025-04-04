@@ -13,7 +13,6 @@ abstract class Player with _$Player {
     required String phobia,
     required String luggage,
     required String extra,
-
     required LifeStatus lifeStatus,
     required List<bool> knownProperties,
     required List<String> notes,

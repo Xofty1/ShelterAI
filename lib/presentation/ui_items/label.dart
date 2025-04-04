@@ -4,7 +4,8 @@ class LabelWidget extends StatelessWidget {
   final String text;
   final Color color;
 
-  const LabelWidget({super.key, required this.text, this.color = const Color(0xFFEDE0D4)});
+  const LabelWidget(
+      {super.key, required this.text, this.color = const Color(0xFFEDE0D4)});
 
   @override
   Widget build(BuildContext context) {

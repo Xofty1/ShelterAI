@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ContainerTemplate extends StatelessWidget {
-
   final double height;
   final double width;
   final Widget child;
   final Color color;
-
 
   const ContainerTemplate({
     super.key,
@@ -32,7 +30,6 @@ class ContainerTemplate extends StatelessWidget {
             ),
           ],
         ),
-        child: child
-    );
+        child: child);
   }
 }

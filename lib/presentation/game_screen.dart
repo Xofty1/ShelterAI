@@ -106,7 +106,7 @@ class GameScreen extends StatelessWidget {
         ) ??
         false;
 
-    if(result && context.mounted){
+    if (result && context.mounted) {
       context.read<SoundCubit>().pauseText();
       context.read<SoundCubit>().resumeMusic();
     }

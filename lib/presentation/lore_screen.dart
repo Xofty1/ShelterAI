@@ -23,22 +23,22 @@ class LoreScreen extends StatelessWidget {
       backgroundColor: Color(0xFF483728),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-    title: Text(
-    loc.lore,
-    style: const TextStyle(
-    fontSize: 22,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-    letterSpacing: 1.2,
-    ),
-    ),
-    leading: IconButton(
-    icon: const Icon(Icons.arrow_back, color: Colors.white),
-    onPressed: () => Navigator.of(context).pop(),
-    ),
-    centerTitle: true,
-    elevation: 0,
-    ),
+        title: Text(
+          loc.lore,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: 1.2,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: AppColors.mainGradient,

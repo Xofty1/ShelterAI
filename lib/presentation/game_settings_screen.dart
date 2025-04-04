@@ -27,7 +27,7 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
   void didChangeDependencies() {
     if (!gameSettingsDepHolder.isCreated) {
       final globalDepContainer =
-      RepositoryProvider.of<GlobalDepHolder>(context).container!;
+          RepositoryProvider.of<GlobalDepHolder>(context).container!;
       gameSettingsDepHolder.create(globalDepContainer);
     }
     super.didChangeDependencies();
@@ -71,9 +71,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
         if (state is DisasterUploadedState) {
-          NavigationManager.instance
-              .openGameReplacement(state.settings, state.disaster, state.players);
-        } else if(state is ErrorLoadingGameState){
+          NavigationManager.instance.openGameReplacement(
+              state.settings, state.disaster, state.players);
+        } else if (state is ErrorLoadingGameState) {
           final snackBar = SnackBar(content: Text(loc.dataLoadingError));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           NavigationManager.instance.pop();
@@ -130,8 +130,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                         max: 16,
                                         onChange: (value) => BlocProvider.of<
                                                 GameSettingsCubit>(context)
-                                            .updatePlayersCount(
-                                                value.toInt()),
+                                            .updatePlayersCount(value.toInt()),
                                       ),
                                     ),
                                   ],
@@ -149,23 +148,26 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                         text: loc.difficultyClassic,
                                         isSelected:
                                             state.settings.difficulty == 1,
-                                        onTap: () => BlocProvider.of<
-                                                GameSettingsCubit>(context)
-                                            .updateDifficulty(1)),
+                                        onTap: () =>
+                                            BlocProvider.of<GameSettingsCubit>(
+                                                    context)
+                                                .updateDifficulty(1)),
                                     DifficultyButton(
                                         text: loc.difficultyHardcore,
                                         isSelected:
                                             state.settings.difficulty == 2,
-                                        onTap: () => BlocProvider.of<
-                                                GameSettingsCubit>(context)
-                                            .updateDifficulty(2)),
+                                        onTap: () =>
+                                            BlocProvider.of<GameSettingsCubit>(
+                                                    context)
+                                                .updateDifficulty(2)),
                                     DifficultyButton(
                                         text: loc.difficultyInsanity,
                                         isSelected:
                                             state.settings.difficulty == 3,
-                                        onTap: () => BlocProvider.of<
-                                                GameSettingsCubit>(context)
-                                            .updateDifficulty(3)),
+                                        onTap: () =>
+                                            BlocProvider.of<GameSettingsCubit>(
+                                                    context)
+                                                .updateDifficulty(3)),
                                   ],
                                 ),
                                 const SizedBox(height: 10),
@@ -215,27 +217,26 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               children: [
                                 SettingHeader(text: loc.time),
                                 Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
                                         SizedBox(
                                           width: 70,
                                           child: LabelWidget(
-                                            text: state.settings.time
-                                                .toString(),
+                                            text:
+                                                state.settings.time.toString(),
                                           ),
                                         ),
                                         Expanded(
                                           child: SliderSettings(
-                                            defaultValue: state.settings.time
-                                                .toDouble(),
+                                            defaultValue:
+                                                state.settings.time.toDouble(),
                                             min: 30,
                                             max: 120,
                                             onChange: (value) => BlocProvider
-                                                .of<GameSettingsCubit>(
-                                                context)
+                                                    .of<GameSettingsCubit>(
+                                                        context)
                                                 .updateTime(value.toInt()),
                                           ),
                                         ),
@@ -249,7 +250,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 // Random mode
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     ToneButton(
                                         text: loc.random,

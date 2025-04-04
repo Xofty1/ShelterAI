@@ -8,7 +8,6 @@ import 'dart:math';
 import 'package:shelter_ai/presentation/ui_items/front_card_side.dart';
 import '../domain/bloc/sound_cubit.dart';
 
-
 class PlayerCardScreen extends StatefulWidget {
   final int openCount;
   final List<Player> players;
@@ -165,7 +164,8 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
                         alignment: Alignment.center,
                         child: _buildCardContainer(
                           isBackSide: true,
-                          child: PlayerCardBack(currentIndex: (widget.currentPlayerIndex + 1)),
+                          child: PlayerCardBack(
+                              currentIndex: (widget.currentPlayerIndex + 1)),
                         ),
                       );
                     }
@@ -180,10 +180,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   }
 
   Widget _buildCardContainer(
-      {
-        required bool isBackSide,
-        required Widget child
-      }) {
+      {required bool isBackSide, required Widget child}) {
     return Container(
       width: cardWidth,
       height: cardHeight,

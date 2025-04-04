@@ -40,15 +40,18 @@ class VoteResultScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Expanded(child: kickedPlayers.isNotEmpty ? PlayerList(players: kickedPlayers) : Center(
-            child: Text(
-              loc.noKickedOutPlayers,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Color(0xFF482020),
-              ),
-            ),
-          )),
+          Expanded(
+              child: kickedPlayers.isNotEmpty
+                  ? PlayerList(players: kickedPlayers)
+                  : Center(
+                      child: Text(
+                        loc.noKickedOutPlayers,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Color(0xFF482020),
+                        ),
+                      ),
+                    )),
           Padding(
             padding: const EdgeInsets.all(16),
             child: CustomButton(
@@ -67,10 +70,7 @@ class VoteResultScreen extends StatelessWidget {
 class PlayerCardDetail extends StatelessWidget {
   final Player player;
 
-  const PlayerCardDetail({
-    super.key,
-    required this.player
-  });
+  const PlayerCardDetail({super.key, required this.player});
 
   @override
   Widget build(BuildContext context) {
@@ -136,15 +136,20 @@ class PlayerCardDetail extends StatelessWidget {
           const SizedBox(height: 24),
           _buildInfoSection(loc.age, player.bio, player.knownProperties[0]),
           const SizedBox(height: 16),
-          _buildInfoSection(loc.health, player.health, player.knownProperties[1]),
+          _buildInfoSection(
+              loc.health, player.health, player.knownProperties[1]),
           const SizedBox(height: 16),
-          _buildInfoSection(loc.hobbyAndSkills, player.hobby, player.knownProperties[2]),
+          _buildInfoSection(
+              loc.hobbyAndSkills, player.hobby, player.knownProperties[2]),
           const SizedBox(height: 16),
-          _buildInfoSection(loc.phobias, player.phobia, player.knownProperties[3]),
+          _buildInfoSection(
+              loc.phobias, player.phobia, player.knownProperties[3]),
           const SizedBox(height: 16),
-          _buildInfoSection(loc.luggage, player.luggage, player.knownProperties[4]),
+          _buildInfoSection(
+              loc.luggage, player.luggage, player.knownProperties[4]),
           const SizedBox(height: 16),
-          _buildInfoSection(loc.additionalInfo, player.extra, player.knownProperties[5]),
+          _buildInfoSection(
+              loc.additionalInfo, player.extra, player.knownProperties[5]),
         ],
       ),
     );

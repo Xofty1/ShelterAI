@@ -38,13 +38,12 @@ class AssetImageItem extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: SvgPicture.asset(
-          imagePath,
-          width: 100,
-          height: 100,
-        )
-      ),
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: SvgPicture.asset(
+            imagePath,
+            width: 100,
+            height: 100,
+          )),
     );
   }
 }

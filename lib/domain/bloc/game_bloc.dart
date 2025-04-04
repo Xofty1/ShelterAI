@@ -78,8 +78,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onWaiting(WaitingGameEvent event, Emitter emit) {
     final prevState = state as RunningGameState;
-
-
   }
 
   void _onVoted(VotedGameEvent event, Emitter emit) {
@@ -133,7 +131,6 @@ class VotedGameEvent extends GameEvent {
 
   final int voteIndex;
 }
-
 
 class WaitingGameEvent extends GameEvent {
   WaitingGameEvent(this.isHost);
