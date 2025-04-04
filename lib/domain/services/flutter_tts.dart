@@ -111,7 +111,7 @@ class Tts {
   }
 
   // Updates language
-  void setLoacle(String? lang) {
+  void setLocale(String? lang) {
     // Reforms it
     switch (lang) {
       case "en": lang = "en-US"; break;

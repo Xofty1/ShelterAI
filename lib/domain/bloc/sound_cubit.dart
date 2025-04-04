@@ -61,10 +61,6 @@ class SoundCubit extends Cubit<SoundState> {
     await tts.setVolume(volume.toDouble() / 100);
   }
 
-  Future<void> setDubbingLocale(String locale) async {
-    tts.setLoacle(locale);
-  }
-
   Future<void> playText(String text) async {
     tts.setText(text);
     await tts.speak();
@@ -108,6 +104,10 @@ class SoundCubit extends Cubit<SoundState> {
 
   Future<void> pauseMusic() async {
     await musicPlayer.pause();
+  }
+
+  void setDubbingLocale(String locale) {
+    tts.setLocale(locale);
   }
 }
 

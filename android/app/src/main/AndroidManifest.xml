@@ -4,7 +4,7 @@
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
     </queries>
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="Бункер AI"
         android:name="${applicationName}"
