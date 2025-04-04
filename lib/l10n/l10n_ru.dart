@@ -359,5 +359,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get difficultySettings => 'Сложность';
 
   @override
+  String get soonHistory => 'Скоро здесь будет история игр';
+
+  @override
   String get playerInfo => 'ОБ ИГРОКЕ';
 }

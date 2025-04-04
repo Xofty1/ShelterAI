@@ -779,6 +779,12 @@ abstract class AppLocalizations {
   /// **'Сложность'**
   String get difficultySettings;
 
+  /// No description provided for @soonHistory.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скоро здесь будет история игр'**
+  String get soonHistory;
+
   /// No description provided for @playerInfo.
   ///
   /// In ru, this message translates to:

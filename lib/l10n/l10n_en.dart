@@ -359,5 +359,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get difficultySettings => 'Difficulty';
 
   @override
+  String get soonHistory => 'Game history will be here soon';
+
+  @override
   String get playerInfo => 'Player info';
 }

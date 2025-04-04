@@ -52,6 +52,10 @@ class NavigationManager {
     });
   }
 
+  void openHistory() {
+    _navigator.pushNamed(RouteNames.history);
+  }
+
   void pop([Object? result]) {
     _navigator.pop(result);
   }
