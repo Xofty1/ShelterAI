@@ -6,6 +6,7 @@ import 'package:shelter_ai/presentation/ui_items/back_card_side.dart';
 import 'dart:math';
 
 import 'package:shelter_ai/presentation/ui_items/front_card_side.dart';
+import '../domain/bloc/sound_cubit.dart';
 
 
 class PlayerCardScreen extends StatefulWidget {
@@ -88,6 +89,7 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
     });
 
     if (_showFrontSide) {
+      context.read<SoundCubit>().playFlipCardEffect();
       _controller.forward().then((_) {
         setState(() => _isAnimating = false);
         onComplete?.call();

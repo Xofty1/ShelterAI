@@ -87,6 +87,11 @@ class SoundCubit extends Cubit<SoundState> {
     await effectsPlayer.resume();
   }
 
+  Future<void> playFlipCardEffect() async {
+    await effectsPlayer.setSourceAsset(SoundPaths.flipCard);
+    await effectsPlayer.resume();
+  }
+
   Future<void> playCustomEffect(String assetSoundPath) async {
     await effectsPlayer.setSourceAsset(assetSoundPath);
     await effectsPlayer.resume();

@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -361,5 +359,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get difficultySettings => 'Сложность';
 
   @override
-  String get playerInfo => 'ИНФОРМАЦИЯ ОБ ИГРОКЕ';
+  String get soonHistory => 'Скоро здесь будет история игр';
+
+  @override
+  String get playerInfo => 'ОБ ИГРОКЕ';
 }

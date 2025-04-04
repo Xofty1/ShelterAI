@@ -27,7 +27,7 @@ class _GameSettingsWidgetState extends State<GameSettingsWidget> {
   void didChangeDependencies() {
     if (!gameSettingsDepHolder.isCreated) {
       final globalDepContainer =
-          RepositoryProvider.of<GlobalDepHolder>(context).container!;
+      RepositoryProvider.of<GlobalDepHolder>(context).container!;
       gameSettingsDepHolder.create(globalDepContainer);
     }
     super.didChangeDependencies();
@@ -71,9 +71,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     return BlocListener<GameSettingsCubit, GameSettingsState>(
       listener: (context, state) {
         if (state is DisasterUploadedState) {
-          NavigationManager.instance.openGameReplacement(
-              state.settings, state.disaster, state.players);
-        } else if (state is ErrorLoadingGameState) {
+          NavigationManager.instance
+              .openGameReplacement(state.settings, state.disaster, state.players);
+        } else if(state is ErrorLoadingGameState){
           final snackBar = SnackBar(content: Text(loc.dataLoadingError));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           NavigationManager.instance.pop();
@@ -103,10 +103,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
+                          horizontal: 12, vertical: 24),
                       child: Column(
                         children: [
-                          const SizedBox(height: 12),
                           // Main settings container
                           SettingsContainer(
                             child: Column(
@@ -217,7 +216,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 SettingHeader(text: loc.time),
                                 Column(
                                   crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
@@ -235,8 +234,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                             min: 30,
                                             max: 120,
                                             onChange: (value) => BlocProvider
-                                                    .of<GameSettingsCubit>(
-                                                        context)
+                                                .of<GameSettingsCubit>(
+                                                context)
                                                 .updateTime(value.toInt()),
                                           ),
                                         ),
@@ -250,7 +249,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 // Random mode
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     ToneButton(
                                         text: loc.random,

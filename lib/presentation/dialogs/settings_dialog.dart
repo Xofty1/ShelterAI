@@ -72,7 +72,7 @@ class SettingsDialog extends StatelessWidget {
                     const SizedBox(height: 16),
                     InfoRow(
                       label: loc.discussionTime,
-                      value: "${settings.time} с.",
+                      value: settings.time.toString(),
                     ),
                     const SizedBox(height: 16),
                     InfoRow(

@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -359,6 +357,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get difficultySettings => 'Difficulty';
+
+  @override
+  String get soonHistory => 'Game history will be here soon';
 
   @override
   String get playerInfo => 'Player info';

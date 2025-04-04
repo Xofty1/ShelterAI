@@ -58,6 +58,7 @@ flutter:
     - assets/offline/games.txt
     - assets/offline/players.txt
     - assets/audio/music.mp3
+    - assets/audio/flip_card.mp3
     - .env
   #   - images/a_dot_ham.jpeg
 
