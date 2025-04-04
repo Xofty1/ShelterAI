@@ -7,18 +7,19 @@ part 'json_offline.g.dart';
 @freezed
 sealed class DataReader with _$DataReader {
   @JsonSerializable(explicitToJson: true)
-  const factory DataReader ({
+  const factory DataReader({
     required Family ru,
     required Family en,
   }) = _DataReader;
 
-  factory DataReader.fromJson(Map<String, dynamic> json) => _$DataReaderFromJson(json);
+  factory DataReader.fromJson(Map<String, dynamic> json) =>
+      _$DataReaderFromJson(json);
 }
 
 @freezed
 sealed class Family with _$Family {
   @JsonSerializable(explicitToJson: true)
-  const factory Family ({
+  const factory Family({
     required List<Story> no,
     required List<Story> yes,
   }) = _Family;

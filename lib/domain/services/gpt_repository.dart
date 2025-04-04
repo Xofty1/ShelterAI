@@ -4,7 +4,6 @@ import 'package:shelter_ai/domain/models/game_settings.dart';
 import '../models/player.dart';
 
 abstract interface class GptRepository {
-
   Future<String> getFinale(GameSettings settings, Disaster disaster,
       List<Player> alivePlayers, List<Player> kickedPlayer);
 

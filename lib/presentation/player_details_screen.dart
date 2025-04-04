@@ -63,7 +63,9 @@ class PlayerDetailsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 48,),
+                SizedBox(
+                  height: 48,
+                ),
                 PlayerCardDetail(
                   player: player,
                 ),

@@ -184,8 +184,8 @@ class GameService {
         players[i] = players[i].copyWith(lifeStatus: LifeStatus.killed);
       } else if (selectedIndexes.contains(i)) {
         players[i] = players[i].copyWith(
-            lifeStatus: LifeStatus.last,
-            knownProperties: List.filled(6, true),
+          lifeStatus: LifeStatus.last,
+          knownProperties: List.filled(6, true),
         );
       }
     }

@@ -30,7 +30,6 @@ class Tts {
   bool get isIOS => !kIsWeb && Platform.isIOS;
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
 
-
   // Itit function
   void initTts() {
     // Creates player
@@ -49,7 +48,7 @@ class Tts {
     });
 
     flutterTts.setCompletionHandler(() {
-        ttsState = TtsState.stopped;
+      ttsState = TtsState.stopped;
     });
 
     flutterTts.setCancelHandler(() {
@@ -57,22 +56,21 @@ class Tts {
     });
 
     flutterTts.setPauseHandler(() {
-        ttsState = TtsState.paused;
+      ttsState = TtsState.paused;
     });
 
     flutterTts.setContinueHandler(() {
-        ttsState = TtsState.continued;
+      ttsState = TtsState.continued;
     });
 
     flutterTts.setErrorHandler((msg) {
-        ttsState = TtsState.stopped;
+      ttsState = TtsState.stopped;
     });
   }
 
   Tts() {
     initTts();
   }
-
 
   Future<void> _getDefaultEngine() async {
     await flutterTts.getDefaultEngine;
@@ -114,9 +112,14 @@ class Tts {
   void setLoacle(String? lang) {
     // Reforms it
     switch (lang) {
-      case "en": lang = "en-US"; break;
-      case "ru": lang = "ru-RU"; break;
-      default: throw(Error);
+      case "en":
+        lang = "en-US";
+        break;
+      case "ru":
+        lang = "ru-RU";
+        break;
+      default:
+        throw (Error);
     }
     language = lang;
     flutterTts.setLanguage(language);
@@ -127,7 +130,7 @@ class Tts {
     }
   }
 
-  void setText(String text){
+  void setText(String text) {
     _voiceText = text;
   }
 }

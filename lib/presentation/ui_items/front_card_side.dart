@@ -6,7 +6,6 @@ import 'package:shelter_ai/presentation/ui_items/state_card_row.dart';
 
 import '../../l10n/l10n.dart';
 
-
 class PlayerCardFront extends StatelessWidget {
   final Player player;
   final int openCount;

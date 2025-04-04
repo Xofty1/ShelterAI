@@ -58,20 +58,17 @@ class GlobalDepContainer {
       tts: tts,
     );
 
-    final appLifecycleListener = AppLifecycleListener(
-        onHide: (){
-          soundCubit.saveCurrentStatus();
-          soundCubit.pauseText();
-          soundCubit.pauseMusic();
-        },
-        onResume: (){
-          final isMusicPlaying = soundCubit.state.musicIsPlaying;
-          final isDubbingPlaying = soundCubit.state.dubbingIsPlaying;
+    final appLifecycleListener = AppLifecycleListener(onHide: () {
+      soundCubit.saveCurrentStatus();
+      soundCubit.pauseText();
+      soundCubit.pauseMusic();
+    }, onResume: () {
+      final isMusicPlaying = soundCubit.state.musicIsPlaying;
+      final isDubbingPlaying = soundCubit.state.dubbingIsPlaying;
 
-          if(isDubbingPlaying) soundCubit.resumeText();
-          if(isMusicPlaying) soundCubit.resumeMusic();
-       }
-    );
+      if (isDubbingPlaying) soundCubit.resumeText();
+      if (isMusicPlaying) soundCubit.resumeMusic();
+    });
 
     return GlobalDepContainer._(
       gptRepository: gptRepository,
@@ -95,20 +92,17 @@ class GlobalDepContainer {
       tts: tts,
     );
 
-    final appLifecycleListener = AppLifecycleListener(
-        onHide: (){
-          soundCubit.saveCurrentStatus();
-          soundCubit.pauseText();
-          soundCubit.pauseMusic();
-        },
-        onResume: (){
-          final isMusicPlaying = soundCubit.state.musicIsPlaying;
-          final isDubbingPlaying = soundCubit.state.dubbingIsPlaying;
+    final appLifecycleListener = AppLifecycleListener(onHide: () {
+      soundCubit.saveCurrentStatus();
+      soundCubit.pauseText();
+      soundCubit.pauseMusic();
+    }, onResume: () {
+      final isMusicPlaying = soundCubit.state.musicIsPlaying;
+      final isDubbingPlaying = soundCubit.state.dubbingIsPlaying;
 
-          if(isDubbingPlaying) soundCubit.resumeText();
-          if(isMusicPlaying) soundCubit.resumeMusic();
-        }
-    );
+      if (isDubbingPlaying) soundCubit.resumeText();
+      if (isMusicPlaying) soundCubit.resumeMusic();
+    });
 
     return GlobalDepContainer._(
       gptRepository: gptRepository,
@@ -118,7 +112,7 @@ class GlobalDepContainer {
     );
   }
 
-  void dispose(){
+  void dispose() {
     appLifecycleListener.dispose();
   }
 }

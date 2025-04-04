@@ -33,7 +33,7 @@ class AppButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
         ),
-        onPressed: (){
+        onPressed: () {
           context.read<SoundCubit>().playButtonClickEffect();
           onPressed();
         },

@@ -7,26 +7,26 @@ class StateSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF6B5642),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF6B5642),
           ),
-          const SizedBox(height: 4),
-          Text(
-            content,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Color(0xFF5A503F),
-            ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          content,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Color(0xFF5A503F),
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 }

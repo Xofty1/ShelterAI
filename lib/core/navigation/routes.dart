@@ -54,9 +54,7 @@ abstract class RoutesBuilder {
           builder: (_) => const HistoryScreen(),
           settings: settings,
         );
-
     }
     return null;
   }
 }
-

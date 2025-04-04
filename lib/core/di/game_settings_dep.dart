@@ -1,20 +1,20 @@
 import '../../domain/bloc/game_settings_cubit.dart';
 import 'global_dep.dart';
 
-class GameSettingsDepHolder{
+class GameSettingsDepHolder {
   GameSettingsDepContainer? _container;
   bool _isCreated = false;
 
   GameSettingsDepContainer? get container => _container;
   bool get isCreated => _isCreated;
 
-  void create(GlobalDepContainer globalDepContainer){
+  void create(GlobalDepContainer globalDepContainer) {
     _container = GameSettingsDepContainer(globalDepContainer);
     _isCreated = true;
   }
 
-  void dispose(){
-    if(_container != null) _container!.dispose();
+  void dispose() {
+    if (_container != null) _container!.dispose();
     _isCreated = false;
   }
 }
@@ -22,7 +22,7 @@ class GameSettingsDepHolder{
 class GameSettingsDepContainer {
   final GameSettingsCubit gameSettingsCubit;
 
-  void dispose(){
+  void dispose() {
     gameSettingsCubit.close();
   }
 

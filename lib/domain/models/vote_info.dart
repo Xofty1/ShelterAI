@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'vote_info.freezed.dart';
 
 @freezed
-abstract class VoteInfo with _$VoteInfo{
+abstract class VoteInfo with _$VoteInfo {
   const factory VoteInfo({
     // Голоса (по индексам)
     required List<int> votes,
@@ -18,7 +18,7 @@ abstract class VoteInfo with _$VoteInfo{
   }) = _VoteInfo;
 }
 
-enum VoteStatus{
+enum VoteStatus {
   // В данный момент выборы не происходят
   none,
   // Выборы идут
