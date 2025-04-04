@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -272,22 +274,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profession => 'Profession (doctor, engineer, military, teacher, etc.)';
 
   @override
-  String get age => 'Age (may affect physical abilities)';
+  String get age => 'Age';
 
   @override
-  String get health => 'Health (chronic diseases, disability, excellent condition)';
+  String get ageRule => 'Age (may affect physical abilities)';
 
   @override
-  String get hobbies => 'Hobbies/skills (can be useful or useless in a bunker)';
+  String get health => 'Health';
 
   @override
-  String get phobias => 'Phobias (fears that may interfere with survival)';
+  String get healthRule => 'Health (chronic diseases, disability, excellent condition)';
 
   @override
-  String get luggage => 'Luggage (an item that the player took with them, such as weapons, first aid kit, books)';
+  String get hobbies => 'Hobbies/skills';
 
   @override
-  String get additionalInfo => 'Additional information (e.g., pregnancy, criminal past)';
+  String get hobbiesRule => 'Hobbies/skills (can be useful or useless in a bunker)';
+
+  @override
+  String get phobias => 'Phobias';
+
+  @override
+  String get phobiasRule => 'Phobias (fears that may interfere with survival)';
+
+  @override
+  String get luggage => 'Luggage';
+
+  @override
+  String get luggageRule => 'Luggage (an item that the player took with them, such as weapons, first aid kit, books)';
+
+  @override
+  String get additionalInfo => 'Additional information';
+
+  @override
+  String get additionalInfoRule => 'Additional information (e.g., pregnancy, criminal past)';
 
   @override
   String get discussionDebate => 'Discussion and Debate';

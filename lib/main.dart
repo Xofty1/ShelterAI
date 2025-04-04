@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shelter_ai/core/constants/sound_paths.dart';
 import 'package:shelter_ai/core/di/global_dep.dart';
 import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
     }
 
     return RepositoryProvider<GlobalDepHolder>(
-      create: (context) => globalDepHolder..create(isMock: true),
+      create: (context) => globalDepHolder,
       child: Builder(builder: (context) {
         return MultiBlocProvider(
           providers: [
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
               value: container.appSettingsCubit,
             ),
             BlocProvider.value(
-              value: container.soundCubit,
+              value: container.soundCubit..playCustomMusic(SoundPaths.music),
             ),
           ],
           child: Builder(
@@ -52,16 +53,48 @@ class MyApp extends StatelessWidget {
                   MediaQuery.platformBrightnessOf(context);
               final bool isSystemDark = platformBrightness == Brightness.dark;
 
-              return BlocListener<AppSettingsCubit, AppSettingsState>(
-                listenWhen: (prevState, newState) =>
-                    prevState.settings.effects != newState.settings.effects ||
-                    prevState.settings.music != newState.settings.music,
-                listener: (context, state) {
-                  BlocProvider.of<SoundCubit>(context)
-                      .setMusicVolume(state.settings.music);
-                  BlocProvider.of<SoundCubit>(context)
-                      .setEffectsVolume(state.settings.effects);
-                },
+              return MultiBlocListener(
+                listeners: [
+                  BlocListener<AppSettingsCubit, AppSettingsState>(
+                    listenWhen: (prevState, newState) {
+                      return prevState.settings.effects !=
+                          newState.settings.effects;
+                    },
+                    listener: (context, state) {
+                      BlocProvider.of<SoundCubit>(context)
+                          .setEffectsVolume(state.settings.effects);
+                    },
+                  ),
+                  BlocListener<AppSettingsCubit, AppSettingsState>(
+                    listenWhen: (prevState, newState) {
+                      return prevState.settings.music !=
+                          newState.settings.music;
+                    },
+                    listener: (context, state) {
+                      BlocProvider.of<SoundCubit>(context)
+                          .setMusicVolume(state.settings.music);
+                    },
+                  ),
+                  BlocListener<AppSettingsCubit, AppSettingsState>(
+                    listenWhen: (prevState, newState) {
+                      return prevState.settings.dubbing !=
+                          newState.settings.dubbing;
+                    },
+                    listener: (context, state) {
+                      BlocProvider.of<SoundCubit>(context)
+                          .setDubbingVolume(state.settings.dubbing);
+                    },
+                  ),
+                  BlocListener<AppSettingsCubit, AppSettingsState>(
+                    listenWhen: (prevState, newState) {
+                      return prevState.settings.loc != newState.settings.loc;
+                    },
+                    listener: (context, state) {
+                      BlocProvider.of<SoundCubit>(context)
+                          .setDubbingLocale(state.settings.loc);
+                    },
+                  )
+                ],
                 child: BlocSelector<AppSettingsCubit, AppSettingsState, String>(
                   selector: (state) => state.settings.loc,
                   builder: (context, languageCode) {

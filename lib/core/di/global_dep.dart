@@ -1,9 +1,12 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shelter_ai/data/repositories/gpt_api.dart';
 import 'package:shelter_ai/data/repositories/gpt_repository_mock.dart';
 import 'package:shelter_ai/domain/bloc/app_settings_cubit.dart';
 import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
+
+import '../../domain/services/flutter_tts.dart';
 
 class GlobalDepHolder {
   GlobalDepContainer? _container;
@@ -20,6 +23,7 @@ class GlobalDepHolder {
 
   void dispose() {
     if (_container != null) {
+      _container!.dispose();
       _container = null;
     }
     _isCreated = false;
@@ -31,51 +35,90 @@ class GlobalDepContainer {
   final AppSettingsCubit appSettingsCubit;
   final SoundCubit soundCubit;
 
+  final AppLifecycleListener appLifecycleListener;
+
   GlobalDepContainer._({
     required this.gptRepository,
     required this.appSettingsCubit,
     required this.soundCubit,
+    required this.appLifecycleListener,
   });
 
   factory GlobalDepContainer.mock() {
-    var gptRepository = GptRepositoryMock();
-    var appSettingsCubit = AppSettingsCubit();
+    final gptRepository = GptRepositoryMock();
+    final appSettingsCubit = AppSettingsCubit();
 
-    var musicPlayer = AudioPlayer();
-    var effectsPlayer = AudioPlayer();
+    final musicPlayer = AudioPlayer();
+    final effectsPlayer = AudioPlayer();
+    final tts = Tts();
 
-    var soundCubit = SoundCubit(
+    final soundCubit = SoundCubit(
       musicPlayer: musicPlayer,
       effectsPlayer: effectsPlayer,
-      initialMusicVolume: appSettingsCubit.state.settings.music,
-      initialEffectsVolume: appSettingsCubit.state.settings.effects,
+      tts: tts,
+    );
+
+    final appLifecycleListener = AppLifecycleListener(
+        onHide: (){
+          soundCubit.saveCurrentStatus();
+          soundCubit.pauseText();
+          soundCubit.pauseMusic();
+        },
+        onResume: (){
+          final isMusicPlaying = soundCubit.state.musicIsPlaying;
+          final isDubbingPlaying = soundCubit.state.dubbingIsPlaying;
+
+          if(isDubbingPlaying) soundCubit.resumeText();
+          if(isMusicPlaying) soundCubit.resumeMusic();
+       }
     );
 
     return GlobalDepContainer._(
       gptRepository: gptRepository,
       appSettingsCubit: appSettingsCubit,
       soundCubit: soundCubit,
+      appLifecycleListener: appLifecycleListener,
     );
   }
 
   factory GlobalDepContainer.real() {
-    var gptRepository = GptRepositoryImpl();
-    var appSettingsCubit = AppSettingsCubit();
+    final gptRepository = GptRepositoryImpl();
+    final appSettingsCubit = AppSettingsCubit();
 
-    var musicPlayer = AudioPlayer();
-    var effectsPlayer = AudioPlayer();
+    final musicPlayer = AudioPlayer();
+    final effectsPlayer = AudioPlayer();
+    final tts = Tts();
 
     var soundCubit = SoundCubit(
       musicPlayer: musicPlayer,
       effectsPlayer: effectsPlayer,
-      initialMusicVolume: appSettingsCubit.state.settings.music,
-      initialEffectsVolume: appSettingsCubit.state.settings.effects,
+      tts: tts,
+    );
+
+    final appLifecycleListener = AppLifecycleListener(
+        onHide: (){
+          soundCubit.saveCurrentStatus();
+          soundCubit.pauseText();
+          soundCubit.pauseMusic();
+        },
+        onResume: (){
+          final isMusicPlaying = soundCubit.state.musicIsPlaying;
+          final isDubbingPlaying = soundCubit.state.dubbingIsPlaying;
+
+          if(isDubbingPlaying) soundCubit.resumeText();
+          if(isMusicPlaying) soundCubit.resumeMusic();
+        }
     );
 
     return GlobalDepContainer._(
       gptRepository: gptRepository,
       appSettingsCubit: appSettingsCubit,
       soundCubit: soundCubit,
+      appLifecycleListener: appLifecycleListener,
     );
+  }
+
+  void dispose(){
+    appLifecycleListener.dispose();
   }
 }

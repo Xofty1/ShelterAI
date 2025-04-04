@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'l10n.dart';
 
 // ignore_for_file: type=lint
@@ -272,22 +274,40 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profession => 'Профессия (врач, инженер, военный, учитель и т.д.)';
 
   @override
-  String get age => 'Возраст (может влиять на физические возможности)';
+  String get age => 'Возраст';
 
   @override
-  String get health => 'Здоровье (хронические болезни, инвалидность, отличная форма)';
+  String get ageRule => 'Возраст (может влиять на физические возможности)';
 
   @override
-  String get hobbies => 'Хобби/навыки (может быть полезным или бесполезным в бункере)';
+  String get health => 'Здоровье';
 
   @override
-  String get phobias => 'Фобии (страхи, которые могут помешать выживанию)';
+  String get healthRule => 'Здоровье (хронические болезни, инвалидность, отличная форма)';
 
   @override
-  String get luggage => 'Багаж (предмет, который игрок взял с собой, например, оружие, аптечка, книги)';
+  String get hobbies => 'Хобби/навыки';
 
   @override
-  String get additionalInfo => 'Дополнительная информация (например, беременность, криминальное прошлое)';
+  String get hobbiesRule => 'Хобби/навыки (может быть полезным или бесполезным в бункере)';
+
+  @override
+  String get phobias => 'Фобии';
+
+  @override
+  String get phobiasRule => 'Фобии (страхи, которые могут помешать выживанию)';
+
+  @override
+  String get luggage => 'Багаж';
+
+  @override
+  String get luggageRule => 'Багаж (предмет, который игрок взял с собой, например, оружие, аптечка, книги)';
+
+  @override
+  String get additionalInfo => 'Дополнительная информация';
+
+  @override
+  String get additionalInfoRule => 'Дополнительная информация (например, беременность, криминальное прошлое)';
 
   @override
   String get discussionDebate => 'Обсуждение и дебаты';

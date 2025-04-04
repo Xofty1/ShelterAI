@@ -45,12 +45,12 @@ class RulesScreen extends StatelessWidget {
                 Icons.person,
                 bulletPoints: [
                   loc.profession,
-                  loc.age,
-                  loc.health,
-                  loc.hobbies,
-                  loc.phobias,
-                  loc.luggage,
-                  loc.additionalInfo,
+                  loc.ageRule,
+                  loc.healthRule,
+                  loc.hobbiesRule,
+                  loc.phobiasRule,
+                  loc.luggageRule,
+                  loc.additionalInfoRule,
                 ],
               ),
               _buildSectionCard(

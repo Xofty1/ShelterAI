@@ -1,23 +1,31 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/core/app_shared_preference/app_shared_preference.dart';
 import 'package:shelter_ai/core/constants/sound_paths.dart';
+import 'package:shelter_ai/domain/services/flutter_tts.dart';
 
 class SoundCubit extends Cubit<SoundState> {
   final AudioPlayer musicPlayer;
   final AudioPlayer effectsPlayer;
+  final Tts tts;
 
   SoundCubit({
     required this.musicPlayer,
     required this.effectsPlayer,
-    required int initialMusicVolume,
-    required int initialEffectsVolume,
-  }) : super(SoundState()) {
-    _setup(initialMusicVolume, initialEffectsVolume);
+    required this.tts,
+  }) : super(SoundState(musicIsPlaying: false, dubbingIsPlaying: false)) {
+    _setup();
   }
 
-  Future<void> _setup(int initialMusicVolume, int initialEffectsVolume) async {
-    await setMusicVolume(initialMusicVolume);
-    await setEffectsVolume(initialEffectsVolume);
+  Future<void> _setup() async {
+    final initialMusicVolume = AppSharedPreference().getMusic();
+    final initialEffectsVolume = AppSharedPreference().getEffects();
+    final initialDubbingVolume = AppSharedPreference().getDubbing();
+
+    await setMusicVolume(initialMusicVolume ?? 50);
+    await setEffectsVolume(initialEffectsVolume ?? 50);
+    await setDubbingVolume(initialDubbingVolume ?? 50);
+
     await effectsPlayer.setAudioContext(AudioContext(
       android: const AudioContextAndroid(audioFocus: AndroidAudioFocus.none),
       iOS:
@@ -28,18 +36,50 @@ class SoundCubit extends Cubit<SoundState> {
       iOS:
           AudioContextIOS(options: const {AVAudioSessionOptions.mixWithOthers}),
     ));
+
+    //await effectsPlayer.setPlayerMode(PlayerMode.lowLatency);
+    await musicPlayer.setReleaseMode(ReleaseMode.loop);
+  }
+
+  void saveCurrentStatus() {
+    emit(SoundState(
+      musicIsPlaying: musicPlayer.state == PlayerState.playing,
+      dubbingIsPlaying: tts.ttsState == TtsState.playing ||
+          tts.ttsState == TtsState.continued,
+    ));
   }
 
   Future<void> setEffectsVolume(int volume) async {
-    //await effectsPlayer.pause();
     await effectsPlayer.setVolume(volume.toDouble() / 100);
-    //await effectsPlayer.resume();
   }
 
   Future<void> setMusicVolume(int volume) async {
-    //await musicPlayer.pause();
     await musicPlayer.setVolume(volume.toDouble() / 100);
-    //await musicPlayer.resume();
+  }
+
+  Future<void> setDubbingVolume(int volume) async {
+    await tts.setVolume(volume.toDouble() / 100);
+  }
+
+  Future<void> setDubbingLocale(String locale) async {
+    tts.setLoacle(locale);
+  }
+
+  Future<void> playText(String text) async {
+    tts.setText(text);
+    await tts.speak();
+  }
+
+  Future<void> resumeText() async {
+    await tts.speak();
+  }
+
+  Future<void> stopText() async {
+    await tts.stop();
+  }
+
+  Future<void> pauseText() async {
+    await tts.pause();
   }
 
   Future<void> playButtonClickEffect() async {
@@ -56,6 +96,19 @@ class SoundCubit extends Cubit<SoundState> {
     await musicPlayer.setSourceAsset(assetSoundPath);
     await musicPlayer.resume();
   }
+
+  Future<void> resumeMusic() async {
+    await musicPlayer.resume();
+  }
+
+  Future<void> pauseMusic() async {
+    await musicPlayer.pause();
+  }
 }
 
-class SoundState {}
+class SoundState {
+  final bool musicIsPlaying;
+  final bool dubbingIsPlaying;
+
+  SoundState({required this.musicIsPlaying, required this.dubbingIsPlaying});
+}

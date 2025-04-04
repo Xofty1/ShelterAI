@@ -214,7 +214,6 @@ class GptRepositoryImpl implements GptRepository {
   @override
   Future<Disaster> createDisaster(GameSettings settings) async {
     // Sets up additional information and type
-    print("we are here");
     Map<String, String> additionalInfo = {
       "wishes": settings.plot,
       "player_amount": settings.playersCount.toString(),
@@ -227,8 +226,6 @@ class GptRepositoryImpl implements GptRepository {
 
     // Sends request to Chat GPT 4o
     String answer = await gptRequest(type, additionalInfo);
-    print('Good request');
-
 
     // Jsonifies response
     // story.keys: "player_amount"(int), "language"(String), "family_mode"(Bool),

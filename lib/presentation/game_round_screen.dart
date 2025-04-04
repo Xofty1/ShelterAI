@@ -96,7 +96,7 @@ class GameRoundScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            "${loc.survivors}: ",
+                            loc.survivors,
                             style: const TextStyle(
                               color: textColor,
                               fontSize: 18,
@@ -147,7 +147,7 @@ class GameRoundScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            "${loc.eliminated}: ",
+                            loc.eliminated,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,

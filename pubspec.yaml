@@ -57,6 +57,7 @@ flutter:
     - assets/request_texts.json
     - assets/offline/games.txt
     - assets/offline/players.txt
+    - assets/audio/music.mp3
     - .env
   #   - images/a_dot_ham.jpeg
 
