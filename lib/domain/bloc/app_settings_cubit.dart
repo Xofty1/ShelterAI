@@ -6,7 +6,7 @@ import '../models/app_settings.dart';
 class AppSettingsCubit extends Cubit<AppSettingsState> {
   AppSettingsCubit() : super(AppSettingsState.initial());
 
-  void loadFromSharedPreferences(){
+  void loadFromSharedPreferences() {
     emit(AppSettingsState(
       settings: AppSettings(
         dubbing: AppSharedPreference().getDubbing() ?? 50,

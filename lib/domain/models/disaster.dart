@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'disaster.freezed.dart';
 
 @freezed
-abstract class Disaster with _$Disaster{
+abstract class Disaster with _$Disaster {
   const factory Disaster({
     required String name,
     required String disasterDescription,
