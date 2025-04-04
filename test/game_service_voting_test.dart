@@ -34,15 +34,15 @@ void main() {
       selectedIndexes: [],
       voteStatus: VoteStatus.running,
     );
-    
+
     final state = baseState.copyWith(voteInfo: voteInfo);
     final event = VotedGameEvent(2); // Vote for player 3
-    
+
     final result = gameService.updateVotes(event, state);
-    
+
     expect(result.voteInfo.votes, equals([0, 0, 1, 0, 0]));
   });
-  
+
   test('reVote resets voting process for tied players', () {
     final voteInfo = VoteInfo(
       votes: [2, 2, 1, 0, 0],
@@ -51,15 +51,11 @@ void main() {
       voteStatus: VoteStatus.running,
     );
 
-    const roundInfo = RoundInfo(
-        roundNumber: 3,
-        kickedCount: 1,
-        openCount: 1
-    );
-    
+    const roundInfo = RoundInfo(roundNumber: 3, kickedCount: 1, openCount: 1);
+
     final state = baseState.copyWith(voteInfo: voteInfo, roundInfo: roundInfo);
     final result = gameService.reVote(state);
-    
+
     expect(result.stage, equals(GameStage.voteResult));
     expect(result.voteInfo.voteStatus, equals(VoteStatus.reRunning));
   });

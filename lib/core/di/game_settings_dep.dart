@@ -6,6 +6,7 @@ class GameSettingsDepHolder {
   bool _isCreated = false;
 
   GameSettingsDepContainer? get container => _container;
+
   bool get isCreated => _isCreated;
 
   void create(GlobalDepContainer globalDepContainer) {
@@ -27,5 +28,6 @@ class GameSettingsDepContainer {
   }
 
   GameSettingsDepContainer(GlobalDepContainer container)
-      : gameSettingsCubit = GameSettingsCubit(container.gptRepository);
+      : gameSettingsCubit =
+            GameSettingsCubit(container.gptRepository, container.cacheService);
 }

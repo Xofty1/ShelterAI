@@ -31,7 +31,7 @@ class Tts {
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
 
   // Itit function
-  void initTts() {
+  dynamic initTts() {
     // Creates player
     flutterTts = FlutterTts();
 
@@ -109,7 +109,7 @@ class Tts {
   }
 
   // Updates language
-  void setLoacle(String? lang) {
+  void setLocale(String? lang) {
     // Reforms it
     switch (lang) {
       case "en":
