@@ -17,7 +17,6 @@ class LoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: Color(0xFF483728),
@@ -31,10 +30,6 @@ class LoreScreen extends StatelessWidget {
             color: Colors.white,
             letterSpacing: 1.2,
           ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
         elevation: 0,
@@ -94,10 +89,6 @@ class LoreScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
           const Spacer(),
           Text(
             loc.lore,
