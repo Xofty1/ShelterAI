@@ -90,7 +90,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
             body: state is DisasterLoadingState ||
                     state is DisasterUploadedState
                 ? const LoaderScreen()
-                : DecoratedBox(
+                : Container(
+                    height: double.infinity,
+                    width: double.infinity,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
