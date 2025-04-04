@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     }
 
     return RepositoryProvider<GlobalDepHolder>(
-      create: (context) => globalDepHolder..create(isMock: true),
+      create: (context) => globalDepHolder..create(isMock: false),
       child: Builder(builder: (context) {
         return MultiBlocProvider(
           providers: [
