@@ -15,4 +15,37 @@ abstract class Disaster with _$Disaster {
     required List<String> resources,
     required String answer,
   }) = _Disaster;
+
+  factory Disaster.fromMap(Map<String, dynamic> map) {
+    return Disaster(
+      name: map['name'] as String,
+      disasterDescription: map['disasterDescription'] as String,
+      disasterShortDescription: map['disasterShortDescription'] as String,
+      shelterName: map['shelterName'] as String,
+      location: map['location'] as String,
+      description: map['description'] as String,
+      capacity: map['capacity'] as int,
+      rooms: List<String>.from(map['rooms'] as List),
+      resources: List<String>.from(map['resources'] as List),
+      answer: map['answer'] as String,
+    );
+  }
+
+}
+
+extension Mapping on Disaster{
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'disasterDescription': disasterDescription,
+      'disasterShortDescription': disasterShortDescription,
+      'shelterName': shelterName,
+      'location': location,
+      'description': description,
+      'capacity': capacity,
+      'rooms': rooms,
+      'resources': resources,
+      'answer': answer,
+    };
+  }
 }

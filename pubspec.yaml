@@ -27,6 +27,7 @@ dependencies:
   mockito: ^5.4.5
   mocktail: ^1.0.4
   flutter_tts: ^4.2.2
+  sembast: ^3.8.4+1
 
 dev_dependencies:
   flutter_test:

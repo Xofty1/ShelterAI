@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/domain/services/cache_service.dart';
 import 'package:shelter_ai/domain/services/gpt_repository.dart';
 
 import '../models/disaster.dart';
@@ -6,9 +7,11 @@ import '../models/game_settings.dart';
 import '../models/player.dart';
 
 class GameSettingsCubit extends Cubit<GameSettingsState> {
-  GptRepository repository;
+  GptRepository gptRepository;
+  CacheService cacheService;
 
-  GameSettingsCubit(this.repository) : super(const GameSettingsState.initial());
+  GameSettingsCubit(this.gptRepository, this.cacheService)
+      : super(const GameSettingsState.initial());
 
   void updatePlayersCount(int newCount) {
     emit(
@@ -51,9 +54,16 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     ));
 
     try {
-      final Disaster disaster = await repository.createDisaster(state.settings);
+      final Disaster disaster =
+          await gptRepository.createDisaster(state.settings);
       final List<Player> players =
-          await repository.createPlayers(state.settings, disaster);
+          await gptRepository.createPlayers(state.settings, disaster);
+
+      await cacheService.saveDisaster(disaster);
+
+      for (final player in players) {
+        await cacheService.savePlayer(player);
+      }
 
       emit(DisasterUploadedState(
         settings: state.settings,
@@ -61,8 +71,24 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
         players: players,
       ));
     } catch (e) {
-      print(e);
-      emit(ErrorLoadingGameState(settings: state.settings));
+      print("Ошибка гпт $e");
+      try {
+        final disaster = await cacheService.getRandomDisaster();
+
+        final players = [
+          for (int i = 0; i < state.settings.playersCount; i++)
+            await cacheService.getRandomPlayer(i)
+        ];
+
+        emit(DisasterUploadedState(
+          settings: state.settings,
+          disaster: disaster,
+          players: players,
+        ));
+      } catch (e) {
+        print("Ошибка кеша $e");
+        emit(ErrorLoadingGameState(settings: state.settings));
+      }
     }
   }
 
