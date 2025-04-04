@@ -4,7 +4,8 @@ class ScaffoldTemplate extends StatelessWidget {
   final Widget child;
   final String name;
 
-  const ScaffoldTemplate({Key? key, required this.child, required this.name}) : super(key: key);
+  const ScaffoldTemplate({Key? key, required this.child, required this.name})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

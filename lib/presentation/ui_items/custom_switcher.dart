@@ -94,8 +94,8 @@ class _CustomSwitcherState extends State<CustomSwitcher>
 
 // Example usage:
 // CustomSwitcher(
-//   initialValue: false, 
+//   initialValue: false,
 //   onToggle: (value) {
 //     print('Switched to: $value');
 //   },
-// ) 
+// )

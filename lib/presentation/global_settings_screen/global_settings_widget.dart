@@ -94,7 +94,8 @@ class GlobalSettingsWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: SliderSettings(
-                    defaultValue: AppSharedPreference().getDubbing()?.toDouble() ?? 50,
+                    defaultValue:
+                        AppSharedPreference().getDubbing()?.toDouble() ?? 50,
                     onChange: (value) {
                       AppSharedPreference().saveDubbing(value.toInt());
                       BlocProvider.of<AppSettingsCubit>(context)
@@ -111,10 +112,10 @@ class GlobalSettingsWidget extends StatelessWidget {
                 IntrinsicWidth(
                   child: LabelWidget(text: loc.effects),
                 ),
-
                 Expanded(
                   child: SliderSettings(
-                    defaultValue: AppSharedPreference().getEffects()?.toDouble() ?? 50,
+                    defaultValue:
+                        AppSharedPreference().getEffects()?.toDouble() ?? 50,
                     onChange: (value) {
                       AppSharedPreference().saveEffects(value.toInt());
                       BlocProvider.of<AppSettingsCubit>(context)
