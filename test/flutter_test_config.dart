@@ -4,10 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
-// Проверяем, запущены ли тесты в CI-среде
 bool get isRunningInCI => Platform.environment.containsKey('CI');
 
-// Компаратор с настраиваемым допуском различий
 class CustomFileComparator extends LocalFileComparator {
   CustomFileComparator(Uri uri, {this.tolerance = 0.1}) : super(uri);
   
@@ -34,14 +32,12 @@ class CustomFileComparator extends LocalFileComparator {
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   if (isRunningInCI) {
-    // В CI-среде изменяем tolerance для golden тестов
     AutomatedTestWidgetsFlutterBinding.ensureInitialized();
     WidgetController.hitTestWarningShouldBeFatal = true;
     
-    // Устанавливаем компаратор с высоким уровнем tolerance
     goldenFileComparator = CustomFileComparator(
       Uri.parse('test/ui_tests/goldens'),
-      tolerance: 0.5, // 50% tolerance - очень высокое значение
+      tolerance: 0.5,
     );
   }
   

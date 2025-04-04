@@ -20,31 +20,28 @@ class LoreScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Color(0xFF483728),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF231C08),
-        title: Text(
-          loc.lore,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            letterSpacing: 1.2,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
+        backgroundColor: Colors.transparent,
+    title: Text(
+    loc.lore,
+    style: const TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+    letterSpacing: 1.2,
+    ),
+    ),
+    leading: IconButton(
+    icon: const Icon(Icons.arrow_back, color: Colors.white),
+    onPressed: () => Navigator.of(context).pop(),
+    ),
+    centerTitle: true,
+    elevation: 0,
+    ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF483728), Color(0xFF6B5642)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          gradient: AppColors.mainGradient,
         ),
         child: SafeArea(
           child: Column(

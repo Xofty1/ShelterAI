@@ -19,6 +19,7 @@ class PlayerDetailsScreen extends StatelessWidget {
     final loc = AppLocalizations.of(context);
     return Scaffold(
       body: Container(
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: AppColors.mainGradient,
         ),
@@ -62,6 +63,7 @@ class PlayerDetailsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(height: 48,),
                 PlayerCardDetail(
                   player: player,
                 ),

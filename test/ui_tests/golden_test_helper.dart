@@ -8,7 +8,6 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   await testMain();
 }
 
-// Этот метод можно использовать для тестирования любого виджета
 Future<void> testGoldenWidget(
   WidgetTester tester, 
   Widget widget, 
@@ -18,12 +17,10 @@ Future<void> testGoldenWidget(
     BoxConstraints constraints = const BoxConstraints(maxWidth: 400),
   }
 ) async {
-  // Установка размера виджета для тестов
   final wrappedWidget = size != null
       ? SizedBox(width: size.width, height: size.height, child: widget)
       : ConstrainedBox(constraints: constraints, child: widget);
 
-  // Оборачиваем в MaterialApp для правильного рендеринга
   final materialApp = MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
