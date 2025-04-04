@@ -30,10 +30,9 @@ abstract class Disaster with _$Disaster {
       answer: map['answer'] as String,
     );
   }
-
 }
 
-extension Mapping on Disaster{
+extension Mapping on Disaster {
   Map<String, dynamic> toMap() {
     return {
       'name': name,

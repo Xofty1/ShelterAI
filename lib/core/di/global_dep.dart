@@ -19,7 +19,9 @@ class GlobalDepHolder {
   bool get isCreated => _isCreated;
 
   Future<void> create({required bool isMock}) async {
-    _container = isMock ? await GlobalDepContainer.mock() : await GlobalDepContainer.real();
+    _container = isMock
+        ? await GlobalDepContainer.mock()
+        : await GlobalDepContainer.real();
     _isCreated = true;
   }
 

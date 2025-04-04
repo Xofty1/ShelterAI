@@ -37,7 +37,7 @@ class CacheService {
     final phobias = await repository.getStringList(4);
     final luggages = await repository.getStringList(5);
     final extras = await repository.getStringList(6);
-    
+
     return Player(
         id: index,
         name: (index + 1).toString(),
@@ -50,7 +50,6 @@ class CacheService {
         extra: extras[random.nextInt(extras.length - 1)],
         lifeStatus: LifeStatus.alive,
         knownProperties: List.filled(7, false),
-        notes: []
-    );
+        notes: []);
   }
 }

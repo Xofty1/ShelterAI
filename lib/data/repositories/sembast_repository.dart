@@ -27,11 +27,11 @@ class SembastRepository {
     db = await databaseFactoryIo.openDatabase(dbPath);
   }
 
-  StoreRef<int, String> getStoreByName(String storeName){
+  StoreRef<int, String> getStoreByName(String storeName) {
     return StoreRef<int, String>(storeName);
   }
 
-  StoreRef<int, String> getStoreByIndex(int index){
+  StoreRef<int, String> getStoreByIndex(int index) {
     return StoreRef<int, String>(storeNames[index]);
   }
 
@@ -40,7 +40,7 @@ class SembastRepository {
   }
 
   Future<List<String>> getStringList(int storeIndex) async {
-    final store =  getStoreByIndex(storeIndex);
+    final store = getStoreByIndex(storeIndex);
     final records = await store.find(db);
     return records.map((record) => record.value).toList();
   }
