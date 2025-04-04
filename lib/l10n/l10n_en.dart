@@ -256,15 +256,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameTitle => 'Bunker Game';
 
   @override
-  String get gameDescription =>
-      'A popular social strategy game where participants must convince others that they deserve a place in the bunker after a global catastrophe.';
+  String get gameDescription => 'A popular social strategy game where participants must convince others that they deserve a place in the bunker after a global catastrophe.';
 
   @override
   String get disasterScenario => 'Disaster Scenario';
 
   @override
-  String get disasterScenarioDesc =>
-      'At the beginning of the game, the type of apocalypse is announced (nuclear war, pandemic, asteroid impact, etc.), which affects the survival strategy.';
+  String get disasterScenarioDesc => 'At the beginning of the game, the type of apocalypse is announced (nuclear war, pandemic, asteroid impact, etc.), which affects the survival strategy.';
 
   @override
   String get characterRoles => 'Role and Characteristic Distribution';
@@ -273,8 +271,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get characterRolesDesc => 'Each player receives random parameters:';
 
   @override
-  String get profession =>
-      'Profession (doctor, engineer, military, teacher, etc.)';
+  String get profession => 'Profession (doctor, engineer, military, teacher, etc.)';
 
   @override
   String get age => 'Age';
@@ -286,15 +283,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get health => 'Health';
 
   @override
-  String get healthRule =>
-      'Health (chronic diseases, disability, excellent condition)';
+  String get healthRule => 'Health (chronic diseases, disability, excellent condition)';
 
   @override
   String get hobbies => 'Hobbies/skills';
 
   @override
-  String get hobbiesRule =>
-      'Hobbies/skills (can be useful or useless in a bunker)';
+  String get hobbiesRule => 'Hobbies/skills (can be useful or useless in a bunker)';
 
   @override
   String get phobias => 'Phobias';
@@ -306,15 +301,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get luggage => 'Luggage';
 
   @override
-  String get luggageRule =>
-      'Luggage (an item that the player took with them, such as weapons, first aid kit, books)';
+  String get luggageRule => 'Luggage (an item that the player took with them, such as weapons, first aid kit, books)';
 
   @override
   String get additionalInfo => 'Additional information';
 
   @override
-  String get additionalInfoRule =>
-      'Additional information (e.g., pregnancy, criminal past)';
+  String get additionalInfoRule => 'Additional information (e.g., pregnancy, criminal past)';
 
   @override
   String get discussionDebate => 'Discussion and Debate';
@@ -323,12 +316,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discussionDebateDesc => 'Decision-making process:';
 
   @override
-  String get discussionDebatePoint1 =>
-      'Players take turns talking about themselves and proving why they should be left in the bunker';
+  String get discussionDebatePoint1 => 'Players take turns talking about themselves and proving why they should be left in the bunker';
 
   @override
-  String get discussionDebatePoint2 =>
-      'You can ask each other questions and identify weaknesses';
+  String get discussionDebatePoint2 => 'You can ask each other questions and identify weaknesses';
 
   @override
   String get votingTitle => 'Voting';
@@ -337,16 +328,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get votingDesc => 'Choosing survivors:';
 
   @override
-  String get votingPoint1 =>
-      'After the discussion, participants vote on who to kick out of the bunker';
+  String get votingPoint1 => 'After the discussion, participants vote on who to kick out of the bunker';
 
   @override
-  String get votingPoint2 =>
-      'In some versions, you can vote for multiple players';
+  String get votingPoint2 => 'In some versions, you can vote for multiple players';
 
   @override
-  String get votingPoint3 =>
-      'The process is repeated until the required number of survivors remains';
+  String get votingPoint3 => 'The process is repeated until the required number of survivors remains';
 
   @override
   String get kickedOutPlayers => 'Kicked out players';

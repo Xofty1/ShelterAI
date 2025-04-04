@@ -62,7 +62,7 @@ class PlayerTapCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                     const Center(
                       child: Icon(
                         Icons.person,

@@ -256,15 +256,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get gameTitle => 'Игра \"Бункер\"';
 
   @override
-  String get gameDescription =>
-      'Популярная социально-стратегическая игра, в которой участники должны убедить остальных, что именно они достойны места в бункере после глобальной катастрофы.';
+  String get gameDescription => 'Популярная социально-стратегическая игра, в которой участники должны убедить остальных, что именно они достойны места в бункере после глобальной катастрофы.';
 
   @override
   String get disasterScenario => 'Сценарий катастрофы';
 
   @override
-  String get disasterScenarioDesc =>
-      'В начале игры объявляется тип апокалипсиса (ядерная война, пандемия, падение астероида и т.д.), что влияет на стратегию выживания.';
+  String get disasterScenarioDesc => 'В начале игры объявляется тип апокалипсиса (ядерная война, пандемия, падение астероида и т.д.), что влияет на стратегию выживания.';
 
   @override
   String get characterRoles => 'Раздача ролей и характеристик';
@@ -285,15 +283,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get health => 'Здоровье';
 
   @override
-  String get healthRule =>
-      'Здоровье (хронические болезни, инвалидность, отличная форма)';
+  String get healthRule => 'Здоровье (хронические болезни, инвалидность, отличная форма)';
 
   @override
   String get hobbies => 'Хобби/навыки';
 
   @override
-  String get hobbiesRule =>
-      'Хобби/навыки (может быть полезным или бесполезным в бункере)';
+  String get hobbiesRule => 'Хобби/навыки (может быть полезным или бесполезным в бункере)';
 
   @override
   String get phobias => 'Фобии';
@@ -305,15 +301,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get luggage => 'Багаж';
 
   @override
-  String get luggageRule =>
-      'Багаж (предмет, который игрок взял с собой, например, оружие, аптечка, книги)';
+  String get luggageRule => 'Багаж (предмет, который игрок взял с собой, например, оружие, аптечка, книги)';
 
   @override
   String get additionalInfo => 'Дополнительная информация';
 
   @override
-  String get additionalInfoRule =>
-      'Дополнительная информация (например, беременность, криминальное прошлое)';
+  String get additionalInfoRule => 'Дополнительная информация (например, беременность, криминальное прошлое)';
 
   @override
   String get discussionDebate => 'Обсуждение и дебаты';
@@ -322,12 +316,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get discussionDebateDesc => 'Процесс принятия решений:';
 
   @override
-  String get discussionDebatePoint1 =>
-      'Игроки по очереди рассказывают о себе и доказывают, почему их нужно оставить в бункере';
+  String get discussionDebatePoint1 => 'Игроки по очереди рассказывают о себе и доказывают, почему их нужно оставить в бункере';
 
   @override
-  String get discussionDebatePoint2 =>
-      'Можно задавать друг другу вопросы, выявлять слабые стороны';
+  String get discussionDebatePoint2 => 'Можно задавать друг другу вопросы, выявлять слабые стороны';
 
   @override
   String get votingTitle => 'Голосование';
@@ -336,16 +328,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get votingDesc => 'Выбор выживших:';
 
   @override
-  String get votingPoint1 =>
-      'После обсуждения участники голосуют, кого выгнать из бункера';
+  String get votingPoint1 => 'После обсуждения участники голосуют, кого выгнать из бункера';
 
   @override
-  String get votingPoint2 =>
-      'В некоторых версиях можно голосовать за нескольких игроков';
+  String get votingPoint2 => 'В некоторых версиях можно голосовать за нескольких игроков';
 
   @override
-  String get votingPoint3 =>
-      'Процесс повторяется, пока не останется нужное количество выживших';
+  String get votingPoint3 => 'Процесс повторяется, пока не останется нужное количество выживших';
 
   @override
   String get kickedOutPlayers => 'Выгнанные игроки';
