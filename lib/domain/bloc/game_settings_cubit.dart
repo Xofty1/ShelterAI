@@ -50,17 +50,17 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
       settings: state.settings.copyWith(language: language),
     ));
 
-    try{
-      print('we are in try');
+    try {
       final Disaster disaster = await repository.createDisaster(state.settings);
-      final List<Player> players = await repository.createPlayers(state.settings, disaster);
+      final List<Player> players =
+          await repository.createPlayers(state.settings, disaster);
 
       emit(DisasterUploadedState(
         settings: state.settings,
         disaster: disaster,
         players: players,
       ));
-    } catch(e){
+    } catch (e) {
       print(e);
       emit(ErrorLoadingGameState(settings: state.settings));
     }
@@ -70,8 +70,8 @@ class GameSettingsCubit extends Cubit<GameSettingsState> {
     emit(
       GameSettingsState(
           settings: state.settings.copyWith(
-            isTimerEnable: newEnable,
-          )),
+        isTimerEnable: newEnable,
+      )),
     );
   }
 }
@@ -97,7 +97,7 @@ class DisasterLoadingState extends GameSettingsState {
   DisasterLoadingState({required super.settings});
 }
 
-class ErrorLoadingGameState extends GameSettingsState{
+class ErrorLoadingGameState extends GameSettingsState {
   ErrorLoadingGameState({required super.settings});
 }
 

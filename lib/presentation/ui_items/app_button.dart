@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/core/theme/app_colors.dart';
+
+import '../../domain/bloc/sound_cubit.dart';
 
 class AppButton extends StatelessWidget {
   final String text;
@@ -30,7 +33,10 @@ class AppButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
         ),
-        onPressed: onPressed,
+        onPressed: (){
+          context.read<SoundCubit>().playButtonClickEffect();
+          onPressed();
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
           child: Text(

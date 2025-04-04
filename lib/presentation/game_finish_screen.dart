@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/domain/models/player.dart';
 import 'package:shelter_ai/presentation/player_list_screen.dart';
 import 'package:shelter_ai/presentation/ui_items/player_tap_card.dart';
 import '../../l10n/l10n.dart';
+import '../domain/bloc/sound_cubit.dart';
 
 class FinishScreen extends StatelessWidget {
   final List<Player> alivePlayers;
@@ -39,7 +41,7 @@ class FinishScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 10),
               width: double.infinity,
@@ -163,6 +165,8 @@ class FinishScreen extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    context.read<SoundCubit>().pauseText();
+                    context.read<SoundCubit>().resumeMusic();
                     NavigationManager.instance.openHomeReplacement();
                   },
                   style: ElevatedButton.styleFrom(

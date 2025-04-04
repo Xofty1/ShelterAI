@@ -608,38 +608,74 @@ abstract class AppLocalizations {
   /// No description provided for @age.
   ///
   /// In ru, this message translates to:
-  /// **'Возраст (может влиять на физические возможности)'**
+  /// **'Возраст'**
   String get age;
+
+  /// No description provided for @ageRule.
+  ///
+  /// In ru, this message translates to:
+  /// **'Возраст (может влиять на физические возможности)'**
+  String get ageRule;
 
   /// No description provided for @health.
   ///
   /// In ru, this message translates to:
-  /// **'Здоровье (хронические болезни, инвалидность, отличная форма)'**
+  /// **'Здоровье'**
   String get health;
+
+  /// No description provided for @healthRule.
+  ///
+  /// In ru, this message translates to:
+  /// **'Здоровье (хронические болезни, инвалидность, отличная форма)'**
+  String get healthRule;
 
   /// No description provided for @hobbies.
   ///
   /// In ru, this message translates to:
-  /// **'Хобби/навыки (может быть полезным или бесполезным в бункере)'**
+  /// **'Хобби/навыки'**
   String get hobbies;
+
+  /// No description provided for @hobbiesRule.
+  ///
+  /// In ru, this message translates to:
+  /// **'Хобби/навыки (может быть полезным или бесполезным в бункере)'**
+  String get hobbiesRule;
 
   /// No description provided for @phobias.
   ///
   /// In ru, this message translates to:
-  /// **'Фобии (страхи, которые могут помешать выживанию)'**
+  /// **'Фобии'**
   String get phobias;
+
+  /// No description provided for @phobiasRule.
+  ///
+  /// In ru, this message translates to:
+  /// **'Фобии (страхи, которые могут помешать выживанию)'**
+  String get phobiasRule;
 
   /// No description provided for @luggage.
   ///
   /// In ru, this message translates to:
-  /// **'Багаж (предмет, который игрок взял с собой, например, оружие, аптечка, книги)'**
+  /// **'Багаж'**
   String get luggage;
+
+  /// No description provided for @luggageRule.
+  ///
+  /// In ru, this message translates to:
+  /// **'Багаж (предмет, который игрок взял с собой, например, оружие, аптечка, книги)'**
+  String get luggageRule;
 
   /// No description provided for @additionalInfo.
   ///
   /// In ru, this message translates to:
-  /// **'Дополнительная информация (например, беременность, криминальное прошлое)'**
+  /// **'Дополнительная информация'**
   String get additionalInfo;
+
+  /// No description provided for @additionalInfoRule.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дополнительная информация (например, беременность, криминальное прошлое)'**
+  String get additionalInfoRule;
 
   /// No description provided for @discussionDebate.
   ///
