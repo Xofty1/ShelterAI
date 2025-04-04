@@ -1,6 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
     <application
-        android:label="shelter_ai"
+        android:label="Бункер AI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

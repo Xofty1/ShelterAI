@@ -77,11 +77,11 @@ class _CustomSwitcherState extends State<CustomSwitcher>
               ),
             ),
             child: _isChecked
-                ? Center(
+                ? const Center(
                     child: Icon(
                       Icons.check,
                       size: 20,
-                      color: const Color(0xFFC9C0B6),
+                      color: Color(0xFFC9C0B6),
                     ),
                   )
                 : null,

@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 
 class LabelWidget extends StatelessWidget {
   final String text;
+  final Color color;
 
-  const LabelWidget({super.key, required this.text});
+  const LabelWidget({super.key, required this.text, this.color = const Color(0xFFEDE0D4)});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(
-        maxWidth: 300, // Ограничение максимальной ширины
+        maxWidth: 200,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: const Color(0xFFEDE0D4),
+        color: color,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(

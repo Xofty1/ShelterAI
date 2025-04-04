@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:shelter_ai/presentation/ui_items/custom_switcher.dart';
-import 'package:shelter_ai/presentation/ui_items/label.dart';
-import 'package:shelter_ai/presentation/ui_items/scaffold_template.dart';
-import 'package:shelter_ai/presentation/ui_items/button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/domain/bloc/game_bloc.dart';
+import 'package:shelter_ai/domain/models/player.dart';
+import 'package:shelter_ai/presentation/ui_items/back_card_side.dart';
 import 'dart:math';
 
+import 'package:shelter_ai/presentation/ui_items/front_card_side.dart';
+import '../domain/bloc/sound_cubit.dart';
+
+
 class PlayerCardScreen extends StatefulWidget {
-  const PlayerCardScreen({super.key});
+  final int openCount;
+  final List<Player> players;
+
+  Player get player => players[currentPlayerIndex];
+
+  final int currentPlayerIndex;
+
+  const PlayerCardScreen(
+      {super.key,
+      required this.players,
+      required this.currentPlayerIndex,
+      required this.openCount});
 
   @override
   State<PlayerCardScreen> createState() => _PlayerCardScreenState();
@@ -17,6 +32,24 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   late AnimationController _controller;
   late Animation<double> _animation;
   bool _showFrontSide = false;
+  double cardWidth = 10;
+  double cardHeight = 10;
+
+  List<int> selectedIndexes = [];
+
+  bool _isAnimating = false;
+
+  void _handleToggle(int index, bool value) {
+    setState(() {
+      if (value) {
+        if (selectedIndexes.length < widget.openCount) {
+          selectedIndexes.add(index);
+        }
+      } else {
+        selectedIndexes.remove(index);
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -34,64 +67,128 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
   }
 
   @override
+  void didUpdateWidget(PlayerCardScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      selectedIndexes.clear();
+    });
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  void _flipCard() {
-    if (_showFrontSide) {
-      _controller.reverse();
-    } else {
-      _controller.forward();
-    }
+  void _flipCard({VoidCallback? onComplete}) {
+    if (_isAnimating) return;
+
     setState(() {
+      _isAnimating = true;
       _showFrontSide = !_showFrontSide;
     });
+
+    if (_showFrontSide) {
+      context.read<SoundCubit>().playFlipCardEffect();
+      _controller.forward().then((_) {
+        setState(() => _isAnimating = false);
+        onComplete?.call();
+      });
+    } else {
+      _controller.reverse().then((_) {
+        setState(() => _isAnimating = false);
+        onComplete?.call();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldTemplate(
-      name: "Раунд 1",
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 20),
-          GestureDetector(
-            onTap: _flipCard,
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                final angle = _animation.value * pi;
-                final transform = Matrix4.identity()
-                  ..setEntry(3, 2, 0.001)
-                  ..rotateY(angle);
-
-                return Transform(
-                  transform: transform,
-                  alignment: Alignment.center,
-                  child: angle >= pi / 2
-                      ? Transform(
+    cardWidth = MediaQuery.of(context).size.width * 0.9;
+    cardHeight = MediaQuery.of(context).size.height * 0.72;
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF6B5642), Color(0xFFD1A881)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: !_showFrontSide && !_isAnimating ? _flipCard : null,
+              child: IgnorePointer(
+                ignoring: _isAnimating,
+                child: AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, child) {
+                    final angle = _animation.value * pi;
+                    if (angle >= pi / 2) {
+                      return Transform(
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(angle),
+                        alignment: Alignment.center,
+                        child: Transform(
                           transform: Matrix4.identity()..rotateY(pi),
                           alignment: Alignment.center,
-                          child: _buildFrontCard(),
-                        )
-                      : _buildBackCard(),
-                );
-              },
+                          child: _buildCardContainer(
+                            isBackSide: false,
+                            child: PlayerCardFront(
+                              player: widget.player,
+                              openCount: widget.openCount,
+                              selectedIndexes: selectedIndexes,
+                              onToggle: _handleToggle,
+                              onConfirm: () {
+                                _flipCard(
+                                  onComplete: () {
+                                    BlocProvider.of<GameBloc>(context).add(
+                                        OpenedPropertyGameEvent(
+                                            selectedIndexes));
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Transform(
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(angle),
+                        alignment: Alignment.center,
+                        child: _buildCardContainer(
+                          isBackSide: true,
+                          child: PlayerCardBack(currentIndex: (widget.currentPlayerIndex + 1)),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
             ),
-          ),
-          if (_showFrontSide) ...[],
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildFrontCard() {
+  Widget _buildCardContainer(
+      {
+        required bool isBackSide,
+        required Widget child
+      }) {
     return Container(
+      width: cardWidth,
+      height: cardHeight,
       decoration: BoxDecoration(
-        color: const Color(0xFFD9D9D9),
+        color: isBackSide ? const Color(0xFF8B7355) : const Color(0xFFD9D9D9),
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
@@ -101,130 +198,8 @@ class _PlayerCardScreenState extends State<PlayerCardScreen>
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFD9D9D9),
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: const Color(0xFF6B5642), width: 2),
-              ),
-              child: const Icon(
-                Icons.person,
-                size: 70,
-                color: Color(0xFF6B5642),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          const Center(
-            child: Text(
-              "Игрок 1",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF5A503F),
-              ),
-            ),
-          ),
-          const SizedBox(height: 30),
-          _buildStatRow("Здоровье", "100%"),
-          const SizedBox(height: 15),
-          _buildStatRow("Сытость", "80%"),
-          const SizedBox(height: 15),
-          _buildStatRow("Рассудок", "90%"),
-          const SizedBox(height: 15),
-          _buildStatRow("Усталость", "70%"),
-          const SizedBox(height: 40),
-          Center(
-            child: CustomButton(
-              text: "Подтверить выбор",
-              onPressed: () {
-                // Handle next turn
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBackCard() {
-    return Container(
-      width: 300,
-      height: 400,
-      decoration: BoxDecoration(
-        color: const Color(0xFF8B7355),
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-        image: const DecorationImage(
-          image: AssetImage("assets/images/door.png"),
-          fit: BoxFit.scaleDown,
-        ),
-      ),
-      padding: const EdgeInsets.all(20),
-      child: Center(
-        child: Text(
-          "Нажмите, чтобы увидеть карту игрока",
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Color(0xFFD9D9D9),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatRow(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Color(0xFF5A503F),
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.brown,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 30,
-                child: Image.asset("assets/images/door.png"),
-              ),
-              const LabelWidget(
-                  text: "ddddddddddddddddddddddddddddd"
-                      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"),
-              CustomSwitcher(
-                initialValue: false,
-                onToggle: (value) {},
-              )
-            ],
-          ),
-        ),
-      ],
+      padding: const EdgeInsets.all(12),
+      child: child,
     );
   }
 }

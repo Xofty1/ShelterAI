@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:shelter_ai/core/navigation/navigation_manager.dart';
 import 'package:shelter_ai/presentation/ui_items/button.dart';
 
 import '../l10n/l10n.dart';
@@ -19,7 +21,7 @@ class MainMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
     return Scaffold(
-      body: Container(
+      body: DecoratedBox(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF6B5642), Color(0xFFD1A881)], // Цвета градиента
@@ -33,8 +35,8 @@ class MainMenuScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/images/door.png",
+                  SvgPicture.asset(
+                    'assets/images/door.svg',
                     width: 250,
                   ),
                   const SizedBox(
@@ -66,12 +68,18 @@ class MainMenuScreen extends StatelessWidget {
                         CustomButton(
                             text: loc.newGame,
                             onPressed: () {
-                              Navigator.pushNamed(context, '/game_settings');
+                              NavigationManager.instance.openGameSettings();
                             }),
                         const SizedBox(height: 16),
-                        CustomButton(text: loc.history, onPressed: () {}),
+                        CustomButton(text: loc.history, onPressed: () {
+                          NavigationManager.instance.openHistory();
+                        }),
                         const SizedBox(height: 16),
-                        CustomButton(text: loc.rules, onPressed: () {}),
+                        CustomButton(
+                            text: loc.rules,
+                            onPressed: () {
+                              NavigationManager.instance.openRules();
+                            }),
                       ],
                     ),
                   ),
@@ -83,7 +91,7 @@ class MainMenuScreen extends StatelessWidget {
               bottom: 30,
               child: IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/settings');
+                  NavigationManager.instance.openSettings();
                 },
                 icon: const Icon(
                   Icons.settings,

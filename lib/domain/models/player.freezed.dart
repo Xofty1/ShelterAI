@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$Player {
+  int get id;
   String get name;
-  LifeStatus get lifeStatus;
   String get profession;
   String get bio;
   String get health;
@@ -24,6 +24,9 @@ mixin _$Player {
   String get phobia;
   String get luggage;
   String get extra;
+  LifeStatus get lifeStatus;
+  List<bool> get knownProperties;
+  List<String> get notes;
 
   /// Create a copy of Player
   /// with the given fields replaced by the non-null parameter values.
@@ -37,9 +40,8 @@ mixin _$Player {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Player &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.lifeStatus, lifeStatus) ||
-                other.lifeStatus == lifeStatus) &&
             (identical(other.profession, profession) ||
                 other.profession == profession) &&
             (identical(other.bio, bio) || other.bio == bio) &&
@@ -47,16 +49,33 @@ mixin _$Player {
             (identical(other.hobby, hobby) || other.hobby == hobby) &&
             (identical(other.phobia, phobia) || other.phobia == phobia) &&
             (identical(other.luggage, luggage) || other.luggage == luggage) &&
-            (identical(other.extra, extra) || other.extra == extra));
+            (identical(other.extra, extra) || other.extra == extra) &&
+            (identical(other.lifeStatus, lifeStatus) ||
+                other.lifeStatus == lifeStatus) &&
+            const DeepCollectionEquality()
+                .equals(other.knownProperties, knownProperties) &&
+            const DeepCollectionEquality().equals(other.notes, notes));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, name, lifeStatus, profession,
-      bio, health, hobby, phobia, luggage, extra);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      name,
+      profession,
+      bio,
+      health,
+      hobby,
+      phobia,
+      luggage,
+      extra,
+      lifeStatus,
+      const DeepCollectionEquality().hash(knownProperties),
+      const DeepCollectionEquality().hash(notes));
 
   @override
   String toString() {
-    return 'Player(name: $name, lifeStatus: $lifeStatus, profession: $profession, bio: $bio, health: $health, hobby: $hobby, phobia: $phobia, luggage: $luggage, extra: $extra)';
+    return 'Player(id: $id, name: $name, profession: $profession, bio: $bio, health: $health, hobby: $hobby, phobia: $phobia, luggage: $luggage, extra: $extra, lifeStatus: $lifeStatus, knownProperties: $knownProperties, notes: $notes)';
   }
 }
 
@@ -66,15 +85,18 @@ abstract mixin class $PlayerCopyWith<$Res> {
       _$PlayerCopyWithImpl;
   @useResult
   $Res call(
-      {String name,
-      LifeStatus lifeStatus,
+      {int id,
+      String name,
       String profession,
       String bio,
       String health,
       String hobby,
       String phobia,
       String luggage,
-      String extra});
+      String extra,
+      LifeStatus lifeStatus,
+      List<bool> knownProperties,
+      List<String> notes});
 }
 
 /// @nodoc
@@ -89,8 +111,8 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
-    Object? lifeStatus = null,
     Object? profession = null,
     Object? bio = null,
     Object? health = null,
@@ -98,16 +120,19 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
     Object? phobia = null,
     Object? luggage = null,
     Object? extra = null,
+    Object? lifeStatus = null,
+    Object? knownProperties = null,
+    Object? notes = null,
   }) {
     return _then(_self.copyWith(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      lifeStatus: null == lifeStatus
-          ? _self.lifeStatus
-          : lifeStatus // ignore: cast_nullable_to_non_nullable
-              as LifeStatus,
       profession: null == profession
           ? _self.profession
           : profession // ignore: cast_nullable_to_non_nullable
@@ -136,6 +161,18 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
           ? _self.extra
           : extra // ignore: cast_nullable_to_non_nullable
               as String,
+      lifeStatus: null == lifeStatus
+          ? _self.lifeStatus
+          : lifeStatus // ignore: cast_nullable_to_non_nullable
+              as LifeStatus,
+      knownProperties: null == knownProperties
+          ? _self.knownProperties
+          : knownProperties // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
+      notes: null == notes
+          ? _self.notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -144,20 +181,25 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
 
 class _Player implements Player {
   const _Player(
-      {required this.name,
-      required this.lifeStatus,
+      {required this.id,
+      required this.name,
       required this.profession,
       required this.bio,
       required this.health,
       required this.hobby,
       required this.phobia,
       required this.luggage,
-      required this.extra});
+      required this.extra,
+      required this.lifeStatus,
+      required final List<bool> knownProperties,
+      required final List<String> notes})
+      : _knownProperties = knownProperties,
+        _notes = notes;
 
   @override
-  final String name;
+  final int id;
   @override
-  final LifeStatus lifeStatus;
+  final String name;
   @override
   final String profession;
   @override
@@ -172,6 +214,23 @@ class _Player implements Player {
   final String luggage;
   @override
   final String extra;
+  @override
+  final LifeStatus lifeStatus;
+  final List<bool> _knownProperties;
+  @override
+  List<bool> get knownProperties {
+    if (_knownProperties is EqualUnmodifiableListView) return _knownProperties;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_knownProperties);
+  }
+
+  final List<String> _notes;
+  @override
+  List<String> get notes {
+    if (_notes is EqualUnmodifiableListView) return _notes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_notes);
+  }
 
   /// Create a copy of Player
   /// with the given fields replaced by the non-null parameter values.
@@ -186,9 +245,8 @@ class _Player implements Player {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Player &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.lifeStatus, lifeStatus) ||
-                other.lifeStatus == lifeStatus) &&
             (identical(other.profession, profession) ||
                 other.profession == profession) &&
             (identical(other.bio, bio) || other.bio == bio) &&
@@ -196,16 +254,33 @@ class _Player implements Player {
             (identical(other.hobby, hobby) || other.hobby == hobby) &&
             (identical(other.phobia, phobia) || other.phobia == phobia) &&
             (identical(other.luggage, luggage) || other.luggage == luggage) &&
-            (identical(other.extra, extra) || other.extra == extra));
+            (identical(other.extra, extra) || other.extra == extra) &&
+            (identical(other.lifeStatus, lifeStatus) ||
+                other.lifeStatus == lifeStatus) &&
+            const DeepCollectionEquality()
+                .equals(other._knownProperties, _knownProperties) &&
+            const DeepCollectionEquality().equals(other._notes, _notes));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, name, lifeStatus, profession,
-      bio, health, hobby, phobia, luggage, extra);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      name,
+      profession,
+      bio,
+      health,
+      hobby,
+      phobia,
+      luggage,
+      extra,
+      lifeStatus,
+      const DeepCollectionEquality().hash(_knownProperties),
+      const DeepCollectionEquality().hash(_notes));
 
   @override
   String toString() {
-    return 'Player(name: $name, lifeStatus: $lifeStatus, profession: $profession, bio: $bio, health: $health, hobby: $hobby, phobia: $phobia, luggage: $luggage, extra: $extra)';
+    return 'Player(id: $id, name: $name, profession: $profession, bio: $bio, health: $health, hobby: $hobby, phobia: $phobia, luggage: $luggage, extra: $extra, lifeStatus: $lifeStatus, knownProperties: $knownProperties, notes: $notes)';
   }
 }
 
@@ -216,15 +291,18 @@ abstract mixin class _$PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String name,
-      LifeStatus lifeStatus,
+      {int id,
+      String name,
       String profession,
       String bio,
       String health,
       String hobby,
       String phobia,
       String luggage,
-      String extra});
+      String extra,
+      LifeStatus lifeStatus,
+      List<bool> knownProperties,
+      List<String> notes});
 }
 
 /// @nodoc
@@ -239,8 +317,8 @@ class __$PlayerCopyWithImpl<$Res> implements _$PlayerCopyWith<$Res> {
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? id = null,
     Object? name = null,
-    Object? lifeStatus = null,
     Object? profession = null,
     Object? bio = null,
     Object? health = null,
@@ -248,16 +326,19 @@ class __$PlayerCopyWithImpl<$Res> implements _$PlayerCopyWith<$Res> {
     Object? phobia = null,
     Object? luggage = null,
     Object? extra = null,
+    Object? lifeStatus = null,
+    Object? knownProperties = null,
+    Object? notes = null,
   }) {
     return _then(_Player(
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       name: null == name
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      lifeStatus: null == lifeStatus
-          ? _self.lifeStatus
-          : lifeStatus // ignore: cast_nullable_to_non_nullable
-              as LifeStatus,
       profession: null == profession
           ? _self.profession
           : profession // ignore: cast_nullable_to_non_nullable
@@ -286,6 +367,18 @@ class __$PlayerCopyWithImpl<$Res> implements _$PlayerCopyWith<$Res> {
           ? _self.extra
           : extra // ignore: cast_nullable_to_non_nullable
               as String,
+      lifeStatus: null == lifeStatus
+          ? _self.lifeStatus
+          : lifeStatus // ignore: cast_nullable_to_non_nullable
+              as LifeStatus,
+      knownProperties: null == knownProperties
+          ? _self._knownProperties
+          : knownProperties // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
+      notes: null == notes
+          ? _self._notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }

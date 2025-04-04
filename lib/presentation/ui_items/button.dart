@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../domain/bloc/sound_cubit.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
+  final bool isMuted;
   final VoidCallback onPressed;
 
   const CustomButton({
     super.key,
     required this.text,
+    this.isMuted = false,
     required this.onPressed,
   });
 
@@ -36,7 +41,12 @@ class CustomButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           elevation: 0,
         ),
-        onPressed: onPressed,
+        onPressed: isMuted
+            ? null
+            : () {
+                context.read<SoundCubit>().playButtonClickEffect();
+                onPressed();
+              },
         child: Text(
           text,
           style: const TextStyle(

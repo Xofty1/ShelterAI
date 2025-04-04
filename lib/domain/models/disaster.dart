@@ -13,5 +13,6 @@ abstract class Disaster with _$Disaster {
     required int capacity,
     required List<String> rooms,
     required List<String> resources,
+    required String answer,
   }) = _Disaster;
 }

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shelter_ai/presentation/ui_items/scaffold_template.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 
-import '../../core/app_shared_preference/app_shared_preference.dart';
 import '../../domain/bloc/app_settings_cubit.dart';
 import '../../l10n/l10n.dart';
 import '../ui_items/dropdown_spinner.dart';
@@ -14,10 +13,7 @@ class AppSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppSettingsCubit(),
-      child: const GlobalSettingsWidget(),
-    );
+    return const GlobalSettingsWidget();
   }
 }
 
@@ -52,7 +48,6 @@ class GlobalSettingsWidget extends StatelessWidget {
               itemLabel: (item) => item,
               onChanged: (value) {
                 String languageName = value == 'English' ? 'en' : 'ru';
-                AppSharedPreference().saveLanguage(languageName);
                 BlocProvider.of<AppSettingsCubit>(context)
                     .updateLocale(languageName);
               },
@@ -68,13 +63,18 @@ class GlobalSettingsWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            // Music row with 1:3 ratio
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IntrinsicWidth(
-                  child: LabelWidget(text: loc.music),
-                ),
                 Expanded(
+                  flex: 1,
+                  child: IntrinsicWidth(
+                    child: LabelWidget(text: loc.music),
+                  ),
+                ),
+                const SizedBox(width: 16), // Добавляем отступ между элементами
+                Expanded(
+                  flex: 2,
                   child: SliderSettings(
                     defaultValue: state.settings.music.toDouble(),
                     onChange: (value) {
@@ -86,18 +86,21 @@ class GlobalSettingsWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+            // Dubbing row with 1:3 ratio
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IntrinsicWidth(
-                  child: LabelWidget(text: loc.dubbing),
-                ),
                 Expanded(
+                  flex: 1,
+                  child: IntrinsicWidth(
+                    child: LabelWidget(text: loc.dubbing),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
                   child: SliderSettings(
-                    defaultValue:
-                        AppSharedPreference().getDubbing()?.toDouble() ?? 50,
+                    defaultValue: state.settings.dubbing.toDouble(),
                     onChange: (value) {
-                      AppSharedPreference().saveDubbing(value.toInt());
                       BlocProvider.of<AppSettingsCubit>(context)
                           .updateDubbing(value.toInt());
                     },
@@ -106,18 +109,21 @@ class GlobalSettingsWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+            // Effects row with 1:3 ratio
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IntrinsicWidth(
-                  child: LabelWidget(text: loc.effects),
-                ),
                 Expanded(
+                  flex: 1,
+                  child: IntrinsicWidth(
+                    child: LabelWidget(text: loc.effects),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
                   child: SliderSettings(
-                    defaultValue:
-                        AppSharedPreference().getEffects()?.toDouble() ?? 50,
+                    defaultValue: state.settings.effects.toDouble(),
                     onChange: (value) {
-                      AppSharedPreference().saveEffects(value.toInt());
                       BlocProvider.of<AppSettingsCubit>(context)
                           .updateEffects(value.toInt());
                     },
