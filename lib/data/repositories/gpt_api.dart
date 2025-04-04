@@ -43,8 +43,6 @@ class GptRepositoryImpl implements GptRepository {
     } catch (e) {
       print('Error $e');
     }
-    print(txtCont["story"]);
-    print(additionalText);
 
     // Returns request text, type String
     return txtCont['story'];

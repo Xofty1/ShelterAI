@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_ai/domain/bloc/sound_cubit.dart';
 import 'package:shelter_ai/presentation/ui_items/scaffold_template.dart';
 import 'package:shelter_ai/presentation/ui_items/slider_settings.dart';
 
@@ -50,6 +51,8 @@ class GlobalSettingsWidget extends StatelessWidget {
                 String languageName = value == 'English' ? 'en' : 'ru';
                 BlocProvider.of<AppSettingsCubit>(context)
                     .updateLocale(languageName);
+                BlocProvider.of<SoundCubit>(context)
+                    .setDubbingLocale(languageName);
               },
             ),
             const SizedBox(height: 16),
